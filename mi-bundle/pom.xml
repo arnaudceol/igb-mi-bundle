@@ -1,0 +1,294 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>it.iit.genomics.cru.mi</groupId>
+    <artifactId>igb-bundle</artifactId>
+    <packaging>bundle</packaging>
+    <version>2.8</version>
+    
+    <!--    <parent>
+        <groupId>it.iit.genomics.cru.mi</groupId>
+        <artifactId>mi-master</artifactId>
+        <version>2.5-SNAPSHOT</version>
+    </parent>-->
+    
+    <parent>
+        <groupId>it.iit.genomics.igb</groupId>
+        <artifactId>cru-igb-master</artifactId>
+        <version>8.3.1</version>
+    </parent>
+
+
+    <properties>
+        <bundle.symbolicName>it.iit.genomics.cru.mi.MIBundle</bundle.symbolicName>
+        <bundle.namespace>it.iit.genomics.cru.mi</bundle.namespace>
+        <genovizVersion>1.0.9</genovizVersion>
+        <jmol.version>14.2.2</jmol.version>        
+        <bridges.version>2.2</bridges.version>
+        <cru.version>2.2-SNAPSHOT</cru.version>
+        <mi.version>2.7-SNAPSHOT</mi.version>
+        <netbeans.hint.license>apache20</netbeans.hint.license>
+    </properties>
+
+    <name>mi-bundle</name>
+
+    <build>
+        <finalName>MIBundle-igb${parent.version}-${version}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>           
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+                        <Bundle-Version>${version}</Bundle-Version>
+<!--                        <Bundle-Description>Map genomic regions to molecular interactions and structures. EPPIC version. For IGB v.${parent.version}</Bundle-Description>-->
+                        <Bundle-Description>Map genomic regions to molecular interactions and structures. For IGB v.${parent.version}</Bundle-Description>
+                        <Bundle-Author>Arnaud Ceol</Bundle-Author>
+                        <!-- <Private-Package>it.iit.genomics.cru.*</Private-Package> -->
+                        <Bundle-Activator>it.iit.genomics.cru.igb.bundles.mi.MIActivator</Bundle-Activator>
+                        <Export-Package>org.apache.http.*</Export-Package>
+                        <Import-Package>
+                            *;resolution:=optional</Import-Package>
+                        <Embed-Dependency>
+                            uniprotkb, psimitab,
+                            collections-generic,
+                            commons-lang, biojava-core,commons-logging,
+                            biojava-structure,biojava-alignment,
+                            jmol,httpcore,httpclient,commons-httpclient,
+                            interactome3d-bridge, cru-utils,
+                            igb-commons,mi-structures, vecmath,
+                            lucene-core,
+                            lucene-analyzers-common,lucene-queries, lucene-queryparser,
+                            JGoogleAnalyticsTracker,
+                            dsysmap-bridge,
+                            jung-graph-impl, jung-visualization,jung-api, jung-algorithms,
+<!--                            log4j-->
+                        </Embed-Dependency>
+                        <Embed-Transitive>true</Embed-Transitive>       
+                        <Export-Package/>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.dependencymanager.annotation</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>scan</goal>
+                        </goals>
+                        <configuration>
+                            <log>info</log>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1.1</version>
+</dependency>
+<!--        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.http.bundle</artifactId>
+            <version>2.3.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.main</artifactId>
+            <version>4.2.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.affymetrix</groupId>
+            <artifactId>genoviz</artifactId>
+            <version>${genovizVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.lorainelab</groupId>
+            <artifactId>igb-genoviz-extensions-api</artifactId>
+            <version>${igb-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.affymetrix</groupId>
+            <artifactId>genometry</artifactId>
+            <version>${igb-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.affymetrix</groupId>
+            <artifactId>igb</artifactId>
+            <version>${igb-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.affymetrix</groupId>
+            <artifactId>igb-services-api</artifactId>
+            <version>${igb-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.affymetrix</groupId>
+            <artifactId>window-service</artifactId>
+            <version>${igb-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.affymetrix</groupId>
+            <artifactId>affymetrix-common</artifactId>
+            <version>${igb-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.affymetrix</groupId>
+            <artifactId>igbSwingExt</artifactId>
+            <version>${igb-version}</version>
+        </dependency>   
+        
+        
+        <dependency>
+            <groupId>psidev.psi.mi</groupId>
+            <artifactId>psimitab</artifactId>
+            <version>1.8.3</version>            
+            <exclusions>
+                <exclusion>
+                    <groupId>psidev.psi.mi</groupId>
+                    <artifactId>psi25-xml</artifactId>     
+                </exclusion>        
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jmol</groupId>
+            <artifactId>jmol</artifactId>
+            <version>${jmol.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jmol</groupId>
+            <artifactId>jmol-lib</artifactId>
+            <version>${jmol.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>       
+        <dependency>
+            <groupId>org.utgenome.thirdparty</groupId>
+            <artifactId>picard</artifactId>
+            <version>1.86.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>it.iit.genomics.cru.bridges</groupId>
+            <artifactId>interactome3d-bridge</artifactId>
+            <version>${bridges.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>it.iit.genomics.cru</groupId>
+            <artifactId>cru-utils</artifactId>
+            <version>${cru.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>it.iit.genomics.cru.igb.bundles</groupId>
+            <artifactId>igb-commons</artifactId>
+            <version>${igb-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dmurph</groupId>
+            <artifactId>JGoogleAnalyticsTracker</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mi-structures</artifactId>
+            <version>${mi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>it.iit.genomics.cru.bridges</groupId>
+            <artifactId>dsysmap-bridge</artifactId>
+            <version>${bridges.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung2</artifactId>
+            <version>2.0.1</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung-graph-impl</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung-visualization</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung-algorithms</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.collections</groupId>
+            <artifactId>collections-generic</artifactId>
+            <version>4.01</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>               
+    
+        <!-- EBI repositories - Where the IntAct artifacts are stored -->
+        <repository>
+            <id>ebi-repo</id>
+            <name>ebi-repo</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+        
+    </repositories>
+</project>

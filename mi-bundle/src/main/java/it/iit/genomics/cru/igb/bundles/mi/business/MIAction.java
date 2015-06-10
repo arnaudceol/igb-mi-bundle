@@ -1,0 +1,119 @@
+/* 
+ * Copyright 2015 Fondazione Istituto Italiano di Tecnologia.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package it.iit.genomics.cru.igb.bundles.mi.business;
+
+import com.affymetrix.genometry.GenometryModel;
+import com.affymetrix.genometry.event.GenericAction;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
+import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
+import it.iit.genomics.cru.igb.bundles.mi.query.MIQueryManager;
+import it.iit.genomics.cru.igb.bundles.mi.view.ProgressPanel;
+import it.iit.genomics.cru.structures.bridges.uniprot.UniprotkbUtils;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JProgressBar;
+
+import com.affymetrix.igb.service.api.IGBService;
+import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
+import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
+
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+
+/**
+ * @author Arnaud Ceol
+ *
+ * Main action for the MI Bundle. Create a Query based on the user choices and
+ * run the framework. The actual work is done in background by the MIWorker.
+ */
+public class MIAction extends GenericAction {
+
+    private static final long serialVersionUID = 1L;
+    private final IGBService igbService;
+
+    public MIAction(IGBService igbService) {
+        super("MI Search", KeyEvent.VK_Z);
+        this.igbService = igbService;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        super.actionPerformed(event);
+
+       // MIView.getInstance().getStructurePanel().clean();
+        // Check that sequences have been initialized
+        try {
+            if (MIQueryManager.getInstance().getSequences().isEmpty()) {
+                for (String[] species : UniprotkbUtils.getSpeciesFromName(igbService.getSelectedSpecies())) {
+                    MIQueryManager.getInstance().setSpecies(
+                            igbService.getSelectedSpecies());
+                    MIQueryManager.getInstance().setTaxid(species[1]);
+
+                    ArrayList<String> sequences = new ArrayList<>();
+                    for (int i = 0; i < GenometryModel.getInstance()
+                            .getSelectedSeqGroup().getSeqCount(); i++) {
+                        sequences.add(GenometryModel.getInstance()
+                                .getSelectedSeqGroup().getSeq(i).getID());
+                    }
+                    MIQueryManager.getInstance().setSequences(sequences);
+                    break;
+                }
+            }
+        } catch (BridgesRemoteAccessException be) {
+            IGBLogger.getMainInstance().severe("Cannot access Uniprot!");
+
+        }
+        MIQuery query = MIQueryManager.getInstance().getMIQuery();
+
+        if (query.getSelectedSymmetries().isEmpty() && MIView.getInstance().getMiSearch().isBoxSearchEnabled()) {
+            JOptionPane.showMessageDialog(MIView.getInstance().getMiSearch(),
+                    "Please add one or more genomic region (e.g. a gene, an exon or a variant).", "Select a region", ERROR_MESSAGE);
+            return;
+        }
+
+        if (false == MIView.getInstance().getMiSearch().isBoxSearchEnabled()) {
+            query.getSelectedSymmetries().clear();
+            query.getSelectedSymmetries().addAll(
+                    igbService.getSeqMapView().getSelectedSyms());
+        }
+
+        if (query.getSelectedSymmetries().isEmpty()) {
+            JOptionPane.showMessageDialog(MIView.getInstance().getMiSearch(),
+                    "Please select one genomic region (e.g. a gene, an exon or a variant).", "Select a region", ERROR_MESSAGE);
+            return;
+        }
+
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setMinimum(0);
+        progressBar.setMaximum(100);
+        progressBar.setStringPainted(true);
+        progressBar.setString(query.getLabel());
+
+        ProgressPanel.getInstance().addBar(progressBar);
+
+        List<MIResult> results = new ArrayList<>();
+
+        MIWorker worker = new MIWorker(results, igbService, query, progressBar);
+
+        worker.execute();
+
+    }
+
+}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MI Bundle</title>
+</head>
+<body style="font-size:10px; font-family: Verdana, Arial, Helvetica, sans-serif;">
+
+ <div style="margin-left: 40px; margin-right: 40px">   
+
+     <h1>The Molecular Interaction Bundle</h1>
+     
+     
+     
+<h3>About</h3>
+The <b>Molecular Interaction bundle</b> for IGB allows for mapping genomic regions to molecular interactions and structures.
+The Bundle has been developed by Arnaud Ceol (arnaud.ceol@iit.it) at the <a href="http://genomics.iit.it">Center for Genomic Science</a> of the <a href="http://www.iit.it">Istituto Italiano di Technologia</a> in Milan (Italy).<br/>
+
+<br/>More information about this bundle (including help page and tutorials) is available online at the address <a href="http://cru.genomics.iit.it/igbmibundle">http://cru.genomics.iit.it/igbmibundle</a>.
+
+<ul>
+    <li><a href="#search">Search</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#setup">Configuration</a></li>
+</ul>
+
+<br/><br/>
+<h2><a id="search"></a>Search</h2>
+<img src="pictures/searchpanel.png" alt="search" />
+
+<h3>Search mode</h3>
+<ul>
+    <li><b>Extend: </b> find interaction between the product of selected genes and any other molecules.</li>
+    <li><b>Connect:</b> find interactions between the product of selected genes only.</li>
+</ul>
+
+<h3>Data sources</h3>
+<ul>
+    <li><b>Interactions: </b> choose an interaction database. The list of databases
+        is retrieved from the PSICQUIC registry (). Choose <b>== none ==</b> if you are 
+    only interested by interactions with structures.</li>
+    <li><b>Structure:</b>: PDB, Interactome3D or DSysMap. With PDB and Interactome3D
+        the contacts are calculated by the plugin. With DSysMap, contact at 
+        mutated positions are imported. Choose <b>== none ==</b> if you are 
+    not interested in structures.
+    </li>
+    <li>
+        <b>RNA/DNA and small molecules:</b> check those boxes to include interactions
+        with molecules other than proteins.
+    </li>
+    <li><b>Modified residues:</b> include modified residues (PTMs).</li>
+</ul>
+
+<h3>Extended search: press <b>&gt;&gt;</b></h3>
+When the search box is visible (press button <b>&gt;&gt;</b> to show), the search 
+is done on the regions added to the box. When the search box is hidden, 
+(press button <b>&lt;&lt;</b> to hide), the search 
+is done on the regions selected in the browser. 
+<ul>
+    <li><b>Add: </b> add selected regions to the list.</li>
+    <li><b>Remove:</b> remove selected region to the list.</li>
+    <li><b>Clear:</b> remove all regions from the list.</li>
+    <li><b>Add track: </b> add all regions from selected tracks.</li>
+    <li><b>Search and add: </b> perform a text search on all regions. All regions found
+        are added to the list.</li>
+</ul>
+
+<br/><br/>
+<h2><a id="results"></a>Results</h2>
+<h3>Result tab</h3>
+<img src="pictures/results.png" alt="search" />
+<h4>Buttons</h4>
+<ul>
+    <li><b><img src="pictures/icon-log.png" alt="log" />Log:</b> display the log for current query. If an error occurs, the
+    icon will be display over a red background.</li>
+    <li><b><img src="pictures/icon-network.png" alt="network" />Network:</b> display the network as a graph.</li>
+    <li><b><img src="pictures/icon-save-txt.png" alt="txt" />Save (text format):</b> save the results in a tab-delimited file.</li>
+    <li><b><img src="pictures/icon-save-xgmml.png" alt="xgmml" />Save (xgmml):</b> save the results in the xgmml format, which may be 
+        loaded in network visualization browsers like Cytoscape.</li>
+    <li><b><img src="pictures/icon-jmol.png" alt="jmol" />Jmol:</b> view selected structure in Jmol.</li>
+    <li><b><img src="pictures/icon-link.png" alt="link" />Link: </b> open the link to the original database in an external browser.</li>
+ </ul>
+
+<h4>Result table</h4>
+
+If you select any line on this table, the respective structures will be listed 
+in the structure table.
+
+<ul>
+    <li><b>Track: </b> by default, the contacts found for all genomic regions
+    for current queries are merged in a single track. It is possible to press
+    this button to create a new track that displays only the contacts for the 
+    specific interactions. This allow to compare the interface of a protein
+    with different partners.</li>
+    <li><b>Gene:</b> gene or molecule name. Double click on this cell to
+    zoom onto the region associated in the browser.</li>
+    <li><b>Reference: </b> for protein coding genes, its Uniprot Accession. Double 
+        click on this cell to open the associated page of the Uniprot website 
+    in an external browser. If the molecule is DNA, RNA or small molecule, its 
+    formula or a label is displayed and the link forwards to PDB.</li>
+    <li><b>Interaction type:</b> the one extracted from the protein 
+        interaction database. If the interaction is imported from PDB, it is set 
+        automatically to <b>association</b>, or <b>direct interactions</b> if 
+    imported from Interactome3D.</li>
+    <li><b>Diseases:</b> list of diseases associated to the proteins according 
+        to Uniprot. The disease name is colored in <font color="green">green</font>if it is 
+        associated to the first protein, in <font color="blue">blue</font> if 
+        associated to the second protein, and <font color="orange">orange</font> if 
+        common to both proteins.</li>
+    <li><b>Structures:</b> colored squares are displayed id a structure is 
+        available for this interaction. <font color="orange">Orange</font> border 
+    indicates that a selected residue is mapped on the protein, <font color="red">
+    red</font> border shows that a selected residues is in contact with the 
+    other molecule.</li>
+</ul>
+
+<h4>Network visualization:</h4>
+<table><tr><td><img src="pictures/network2.png" alt="network" /></td><td>
+                <p>The interactions can be displayed in a graphical network. The type of molecule 
+                    is represented by its color. A small black circle on one side
+                    of an edge indicates that contacts have been detected on this
+                    side of the interaction.
+                </p></td></tr></table>
+
+<h4>Structure table</h4>
+The names of the structures is displayed in <font color="orange">orange</font> 
+if a residue selected is mapped on the structure, <font color="red">red</font> 
+it is in contact with the  other molecule.
+    
+<h3>New tracks in the genome browser:</h3>
+<table><tr><td><img src="pictures/symmetries.png" alt="tracks" /></td><td><p>New tracks are create for each result. The tracks displays either the genes
+which products are involved in an interactions or the residues found at the 
+interface between a protein and another molecule.</p>
+
+<p>The elements in the new track are represented as red horizontal lines with vertical
+sticks at the positions that encode for residues at an interaction interface. 
+If no contact residues was found, a black vertical bar is displayed over the region
+that encode a selected or interacting gene.</p></td></tr></table>
+
+<h3>The Jmol window</h3>
+<table><tr><td><img src="pictures/jmol.png" alt="jmol" /></td><td>
+The structures can be displayed in a Jmol window. It is possible to access to all
+the Jmol options and feature by right clicking on the window. The chains that 
+represent the first protein are colored in green, the chains that represent the
+second protein in blue, and the other types of molecules (DNA, RNA, ligands) in 
+yellow. The selected residues are colored in red if they are in contact with the
+other molecule, in orange otherwise.</td></tr></table>
+
+<br/><br/>
+<h2><a id="setup"></a>Configuration</h2>
+<table><tr><td><img src="pictures/setings.png" alt="settings" /></td><td>
+<h4>File cache</h4>
+<p>The MI Bundle stores localy files
+such as structures (pdb) or interaction lists. 
+You can clear those files to free disk space. They will be
+automatically downloaded next time the plugin needs them.</p>
+
+<h4>PDB local mirror</h4>
+<p>If you maintain a local mirror of PDB,
+you can use it to avoid downloading the data.
+The PDB mirror should maintain the hierarchical structure of 
+PDB directory.</p>
+
+<h4>Interactome3D local mirror</h4>
+<p>If you maintain a local mirror
+or Interactome3D, you can use it to avoid downloading the data.
+The Interactome3D mirror should contain
+interactions.dat, proteins.dat and all Interactome3D
+structures in PDB format.</p>
+        </td></tr></table>
+ 
+ <br/><br/>
+ </div>
+</body>
+</html>
