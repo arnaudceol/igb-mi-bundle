@@ -504,7 +504,7 @@ public class MIResult {
             }
             SeqSpan span = sym.getSpan(0);
 
-            positions.add(span.getBioSeq().getID() + ":" + span.getStart()
+            positions.add(span.getBioSeq().getId() + ":" + span.getStart()
                     + "-" + span.getEnd());
         }
 
@@ -839,7 +839,7 @@ public class MIResult {
         interactorTrack.setID(getTrackId());
         interactorTrack.setProperty(TrackLineParser.ITEM_RGB, Color.PINK);
 
-        BioSeq aseq = GenometryModel.getInstance().getSelectedSeq();
+        BioSeq aseq = GenometryModel.getInstance().getSelectedSeq().get();
 
         ArrayList<MISymContainer> resultSyms = new ArrayList<>();
         resultSyms.add(container1);
@@ -873,8 +873,8 @@ public class MIResult {
             ArrayList<Integer> emins = new ArrayList<>();
             ArrayList<Integer> emaxs = new ArrayList<>();
 
-            if (merger.getRanges(sequence.getID()) != null) {
-                for (Range range : merger.getRanges(sequence.getID())) {
+            if (merger.getRanges(sequence.getId()) != null) {
+                for (Range range : merger.getRanges(sequence.getId())) {
                     if (range.getMin() >= span.getMin() && range.getMax() < span.getMax()) {
                         emins.add(range.getMin());
                         // from 0-based inclusive to 0-based exclusive

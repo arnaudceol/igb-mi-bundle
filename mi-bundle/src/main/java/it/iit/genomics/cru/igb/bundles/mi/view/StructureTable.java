@@ -26,7 +26,7 @@ import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
-import com.affymetrix.igb.service.api.IGBService;
+import com.lorainelab.igb.services.IgbService;
 
 /**
  *
@@ -39,7 +39,7 @@ public class StructureTable extends JTable {
 
     private static final long serialVersionUID = 1L;
 
-    public StructureTable(StructureTableModel model, IGBService igbService) {
+    public StructureTable(StructureTableModel model, IgbService igbService) {
         super(model);
 
         TableRowSorter<StructureTableModel> sorter = new TableRowSorter<>(

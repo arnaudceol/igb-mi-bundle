@@ -16,6 +16,7 @@
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
 import com.affymetrix.common.CommonUtils;
+import com.lorainelab.igb.services.IgbService;
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
@@ -43,7 +44,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.httpclient.util.URIUtil;
 
-import com.affymetrix.igb.service.api.IGBService;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
@@ -117,7 +117,7 @@ public class MIResultPanel extends JPanel {
     private final static String HTML_CHECKBOX_OTHER = "<html><font color=\"pink\"><b>O</b></font>ther</html>";
     private final static String HTML_CHECKBOX_UNSPECIFIED = "<html><font color=\"black\"><b>U</b></font>nspecified</html>";
 
-    public MIResultPanel(IGBService service, String summary,
+    public MIResultPanel(IgbService service, String summary,
             List<MIResult> results, String label, MIQuery query) {
         setLayout(new BorderLayout());
 

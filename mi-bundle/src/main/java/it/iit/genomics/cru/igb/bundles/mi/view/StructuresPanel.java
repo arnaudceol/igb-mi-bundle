@@ -45,9 +45,8 @@ import org.apache.commons.lang.StringUtils;
 import org.biojava.nbio.structure.Structure;
 import org.jmol.api.JmolViewer;
 
-import com.affymetrix.igb.service.api.IGBService;
-import com.affymetrix.igb.service.api.IGBTabPanel;
-import com.affymetrix.igb.service.api.IGBTabPanel.TabState;
+import com.lorainelab.igb.services.IgbService;
+import com.lorainelab.igb.services.window.tabs.IgbTabPanel;
 import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
 import it.iit.genomics.cru.structures.model.StructureException;
@@ -70,7 +69,7 @@ import javax.swing.JRadioButton;
  * setCurrentInteraction()
  *
  */
-public class StructuresPanel extends IGBTabPanel {
+public class StructuresPanel extends IgbTabPanel {
 
     private final IGBLogger igbLogger;
 
@@ -125,9 +124,9 @@ public class StructuresPanel extends IGBTabPanel {
     JmolPanel jmolPanel;
     JmolViewer viewer;
 
-    public StructuresPanel(IGBService service, String label) {
+    public StructuresPanel(IgbService service, String label) {
 
-        super(service, "MI Structures", "MI Structures", "Display structure",
+        super("MI Structures", "MI Structures", "Display structure",
                 true);
 
         igbLogger = IGBLogger.getInstance(label);
@@ -186,10 +185,10 @@ public class StructuresPanel extends IGBTabPanel {
         add(structureListPane);
     }
 
-    @Override
-    public TabState getDefaultState() {
-        return TabState.COMPONENT_STATE_RIGHT_TAB;
-    }
+//    @Override
+//    public TabState getDefaultState() {
+//        return TabState.COMPONENT_STATE_RIGHT_TAB;
+//    }
 
     @Override
     public boolean isEmbedded() {

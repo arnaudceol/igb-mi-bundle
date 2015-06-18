@@ -16,20 +16,21 @@
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
 import com.affymetrix.common.CommonUtils;
-import com.affymetrix.genometry.AnnotatedSeqGroup;
+import com.affymetrix.genometry.BioSeq;
+import com.affymetrix.genometry.GenomeVersion;	
 import com.affymetrix.genometry.GenometryModel;
 import com.affymetrix.genometry.SeqSpan;
 import com.affymetrix.genometry.event.GenericAction;
-import com.affymetrix.genometry.event.GroupSelectionEvent;
+import com.affymetrix.genometry.event.GenomeVersionSelectionEvent;
 import com.affymetrix.genometry.event.GroupSelectionListener;
+import com.affymetrix.genometry.search.SearchUtils;
 import com.affymetrix.genometry.symmetry.RootSeqSymmetry;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.util.SeqUtils;
-import com.affymetrix.igb.service.api.IGBService;
-
-import com.affymetrix.igb.shared.SearchUtils;
 import com.affymetrix.igb.shared.TrackUtils;
-import com.lorainelab.igb.genoviz.extensions.api.StyledGlyph;
+import com.lorainelab.igb.genoviz.extensions.glyph.StyledGlyph;
+import com.lorainelab.igb.services.IgbService;
+
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.commons.view.InfoPanel;
 import it.iit.genomics.cru.igb.bundles.commons.view.LogPanel;
@@ -128,7 +129,7 @@ public class SearchPanel extends JPanel {
     public static final String choiceUSER = "I3D user data";
     public static final String choiceUniprot = "Uniprotkb";
 
-    private IGBService igbService;
+    private IgbService igbService;
 
     public void setPsicquicProviders(String[] providers) {
         psicquicChoice.removeAllItems();
@@ -141,7 +142,7 @@ public class SearchPanel extends JPanel {
         }
     }
 
-    public SearchPanel(final IGBService igbService) {
+    public SearchPanel(final IgbService igbService) {
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
@@ -379,20 +380,17 @@ public class SearchPanel extends JPanel {
                 selectList.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent evt) {
-                        
-                        
-                        
+
                         JList list = (JList) evt.getSource();
                         if (evt.getClickCount() == 2) {
                             int index = list.locationToIndex(evt.getPoint());
-                            SeqSymmetry sym = selectionModel.getListModel().elementAt(index);                           
+                            SeqSymmetry sym = selectionModel.getListModel().elementAt(index);
                             SeqSpan span = sym.getSpan(0);
-                            igbService.zoomToCoord(span.getBioSeq().getID(), span.getStart(), span.getEnd());                            
-                        } 
+                            igbService.zoomToCoord(span.getBioSeq().getId(), span.getStart(), span.getEnd());
+                        }
                     }
                 });
-                
-                
+
                 JScrollPane selectionistPane = new JScrollPane(selectList);
                 this.add(BorderLayout.CENTER, selectionistPane);
 
@@ -518,7 +516,7 @@ public class SearchPanel extends JPanel {
                 buttons.add(log);
 
                 add(buttons);
-                
+
     }
 
     private void chooseStructureFrom() {
@@ -649,7 +647,7 @@ public class SearchPanel extends JPanel {
                 new GroupSelectionListener() {
 
                     @Override
-                    public void groupSelectionChanged(GroupSelectionEvent evt) {
+                    public void groupSelectionChanged(GenomeVersionSelectionEvent evt) {
                         try {
 
                             for (String[] species : UniprotkbUtils
@@ -664,13 +662,12 @@ public class SearchPanel extends JPanel {
                                 MIQueryManager.getInstance().setTaxid(species[1]);
 
                                 ArrayList<String> sequences = new ArrayList<>();
-                                for (int i = 0; i < GenometryModel
-                                .getInstance().getSelectedSeqGroup()
-                                .getSeqCount(); i++) {
-                                    sequences.add(GenometryModel
-                                            .getInstance()
-                                            .getSelectedSeqGroup().getSeq(i)
-                                            .getID());
+
+                                for (BioSeq sequence
+                                : GenometryModel
+                                .getInstance().getSelectedGenomeVersion().getSeqList()) {
+
+                                    sequences.add(sequence.getId());
                                 }
                                 MIQueryManager.getInstance()
                                 .setSequences(sequences);
@@ -737,13 +734,12 @@ public class SearchPanel extends JPanel {
         public void actionPerformed(ActionEvent event) {
             igbLogger.info("Set selection by search: " + searchAndAddArea.getText());
 
-            
             if (searchAndAddArea.getText() == null || "".equals(searchAndAddArea.getText().trim())) {
                 return;
             }
-            
-            AnnotatedSeqGroup group = GenometryModel.getInstance()
-                    .getSelectedSeqGroup();
+
+            GenomeVersion group = GenometryModel.getInstance().getSelectedGenomeVersion();
+//                    .getSelectedSeqGroup();
 
             Pattern regex = null;
             try {
@@ -772,9 +768,9 @@ public class SearchPanel extends JPanel {
 
         private static final long serialVersionUID = 1L;
 
-        IGBService service;
+        IgbService service;
 
-        public AddSelectionAction(IGBService service) {
+        public AddSelectionAction(IgbService service) {
             super("Add", KeyEvent.VK_Z);
             this.service = service;
         }
@@ -782,8 +778,7 @@ public class SearchPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent event) {
 
-            for (SeqSymmetry selected : service.getSeqMapView()
-                    .getSelectedSyms()) {
+            for (SeqSymmetry selected : GenometryModel.getInstance().getSelectedSymmetries(null)) {
                 selectionModel.getListModel().addElement(selected);
 
             }
@@ -799,9 +794,9 @@ public class SearchPanel extends JPanel {
 
         private static final long serialVersionUID = 1L;
 
-        IGBService service;
+        IgbService service;
 
-        public AddTrackAction(IGBService service) {
+        public AddTrackAction(IgbService service) {
             super("Add selected track", KeyEvent.VK_Z);
             this.service = service;
         }
@@ -814,9 +809,9 @@ public class SearchPanel extends JPanel {
             for (Object track : service.getSelectedTierGlyphs()) {
                 if (StyledGlyph.class.isInstance(track)) {
                     tracks.add((StyledGlyph) track);
-                }           
+                }
             }
-            
+
             Collection<RootSeqSymmetry> syms = TrackUtils.getInstance().getSymsTierGlyphs(tracks);
 
             for (SeqSymmetry rsym : syms) {
@@ -915,16 +910,17 @@ public class SearchPanel extends JPanel {
 
         private static final long serialVersionUID = 1L;
 
-        IGBService service;
+        IgbService service;
 
-        public TestAction(IGBService service) {
+        public TestAction(IgbService service) {
             super("Test", KeyEvent.VK_Z);
             this.service = service;
         }
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            SeqSymmetry symFound = service.getSeqMapView().getSelectedSyms().get(0);
+            SeqSymmetry symFound = getSelectedSymmetries().get(0);
+            service.getSeqMapView();
         }
     }
 
@@ -932,5 +928,8 @@ public class SearchPanel extends JPanel {
         return selectionBox.isVisible();
     }
 
-	
+    private List<SeqSymmetry> getSelectedSymmetries() {
+       return GenometryModel.getInstance().getSelectedSymmetries(GenometryModel.getInstance().getSelectedSeq().get());
+    }
+
 }

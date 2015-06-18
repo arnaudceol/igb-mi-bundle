@@ -15,13 +15,15 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import com.affymetrix.genometry.event.GenericAction;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
 import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -34,15 +36,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.border.TitledBorder;
-
-import com.affymetrix.igb.shared.IPrefEditorComponent;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+
+import com.affymetrix.genometry.event.GenericAction;
 
 /**
  *
@@ -51,7 +50,7 @@ import javax.swing.border.EmptyBorder;
  * Panel to manage the configuration of the MI Bundle, e.g. local PDB mirror
  *
  */
-public final class ConfigurationPanel extends IPrefEditorComponent {
+public final class ConfigurationPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -251,10 +250,7 @@ public final class ConfigurationPanel extends IPrefEditorComponent {
         cacheLabel.setText("Cache size: " + cacheMb + "M");
     }
 
-    @Override
-    public void refresh() {
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	
 
     private class ClearConfigAction extends GenericAction {
 

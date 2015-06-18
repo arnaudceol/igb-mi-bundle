@@ -25,6 +25,9 @@ import com.affymetrix.genometry.style.SimpleTrackStyle;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.symmetry.impl.SimpleSymWithProps;
 import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
+import com.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
+import com.lorainelab.igb.services.IgbService;
+
 import it.iit.genomics.cru.bridges.interactome3d.local.Interactome3DLocalRepository;
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.genes.EnsemblGeneManager;
@@ -67,8 +70,6 @@ import javax.swing.SwingWorker;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.affymetrix.igb.service.api.IGBService;
-import com.lorainelab.igb.genoviz.extensions.api.TierGlyph;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
 import it.iit.genomics.cru.igb.bundles.mi.genometry.MIGeneSymmetry;
 import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
@@ -78,12 +79,14 @@ import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERA
 import it.iit.genomics.cru.structures.bridges.psicquic.InteractionManager;
 import it.iit.genomics.cru.structures.model.ModifiedResidue;
 import it.iit.genomics.cru.structures.model.Range;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutionException;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -107,7 +110,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
     private final static String featureName = "mi";
 
-    IGBService service;
+    IgbService service;
 
     MIQuery query;
 
@@ -130,7 +133,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
     // symmetries (e.g. mutations)
     MapOfMap<MIGene, SeqSymmetry> miGene2selectedSyms = new MapOfMap<>();
 
-    public MIWorker(List<MIResult> results, IGBService service, MIQuery query,
+    public MIWorker(List<MIResult> results, IgbService service, MIQuery query,
             JProgressBar progressBar) {
 
         this.service = service;
@@ -622,7 +625,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
                             continue;
                         }
 
-                        merger.addRange(chromosome.getID(), new Range(gene.getMin(), gene.getMax()));
+                        merger.addRange(chromosome.getId(), new Range(gene.getMin(), gene.getMax()));
                     }
                 }
 
@@ -1056,7 +1059,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
         interactorTrack.setID(trackId);
         interactorTrack.setProperty(TrackLineParser.ITEM_RGB, Color.PINK);
 
-        BioSeq aseq = GenometryModel.getInstance().getSelectedSeq();
+        BioSeq aseq = GenometryModel.getInstance().getSelectedSeq().get();
 
         RangeMerger merger = new RangeMerger();
 
@@ -1089,8 +1092,8 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
             ArrayList<Integer> emins = new ArrayList<>();
             ArrayList<Integer> emaxs = new ArrayList<>();
 
-            if (merger.getRanges(sequence.getID()) != null) {
-                for (Range range : merger.getRanges(sequence.getID())) {
+            if (merger.getRanges(sequence.getId()) != null) {
+                for (Range range : merger.getRanges(sequence.getId())) {
                     if (range.getMin() >= span.getMin() && range.getMax() <= span.getMax()) {
                         emins.add(range.getMin());
                         emaxs.add(range.getMax() + 1);

@@ -36,7 +36,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.affymetrix.igb.service.api.IGBService;
+import com.lorainelab.igb.services.IgbService;
 import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
 import it.iit.genomics.cru.utils.maps.MapOfMap;
 import java.util.Collections;
@@ -69,7 +69,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
 
     private static final HashMap<String, IGBQuickLoadGeneManager> instances = new HashMap<>();
 
-    protected IGBService igbService;
+    protected IgbService igbService;
 
     private final static DNACompoundSet dna = DNACompoundSet.getDNACompoundSet();
     private final static RNACompoundSet rna = RNACompoundSet.getRNACompoundSet();
@@ -87,7 +87,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
             new ProteinSequenceCreator(aa), rna, codons, aa, table, false,
             false, false);
 
-    protected IGBQuickLoadGeneManager(IGBService igbService, String species) {
+    protected IGBQuickLoadGeneManager(IgbService igbService, String species) {
         this.igbService = igbService;
         igbLogger = IGBLogger.getMainInstance();
     }
@@ -96,7 +96,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
         return instances.values().iterator().next();
     }
 
-    public static IGBQuickLoadGeneManager getInstance(IGBService igbService, String species) {
+    public static IGBQuickLoadGeneManager getInstance(IgbService igbService, String species) {
         if (false == instances.containsKey(species)) {
             IGBQuickLoadGeneManager instance = new IGBQuickLoadGeneManager(igbService, species);
             instances.put(species, instance);
@@ -120,8 +120,12 @@ public class IGBQuickLoadGeneManager extends GeneManager {
         Set<SeqSymmetry> symmetries = new HashSet<>();
         Pattern pattern = Pattern.compile(geneId);
 
-        GenometryModel.getInstance()
-                .getSelectedSeqGroup().search(symmetries, pattern, -1);
+        
+        for (BioSeq seq : GenometryModel.getInstance().getSelectedGenomeVersion().getSeqList()) {
+             seq.search(symmetries, pattern, -1);
+        }
+//        GenometryModel.getInstance().
+//                .getSelectedSeqGroup().search(symmetries, pattern, -1);
 
         for (SeqSymmetry symmetry : symmetries) {
             /**
@@ -305,7 +309,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
             end = span.getEnd();
         }
 
-        return new MIGene(id, name, span.getBioSeq().getID(), start, end);
+        return new MIGene(id, name, span.getBioSeq().getId(), start, end);
     }
 
     public MapOfMap<SeqSymmetry, MIGene> getBySymList(BioSeq chromosomeSeq, ArrayList<SeqSymmetry> syms) {
@@ -331,7 +335,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
 
         if (chromosomeSym == null) {
             igbLogger.warning(
-                    "No chromosome found for " + chromosomeSeq.getID());
+                    "No chromosome found for " + chromosomeSeq.getId());
             return genes;
         }
 

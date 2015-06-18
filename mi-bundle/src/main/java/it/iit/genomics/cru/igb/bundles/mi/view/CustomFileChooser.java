@@ -16,8 +16,8 @@
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
 import java.io.File;
+
 import javax.swing.JFileChooser;
-import static javax.swing.JFileChooser.SAVE_DIALOG;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -26,7 +26,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author arnaudceol
  */
 public class CustomFileChooser extends JFileChooser {
-  private final String extension;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private final String extension;
   
   public CustomFileChooser(String directory, String extension, String message) {
     super(directory);

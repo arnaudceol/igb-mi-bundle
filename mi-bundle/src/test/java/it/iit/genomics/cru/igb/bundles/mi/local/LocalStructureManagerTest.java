@@ -1,14 +1,6 @@
 package it.iit.genomics.cru.igb.bundles.mi.local;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-
-import org.junit.Test;
-
 public class LocalStructureManagerTest {
-
-	@Test
 	public void testParseDirectory() {
 //		LocalStructureManager manager = LocalStructureManager.getInstance() ;
 //		

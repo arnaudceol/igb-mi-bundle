@@ -292,7 +292,7 @@ public class MIGeneSymmetry implements SeqSpan, SupportsCdsSpan, SymSpanWithCds,
         tprops.put("id", name);
         tprops.put("type", type);
         tprops.put("gene name", geneName);
-        tprops.put("seq id", seq.getID());
+        tprops.put("seq id", seq.getId());
         tprops.put("forward", forward);
         if (props != null) {
             tprops.putAll(props);
@@ -310,7 +310,7 @@ public class MIGeneSymmetry implements SeqSpan, SupportsCdsSpan, SymSpanWithCds,
         } else if (key.equals("gene name") || key.equals("gene_name")) {
             return geneName;
         } else if (key.equals("seq id")) {
-            return seq.getID();
+            return seq.getId();
         } else if (key.equals("forward")) {
             return forward;
         } else if (key.equals("cds min")) {

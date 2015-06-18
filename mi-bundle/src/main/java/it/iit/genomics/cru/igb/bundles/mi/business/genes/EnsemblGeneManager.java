@@ -17,6 +17,7 @@ package it.iit.genomics.cru.igb.bundles.mi.business.genes;
 
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.span.SimpleSeqSpan;
+import com.lorainelab.igb.services.IgbService;
 import it.iit.genomics.cru.bridges.ensembl.EnsemblClient;
 import it.iit.genomics.cru.bridges.ensembl.EnsemblClientManager;
 import it.iit.genomics.cru.bridges.ensembl.model.EnsemblException;
@@ -30,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.affymetrix.igb.service.api.IGBService;
 
 /**
  * @author Arnaud Ceol
@@ -46,9 +46,9 @@ public class EnsemblGeneManager extends GeneManager {
 
     private EnsemblClient client;
 
-    protected IGBService igbService;
+    protected IgbService igbService;
 
-    protected EnsemblGeneManager(IGBService igbService, String species) {
+    protected EnsemblGeneManager(IgbService igbService, String species) {
         igbLogger = IGBLogger.getMainInstance();
         try {
             client = EnsemblClientManager.getInstance().getClient(species);
@@ -58,7 +58,7 @@ public class EnsemblGeneManager extends GeneManager {
         }
     }
 
-    public static EnsemblGeneManager getInstance(IGBService igbService, String species) {
+    public static EnsemblGeneManager getInstance(IgbService igbService, String species) {
         if (false == instances.containsKey(species)) {
             EnsemblGeneManager instance = new EnsemblGeneManager(igbService, species);
             instances.put(species, instance);

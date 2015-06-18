@@ -56,10 +56,10 @@ public class Utils {
         int end = sym.getSpan(0).getEnd();
 
         if (start != end) {
-            return sym.getSpan(0).getBioSeq().getID() + ":" + sym.getSpan(0).getStart() + "-" + sym.getSpan(0).getEnd()
+            return sym.getSpan(0).getBioSeq().getId() + ":" + sym.getSpan(0).getStart() + "-" + sym.getSpan(0).getEnd()
                     + " (" + sym.getID() + ")";
         } else {
-            return sym.getSpan(0).getBioSeq().getID() + ":" + sym.getSpan(0).getStart()
+            return sym.getSpan(0).getBioSeq().getId() + ":" + sym.getSpan(0).getStart()
                     + " (" + sym.getID() + ")";
         }
     }

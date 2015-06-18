@@ -55,8 +55,7 @@ public abstract class GeneManager {
             return null;
         }
 
-        return GenometryModel.getInstance().getSelectedSeqGroup()
-                .getSeq(name);
+        return GenometryModel.getInstance().getSelectedGenomeVersion().getSeq(name);
     }
 
     /**

@@ -15,6 +15,7 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business;
 
+import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.GenometryModel;
 import com.affymetrix.genometry.event.GenericAction;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
@@ -30,7 +31,7 @@ import java.util.List;
 
 import javax.swing.JProgressBar;
 
-import com.affymetrix.igb.service.api.IGBService;
+import com.lorainelab.igb.services.IgbService;
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
 
@@ -46,9 +47,9 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 public class MIAction extends GenericAction {
 
     private static final long serialVersionUID = 1L;
-    private final IGBService igbService;
+    private final IgbService igbService;
 
-    public MIAction(IGBService igbService) {
+    public MIAction(IgbService igbService) {
         super("MI Search", KeyEvent.VK_Z);
         this.igbService = igbService;
     }
@@ -57,7 +58,7 @@ public class MIAction extends GenericAction {
     public void actionPerformed(ActionEvent event) {
         super.actionPerformed(event);
 
-       // MIView.getInstance().getStructurePanel().clean();
+        // MIView.getInstance().getStructurePanel().clean();
         // Check that sequences have been initialized
         try {
             if (MIQueryManager.getInstance().getSequences().isEmpty()) {
@@ -67,11 +68,18 @@ public class MIAction extends GenericAction {
                     MIQueryManager.getInstance().setTaxid(species[1]);
 
                     ArrayList<String> sequences = new ArrayList<>();
-                    for (int i = 0; i < GenometryModel.getInstance()
-                            .getSelectedSeqGroup().getSeqCount(); i++) {
-                        sequences.add(GenometryModel.getInstance()
-                                .getSelectedSeqGroup().getSeq(i).getID());
+
+                    for (BioSeq sequence
+                            : GenometryModel
+                            .getInstance().getSelectedGenomeVersion().getSeqList()) {
+
+                        sequences.add(sequence.getId());
                     }
+//                    for (int i = 0; i < GenometryModel.getInstance()
+//                            .getSelectedSeqGroup().getSeqCount(); i++) {
+//                        sequences.add(GenometryModel.getInstance()
+//                                .getSelectedSeqGroup().getSeq(i).getID());
+//                    }
                     MIQueryManager.getInstance().setSequences(sequences);
                     break;
                 }

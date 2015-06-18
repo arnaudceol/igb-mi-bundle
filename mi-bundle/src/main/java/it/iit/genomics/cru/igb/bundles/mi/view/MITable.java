@@ -20,8 +20,10 @@ import com.affymetrix.genometry.color.RGB;
 import com.affymetrix.genometry.parsers.TrackLineParser;
 import com.affymetrix.genometry.style.SimpleTrackStyle;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-
 import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
+import com.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
+import com.lorainelab.igb.services.IgbService;
+
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult.StructureSummary;
@@ -56,8 +58,6 @@ import javax.swing.table.TableRowSorter;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.lang.StringUtils;
 
-import com.affymetrix.igb.service.api.IGBService;
-import com.lorainelab.igb.genoviz.extensions.api.TierGlyph;
 import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_0;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_1;
@@ -69,7 +69,9 @@ import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
 import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_I3D;
 import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_PDB;
 import it.iit.genomics.cru.structures.model.MoleculeEntry;
+
 import java.util.Comparator;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.ToolTipManager;
@@ -87,7 +89,7 @@ public class MITable extends JTable {
 
     private final IGBLogger igbLogger;
 
-    private final IGBService igbService;
+    private final IgbService igbService;
 
     private boolean showInteractionsWoStructure = true;
 
@@ -155,7 +157,7 @@ public class MITable extends JTable {
 
     private final MIQuery query;
 
-    public MITable(MITableModel model, IGBService service, final MIQuery query) {
+    public MITable(MITableModel model, IgbService service, final MIQuery query) {
         super(model);
 
         this.query = query;
@@ -484,7 +486,7 @@ public class MITable extends JTable {
 
         if (syms != null && false == syms.isEmpty()) {
             SeqSpan span = syms.iterator().next().getSpan(0);
-            igbService.zoomToCoord(span.getBioSeq().getID(), span.getStart(), span.getEnd());
+            igbService.zoomToCoord(span.getBioSeq().getId(), span.getStart(), span.getEnd());
         }
     }
 

@@ -31,7 +31,6 @@ import it.iit.genomics.cru.structures.model.MIExon;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.junit.Test;
 
 public class UtilsTest {
 

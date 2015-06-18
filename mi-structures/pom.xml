@@ -4,12 +4,23 @@
 
     <groupId>it.iit.genomics.cru.mi</groupId>
     <artifactId>mi-structures</artifactId>
+    <version>2.9</version>
     
     <parent>
-        <groupId>it.iit.genomics.cru.mi</groupId>
-        <artifactId>mi-master</artifactId>
-        <version>2.7-SNAPSHOT</version>
+        <groupId>it.iit.genomics.cru</groupId>
+        <artifactId>cru-master</artifactId>
+        <version>2.2-SNAPSHOT</version>
     </parent>
+    
+    <properties>
+        <uniprot.version>2015.02</uniprot.version>
+        <biojava.version>4.0.0</biojava.version>
+        <jmol.version>12.2.34</jmol.version>        
+        <bridges.version>2.2</bridges.version>
+        <cru.version>2.2-SNAPSHOT</cru.version>
+        <netbeans.hint.license>apache20</netbeans.hint.license>
+    </properties>
+    
     
     <dependencies>
         <dependency>
@@ -32,16 +43,11 @@
             <artifactId>cru-utils</artifactId>
             <version>${cru.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.jmol</groupId>
-            <artifactId>jmol</artifactId>
-            <version>${jmol.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>psidev.psi.mi</groupId>
-            <artifactId>psimitab</artifactId>
-            <version>1.8.3</version>
-        </dependency>
+		<dependency>
+			<groupId>net.sourceforge.jmol</groupId>
+			<artifactId>jmol</artifactId>
+			<version>${jmol.version}</version>
+		</dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -78,11 +84,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-<!--        <dependency>
-            <groupId>org.biojava</groupId>
-            <artifactId>biojava3-alignment</artifactId>
-            <version>${biojava.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -108,8 +109,77 @@
             <artifactId>dsysmap-bridge</artifactId>
             <version>2.2</version>
         </dependency>
+        <dependency>
+            <groupId>psidev.psi.mi</groupId>
+            <artifactId>psimitab</artifactId>
+            <version>1.8.5</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>psi25-xml</artifactId>
+                    <groupId>psidev.psi.mi</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>com.springsource.org.apache.commons.collections</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>com.springsource.org.apache.commons.lang</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
     </dependencies>
-    <properties>
-        <netbeans.hint.license>apache20</netbeans.hint.license>
-    </properties>
+    
+    <repositories>               
+
+        <repository>
+            <id>iit-cru-snapshots</id>
+            <name>iit-cru-snapshots</name>
+            <url>http://cru.genomics.iit.it/nexus/content/repositories/snapshots</url>
+        </repository>
+        <repository>
+            <id>iit-cru</id>
+            <name>iit-cru</name>
+            <url>http://cru.genomics.iit.it/nexus/content/repositories/releases</url>
+        </repository>   
+        <!-- Third party jars. -->
+        <repository>
+            <id>iit-cru3</id>
+            <name>iit-cru3</name>
+            <url>http://cru.genomics.iit.it/nexus/content/repositories/thirdparty/</url>
+        </repository>
+
+    
+        <!-- EBI repositories - Where the IntAct artifacts are stored -->
+        <repository>
+            <id>ebi-repo</id>
+            <name>ebi-repo</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+        
+<!--        <repository>
+            <id>intact.nexus</id>
+            <name>IntAct Nexus</name>
+            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/groups/public</url>
+        </repository>
+        -->
+        <repository>
+            <id>biojava-maven-repo</id>
+            <name>BioJava repository</name>
+            <url>http://www.biojava.org/download/maven/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
+    </repositories>
+    
 </project>
