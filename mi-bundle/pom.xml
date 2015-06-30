@@ -79,7 +79,7 @@
 						<Service-Component>*</Service-Component>			
 						<Bundle-Activator>it.iit.genomics.cru.igb.bundles.mi.MIActivator</Bundle-Activator>
 						<Export-Package>org.apache.http.*</Export-Package>
-						<Import-Package>
+						<Import-Package>com.lorainelab.igb.services;version="${parent.version}",
 							*;resolution:=optional</Import-Package>
 						<Embed-Dependency>
 							uniprotkb, psimitab,
