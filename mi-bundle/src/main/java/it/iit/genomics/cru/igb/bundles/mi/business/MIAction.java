@@ -18,6 +18,10 @@ package it.iit.genomics.cru.igb.bundles.mi.business;
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.GenometryModel;
 import com.affymetrix.genometry.event.GenericAction;
+import com.affymetrix.genometry.event.SymSelectionEvent;
+import com.affymetrix.genometry.event.SymSelectionListener;
+import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
 import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
 import it.iit.genomics.cru.igb.bundles.mi.query.MIQueryManager;
@@ -44,15 +48,24 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
  * Main action for the MI Bundle. Create a Query based on the user choices and
  * run the framework. The actual work is done in background by the MIWorker.
  */
-public class MIAction extends GenericAction {
+public class MIAction extends GenericAction  implements SymSelectionListener {
 
     private static final long serialVersionUID = 1L;
     private final IgbService igbService;
 
+    List<SeqSymmetry> selected_syms ;
+    
     public MIAction(IgbService igbService) {
         super("MI Search", KeyEvent.VK_Z);
         this.igbService = igbService;
+        GenometryModel.getInstance().addSymSelectionListener(this);        
     }
+    
+
+	@Override
+	public void symSelectionChanged(SymSelectionEvent evt) {
+		selected_syms = evt.getSelectedGraphSyms();
+	}
 
     @Override
     public void actionPerformed(ActionEvent event) {
@@ -99,10 +112,10 @@ public class MIAction extends GenericAction {
         if (false == MIView.getInstance().getMiSearch().isBoxSearchEnabled()) {
             query.getSelectedSymmetries().clear();
             query.getSelectedSymmetries().addAll(
-                    igbService.getSeqMapView().getSelectedSyms());
+            		selected_syms);
         }
 
-        if (query.getSelectedSymmetries().isEmpty()) {
+        if (selected_syms.isEmpty()) {
             JOptionPane.showMessageDialog(MIView.getInstance().getMiSearch(),
                     "Please select one genomic region (e.g. a gene, an exon or a variant).", "Select a region", ERROR_MESSAGE);
             return;

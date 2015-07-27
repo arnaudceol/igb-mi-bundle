@@ -23,10 +23,13 @@ import com.affymetrix.genometry.SeqSpan;
 import com.affymetrix.genometry.event.GenericAction;
 import com.affymetrix.genometry.event.GenomeVersionSelectionEvent;
 import com.affymetrix.genometry.event.GroupSelectionListener;
+import com.affymetrix.genometry.event.SymSelectionEvent;
+import com.affymetrix.genometry.event.SymSelectionListener;
 import com.affymetrix.genometry.search.SearchUtils;
 import com.affymetrix.genometry.symmetry.RootSeqSymmetry;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.util.SeqUtils;
+import com.affymetrix.igb.shared.Selections;
 import com.affymetrix.igb.shared.TrackUtils;
 import com.lorainelab.igb.genoviz.extensions.glyph.StyledGlyph;
 import com.lorainelab.igb.services.IgbService;
@@ -253,7 +256,6 @@ public class SearchPanel extends JPanel {
                 max.height = getPreferredSize().height;
                 return max;
             }
-
         };
 
         // Load it
@@ -764,30 +766,42 @@ public class SearchPanel extends JPanel {
         }
     }
 
-    private class AddSelectionAction extends GenericAction {
+    private class AddSelectionAction extends GenericAction implements SymSelectionListener	 {
 
         private static final long serialVersionUID = 1L;
 
         IgbService service;
+        
+        List<SeqSymmetry> selected_syms ;
 
         public AddSelectionAction(IgbService service) {
             super("Add", KeyEvent.VK_Z);
-            this.service = service;
+            GenometryModel.getInstance().addSymSelectionListener(this);
+            this.service = service;            
         }
 
         @Override
         public void actionPerformed(ActionEvent event) {
-
-            for (SeqSymmetry selected : GenometryModel.getInstance().getSelectedSymmetries(null)) {
+        	if (selected_syms == null) {
+        		igbLogger.info("Number of elements: null");
+        		return;        				
+        	}
+            for (SeqSymmetry selected : selected_syms ){
+//            		GenometryModel.getInstance().getSelectedSymmetries(null)) {
                 selectionModel.getListModel().addElement(selected);
-
             }
 
+            igbLogger.info("Number of elements: " + selectionModel.getListModel().size());
             MIQueryManager.getInstance().setSelectedSymmetries(
                     Collections.list(selectionModel.getListModel().elements()));
             selectList.ensureIndexIsVisible(selectList.getComponentCount());
 
         }
+
+		@Override
+		public void symSelectionChanged(SymSelectionEvent evt) {
+			selected_syms = evt.getSelectedGraphSyms();
+		}
     }
 
     private class AddTrackAction extends GenericAction {
