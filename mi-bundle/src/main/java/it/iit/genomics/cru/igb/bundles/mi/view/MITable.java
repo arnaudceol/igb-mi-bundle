@@ -600,8 +600,8 @@ public class MITable extends JTable {
             Interaction interaction = (Interaction) value;
 
             String summary = interaction.getInteractionTypes().contains(INTERACTION_TYPE_PDB) || interaction.getInteractionTypes().contains(INTERACTION_TYPE_I3D)
-                    ? "<font color=\"#D3D3D3\">S</font>"
-                    : "<font color=\"green\"><b>S</b></font>";
+                    ? "<font color=\"green\">S</font>"
+                    : "<font color=\"#D3D3D3\"><b>S</b></font>";
 
             String color = interaction.isPhysical() ? "red" : "#D3D3D3";
             summary += "<font color=\"" + color + "\">P</font>";
