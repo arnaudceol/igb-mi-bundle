@@ -857,8 +857,12 @@ public class MITable extends JTable {
                         || colIndex == MITableModel.INTERACTOR2_COLUMN) {
                     MoleculeEntry entry = (MoleculeEntry) value;
                     tip = entry.getGeneName() + " (" + entry.getUniprotAc() + ", " + entry.getOrganism() + ")";
-                } else if (colIndex == MITableModel.TRACK_COLUMN) {
-                    tip = ((MIResult) value).getTrackId();
+                } else if (colIndex == MITableModel.TRACK_COLUMN ) {
+                	if (JButton.class.isInstance(value)) {
+                		tip = "Press this button to create a new track for this interaction";
+                	} else {
+                		tip = ((MIResult) value).getTrackId();
+                	}
                 } else if (colIndex == MITableModel.INTERACTION_TYPE_COLUMN) {
                     Interaction interaction = (Interaction) value;
                     tip = "<html>Type: " + StringUtils.join(interaction.getInteractionTypes(), ", ")
