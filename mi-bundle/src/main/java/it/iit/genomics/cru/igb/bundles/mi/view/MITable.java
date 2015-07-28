@@ -189,7 +189,8 @@ public class MITable extends JTable {
 
                     if (e.getClickCount() == 1) {
                         if (column == MITableModel.TRACK_COLUMN) {
-                            Object value = table.getValueAt(modelRow, column);
+                            Object value = table.getValueAt(table.getSelectedRow(), column);
+                                                        
                             if (value instanceof JButton) {
                                 MIResult result = ((MITableModel) table.getModel())
                                         .getResult(modelRow);
