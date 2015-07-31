@@ -888,10 +888,15 @@ public class MITable extends JTable {
 
         Comparator GN_COMPARATOR = new Comparator<MoleculeEntry>() {
 
-            @Override
-            public int compare(MoleculeEntry o1, MoleculeEntry o2) {
-                return o1.getGeneName().compareTo(o2.getGeneName());
-            }
+			@Override
+			public int compare(MoleculeEntry o1, MoleculeEntry o2) {
+				return o1 == null ? (o2 == null ? 0 : Integer.MIN_VALUE)
+						: (o2 == null ? Integer.MAX_VALUE : 
+							o1.getGeneName() == null ? 
+									(o2.getGeneName() == null ? 0 :  Integer.MIN_VALUE)
+									: (o2.getGeneName() == null ? Integer.MAX_VALUE :									
+										o2.getGeneName().compareTo(o2.getGeneName())));
+			}
         };
 
 //        Comparator EVIDENCE_COMPARATOR = new Comparator<Interaction>() {
