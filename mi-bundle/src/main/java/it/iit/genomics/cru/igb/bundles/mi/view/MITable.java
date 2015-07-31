@@ -861,7 +861,7 @@ public class MITable extends JTable {
                 	if (JButton.class.isInstance(value)) {
                 		tip = "Press this button to create a new track for this interaction";
                 	} else {
-                		tip = ((MIResult) value).getTrackId();
+                		tip = ((JLabel) value).getText();
                 	}
                 } else if (colIndex == MITableModel.INTERACTION_TYPE_COLUMN) {
                     Interaction interaction = (Interaction) value;
