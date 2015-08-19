@@ -1,0 +1,258 @@
+DrugBank ID,Name,HET ID
+DB00786,Marimastat,97
+DB00640,Adenosine,101
+DB00713,Oxacillin,105
+DB01076,Atorvastatin,117
+DB00592,Piperazine,169
+DB00282,Pamidronate,210
+DB00834,Mifepristone,486
+DB01261,Sitagliptin,715
+DB00227,Lovastatin,803
+DB00905,Bimatoprost,15M
+DB00396,Progesterone,1CA
+DB00752,Tranylcypromine,1LP
+DB00900,Didanosine,2DI
+DB01075,Diphenhydramine,2PM
+DB01628,Etoricoxib,5CH
+DB00437,Allopurinol,7HP
+DB00553,Methoxsalen,8MO
+DB01601,Lopinavir,AB1
+DB00787,Aciclovir,AC2
+DB00513,Aminocaproic Acid,ACA
+DB03166,Acetic acid,ACY
+DB00173,Adenine,ADE
+DB00775,Tirofiban,AGG
+DB00630,Alendronate,AHD
+DB00742,Mannitol,AHM
+DB00415,Ampicillin,AIC
+DB00945,Acetylsalicylic acid,AIN
+DB00160,L-Alanine,ALA
+DB00668,Epinephrine,ALE
+DB00518,Albendazole,ALW
+DB00302,Tranexamic Acid,AMH
+DB00594,Amiloride,AMR
+DB00530,Erlotinib,AQ4
+DB00987,Cytarabine,AR3
+DB00877,Sirolimus,ARD
+DB00125,L-Arginine,ARG
+DB00174,L-Asparagine,ASN
+DB00128,L-Aspartic Acid,ASP
+DB00759,Tetracycline,ATC
+DB00171,Adenosine triphosphate,ATP
+DB00548,Azelaic Acid,AZ1
+DB00819,Acetazolamide,AZM
+DB07402,Azapropazone,AZQ
+DB00355,Aztreonam,AZR
+DB01268,Sunitinib,B49
+DB00398,Sorafenib,BAX
+DB01244,Bepridil,BEP
+DB00710,Ibandronate,BFQ
+DB00233,Aminosalicylic Acid,BHA
+DB00290,Bleomycin,BLM
+DB00694,Daunorubicin,BNR
+DB00412,Rosiglitazone,BRL
+DB00121,Biotin,BTN
+DB00676,Benzyl Benzoate,BZM
+DB01194,Brinzolamide,BZU
+DB08800,Chloropyramine,C4C
+DB00411,Carbachol,CCE
+DB00380,Dexrazoxane,CDX
+DB00493,Cefotaxime,CEF
+DB00482,Celecoxib,CEL
+DB00456,Cefalotin,CEO
+DB01034,Cerulenin,CER
+DB01112,Cefuroxime,CES
+DB00631,Clofarabine,CFB
+DB00201,Caffeine,CFF
+DB00122,Choline,CHT
+DB00820,Tadalafil,CIA
+DB01597,Cilastatin,CIL
+DB00155,L-Citrulline,CIR
+DB00446,Chloramphenicol,CLM
+DB00608,Chloroquine,CLQ
+DB00575,Clonidine,CLU
+DB00356,Chlorzoxazone,CLW
+DB01190,Clindamycin,CLY
+DB00115,Cyanocobalamin,CNC
+DB00994,Neomycin,CNY
+DB00205,Pyrimethamine,CP6
+DB00613,Amodiaquine,CQA
+DB00148,Creatine,CRN
+DB00256,Lymecycline,CTC
+DB01147,Cloxacillin,CXN
+DB01242,Clomipramine,CXX
+DB00151,L-Cysteine,CYS
+DB00606,Cyclothiazide,CYZ
+DB00293,Raltitrexed,D16
+DB01235,L-DOPA,DAH
+DB00255,Diethylstilbestrol,DES
+DB01234,Dexamethasone,DEX
+DB00624,Testosterone,DHT
+DB00586,Diclofenac,DIF
+DB01245,Decamethonium,DME
+DB01093,Dimethyl sulfoxide,DMS
+DB01764,Dalfopristin,DOL
+DB01151,Desipramine,DSM
+DB00512,Vancomycin,DVV
+DB00829,Diazepam,DZP
+DB00655,Estrone,E3G
+DB00903,Ethacrynic acid,EAA
+DB00584,Enalapril,EAL
+DB00783,Estradiol,ECO
+DB01010,Edrophonium,EDR
+DB00974,Edetic Acid,EDT
+DB00625,Efavirenz,EFZ
+DB00159,Icosapent,EPA
+DB02187,Equilin,EQI
+DB00199,Erythromycin,ERY
+DB04573,Estriol,ESL
+DB01113,Papaverine,EV1
+DB03147,Flavin adenine dinucleotide,FAD
+DB01098,Rosuvastatin,FBI
+DB00828,Fosfomycin,FCN
+DB00861,Diflunisal,FHI
+DB01216,Finasteride,FIT
+DB00864,Tacrolimus,FK5
+DB00693,Fluorescein,FLU
+DB01259,Lapatinib,FMM
+DB00158,Folic Acid,FOL
+DB02703,Fusidic Acid,FUA
+DB00695,Furosemide,FUN
+DB01004,Ganciclovir,GA2
+DB00536,Guanidine,GAI
+DB00996,Gabapentin,GBN
+DB00441,Gemcitabine,GEO
+DB06605,Apixaban,GG2
+DB00130,L-Glutamine,GLN
+DB00145,Glycine,GLY
+DB00674,Galantamine,GNT
+DB00143,Glutathione,GSH
+DB00551,Acetohydroxamic Acid,HAE
+DB00499,Flutamide,HFT
+DB00117,L-Histidine,HIS
+DB01159,Halothane,HLT
+DB02959,Oxitriptan,HRP
+DB01144,Diclofenamide,I7A
+DB01050,Ibuprofen,IBP
+DB00753,Isoflurane,ICF
+DB00249,Idoxuridine,ID2
+DB04711,Iodipamide,IDB
+DB00167,L-Isoleucine,ILE
+DB03255,Phenol,IPH
+DB00317,Gefitinib,IRE
+DB00951,Isoniazid,ISZ
+DB01586,Ursodeoxycholic acid,IU5
+DB00458,Imipramine,IXX
+DB00570,Vinblastine,KAR
+DB01026,Ketoconazole,KTN
+DB00154,Dihomo-gamma-linolenic acid,LAX
+DB00988,Dopamine,LDP
+DB00149,L-Leucine,LEU
+DB00132,Alpha-Linolenic Acid,LNL
+DB00368,Norepinephrine,LNR
+DB01394,Colchicine,LOC
+DB00166,Lipoic Acid,LPA
+DB00722,Lisinopril,LPR
+DB00137,Xanthophyll,LUT
+DB00642,Pemetrexed,LYA
+DB00123,L-Lysine,LYS
+DB02300,Calcipotriol,MC9
+DB00760,Meropenem,MER
+DB00134,L-Methionine,MET
+DB01065,Melatonin,ML1
+DB00763,Methimazole,MMZ
+DB01024,Mycophenolic acid,MOA
+DB00764,Mometasone,MOF
+DB00295,Morphine,MOI
+DB00410,Mupirocin,MRC
+DB00563,Methotrexate,MTX
+DB00350,Minoxidil,MXD
+DB01011,Metyrapone,MYT
+DB00141,N-Acetyl-D-glucosamine,NAG
+DB00184,Nicotine,NCT
+DB00717,Norethindrone,NDR
+DB04552,Niflumic Acid,NFL
+DB00607,Nafcillin,NFN
+DB00336,Nitrofural,NFZ
+DB00627,Niacin,NIO
+DB01051,Novobiocin,NOV
+DB00238,Nevirapine,NVP
+DB00675,Tamoxifen,OHT
+DB00572,Atropine,OIN
+DB00129,L-Ornithine,ORN
+DB00812,Phenylbutazone,P1Z
+DB00741,Hydrocortisone,PDN
+DB00299,Penciclovir,PE2
+DB01393,Bezafibrate,PEM
+DB00818,Propofol,PFL
+DB01053,Benzylpenicillin,PG1
+DB00120,L-Phenylalanine,PHE
+DB00168,Aspartame,PME
+DB01614,Acepromazine,PMZ
+DB00738,Pentamidine,PNT
+DB00417,Penicillin V,PNV
+DB01179,Podofilox,POD
+DB01123,Proflavine,PRL
+DB00172,L-Proline,PRO
+DB00144,Phosphatidylserine,PSF
+DB00147,Pyridoxal,PXL
+DB00119,Pyruvic acid,PYR
+DB01058,Praziquantel,PZQ
+DB01103,Quinacrine,QUM
+DB00194,Vidarabine,RAB
+DB00481,Raloxifene,RAL
+DB01367,Rasagiline,RAS
+DB00615,Rifabutin,RBT
+DB00884,Risedronate,RIS
+DB00503,Ritonavir,RIT
+DB01656,Roflumilast,ROF
+DB00778,Roxithromycin,ROX
+DB01201,Rifapentine,RPT
+DB00811,Ribavirin,RTP
+DB00936,Salicylic acid,SAL
+DB00118,S-Adenosylmethionine,SAM
+DB00259,Sulfanilamide,SAN
+DB00795,Sulfasalazine,SAS
+DB06151,Acetylcysteine,SC2
+DB00919,Spectinomycin,SCM
+DB00133,L-Serine,SER
+DB02546,Vorinostat,SHH
+DB00641,Simvastatin,SIM
+DB00139,Succinic acid,SIN
+DB00421,Spironolactone,SNL
+DB00127,Spermine,SPM
+DB00705,Delavirdine,SPP
+DB01082,Streptomycin,SRY
+DB00619,Imatinib,STI
+DB04786,Suramin,SVR
+DB01369,Quinupristin,SYB
+DB00279,Liothyronine,T3
+DB01361,Troleandomycin,TAO
+DB08604,Triclosan,TCL
+DB00976,Telithromycin,TEL
+DB00277,Theophylline,TEP
+DB00300,Tenofovir,TFO
+DB00831,Trifluoperazine,TFP
+DB00360,Tetrahydrobiopterin,THB
+DB00116,Tetrahydrofolic acid,THL
+DB00156,L-Threonine,THR
+DB00373,Timolol,TIM
+DB00730,Thiabendazole,TMG
+DB04794,Bifonazole,TMI
+DB01157,Trimetrexate,TMQ
+DB00684,Tobramycin,TOY
+DB00196,Fluconazole,TPF
+DB00932,Tipranavir,TPV
+DB00150,L-Tryptophan,TRP
+DB01030,Topotecan,TTC
+DB00135,L-Tyrosine,TYR
+DB00544,Fluorouracil,URF
+DB00161,L-Valine,VAL
+DB00152,Thiamine,VIB
+DB00163,Vitamin E,VIT
+DB00170,Menadione,VK3
+DB01165,Ofloxacin,XED
+DB00207,Azithromycin,ZIT
+DB00601,Linezolid,ZLD
+DB00558,Zanamivir,ZMR
+DB00399,Zoledronate,ZOL

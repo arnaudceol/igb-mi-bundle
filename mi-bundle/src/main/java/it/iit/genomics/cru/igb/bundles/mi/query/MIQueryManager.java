@@ -54,7 +54,7 @@ public class MIQueryManager extends AbstractMIQuery {
 
     public MIQuery getMIQuery() {
         return new MIQuery(selectedSymmetries, queryType, createTracks, searchPDB, searchInteractome3D, searchDsysmap, searchEPPIC, searchPDBLocal, searchUserStructures,
-                searchProteinStructures, searchNucleicAcid, searchLigands, searchModifications,
+                searchProteinStructures, searchPPI, searchNucleicAcid, searchLigands, searchModifications,
                 psiquicServer, taxid, species, sequences);
     }
 
@@ -126,7 +126,12 @@ public class MIQueryManager extends AbstractMIQuery {
         this.selectedSymmetries.clear();
         this.selectedSymmetries.addAll(selectedSymmetries);
     }
-
+    
+    public void setSearchPPI(boolean selected) {
+        igbLogger.info("Search PPI: " + selected);
+        this.searchPPI = selected;
+    }
+    
     public void setSearchNucleicAcid(boolean selected) {
         igbLogger.info("Search RNA/DNA: " + selected);
         this.searchNucleicAcid = selected;

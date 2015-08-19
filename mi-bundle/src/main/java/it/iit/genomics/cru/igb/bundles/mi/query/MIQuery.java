@@ -49,7 +49,7 @@ public class MIQuery extends AbstractMIQuery {
     // }
     public MIQuery(Collection<SeqSymmetry> selection, QueryType queryType,
             boolean createTracks, boolean searchPDB, boolean searchInteractome3D, boolean searchDsysmap, boolean searchEPPIC, boolean searchPDBLocal, boolean searchUserStructures,
-            boolean searchProteinStructures, boolean searchNucleicAcid, boolean searchLigands, boolean searchModifications,
+            boolean searchProteinStructures,  boolean searchPPI,boolean searchNucleicAcid, boolean searchLigands, boolean searchModifications,
             String psiquicServer, String taxid, String species,
             List<String> sequenceNames) {
         super();
@@ -70,6 +70,7 @@ public class MIQuery extends AbstractMIQuery {
         this.searchPDBLocal = searchPDBLocal;
         this.searchUserStructures = searchUserStructures;
 
+        this.searchPPI = searchPPI;
         this.searchNucleicAcid = searchNucleicAcid;
         this.searchLigands = searchLigands;
 

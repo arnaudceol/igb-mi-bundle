@@ -52,9 +52,13 @@ public class AbstractMIQuery {
     protected boolean searchUserStructures = false;
     protected boolean searchModifications = false;
 
-    protected boolean searchLigands;
+    // For PDB, it should be possible to disable protein-protein interactions in order to 
+    // retrieve only protein-ligand interactions
+    protected boolean searchPPI = true;
+    
+    protected boolean searchLigands = true;
 
-    protected boolean searchNucleicAcid;
+    protected boolean searchNucleicAcid = true;
     
     protected boolean searchProteinStructures = false;
 
@@ -135,6 +139,10 @@ public class AbstractMIQuery {
         return searchProteinStructures;
     }
 
+    public boolean searchPPI() {
+        return searchPPI;
+    }    
+    
     public boolean searchLigands() {
         return searchLigands;
     }

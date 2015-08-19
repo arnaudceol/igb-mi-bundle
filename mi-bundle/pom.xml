@@ -5,12 +5,12 @@
 	<groupId>it.iit.genomics.cru.mi</groupId>
 	<artifactId>igb-bundle</artifactId>
 	<packaging>bundle</packaging>
-	<version>2.9.2</version>
+	<version>2.9.3-SNAPSHOT</version>
     
 	<parent>
 		<groupId>com.affymetrix</groupId>
 		<artifactId>igb-project</artifactId>
-		<version>8.4.0</version>
+		<version>8.4.2</version>
 	</parent>
 
 	<!-- <parent> <groupId>it.iit.genomics.cru.mi</groupId> <artifactId>mi-master</artifactId> 

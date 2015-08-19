@@ -25,6 +25,7 @@ import com.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
 import com.lorainelab.igb.services.IgbService;
 
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.DrugBankMapper;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult.StructureSummary;
 import it.iit.genomics.cru.igb.bundles.mi.commons.Utils;
@@ -275,7 +276,7 @@ public class MITable extends JTable {
                                     if (miResult.getInteractionStructures().isEmpty()) {
                                         return;
                                     }
-                                    query = "http://www.pdb.org/pdb/explore/explore.do?structureId=" + miResult.getInteractionStructures().iterator().next().getStructureID();
+                                    query = "http://www.rcsb.org/pdb/ligand/ligandsummary.do?hetId=" + interactor.getUniprotAc();
                                     break;
                                 case MoleculeEntry.TAXID_MODIFICATION:
                                     query = "http://www.uniprot.org/uniprot/" + miResult.getInteractor1().getUniprotAc();
@@ -565,7 +566,8 @@ public class MITable extends JTable {
 
             MoleculeEntry protein = (MoleculeEntry) value;
 
-            String display = protein.getUniprotAc();
+            String display = protein.isLigand() && DrugBankMapper.getInstance().getDrugBankId(protein.getGeneName()) != null ?
+            	DrugBankMapper.getInstance().getDrugName(protein.getGeneName()) : protein.getUniprotAc();
 
             if (isSelected) {
                 renderer.setForeground(table.getSelectionForeground());
