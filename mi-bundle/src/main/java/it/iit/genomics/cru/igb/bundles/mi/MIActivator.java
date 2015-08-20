@@ -16,6 +16,7 @@
 package it.iit.genomics.cru.igb.bundles.mi;
 
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.DrugBankMapper;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -72,6 +73,9 @@ public class MIActivator extends XServiceRegistrar<IgbService> implements Bundle
 
         igbLogger.info(
 	                "The Molecular Interaction Bundle is ready");
+        
+        // Initialize the DrugBank mapper
+        DrugBankMapper.getInstance();               
     }
 //
 //    @Override
