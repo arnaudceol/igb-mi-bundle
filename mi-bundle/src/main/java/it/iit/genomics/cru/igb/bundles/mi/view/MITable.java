@@ -42,6 +42,7 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -272,11 +273,18 @@ public class MITable extends JTable {
                             switch (taxid) {
                                 case MoleculeEntry.TAXID_DNA:
                                 case MoleculeEntry.TAXID_RNA:
+                                    if (miResult.getInteractionStructures().isEmpty()) {
+                                        return;
+                                    }
+                                    query = "http://www.pdb.org/pdb/explore/explore.do?structureId=" + miResult.getInteractionStructures().iterator().next().getStructureID();
+                                    break;
                                 case MoleculeEntry.TAXID_LIGAND:
                                     if (miResult.getInteractionStructures().isEmpty()) {
                                         return;
                                     }
-                                    query = "http://www.rcsb.org/pdb/ligand/ligandsummary.do?hetId=" + interactor.getUniprotAc();
+                                    query = DrugBankMapper.getInstance().isDrug(interactor.getGeneName()) ?
+                                    	DrugBankMapper.getInstance().getDrugBankLink(interactor.getGeneName()) :
+                                    	"http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/" + interactor.getGeneName();                                    
                                     break;
                                 case MoleculeEntry.TAXID_MODIFICATION:
                                     query = "http://www.uniprot.org/uniprot/" + miResult.getInteractor1().getUniprotAc();
@@ -567,8 +575,10 @@ public class MITable extends JTable {
             MoleculeEntry protein = (MoleculeEntry) value;
 
             String display = protein.isLigand() && DrugBankMapper.getInstance().getDrugBankId(protein.getGeneName()) != null ?
-            	DrugBankMapper.getInstance().getDrugName(protein.getGeneName()) : protein.getUniprotAc();
-
+            	DrugBankMapper.getInstance().getDrugName(protein.getGeneName()) + " (DrugBank: " + DrugBankMapper.getInstance().getDrugBankId(protein.getGeneName()) + ")" 
+            	: protein.getUniprotAc();
+            
+            
             if (isSelected) {
                 renderer.setForeground(table.getSelectionForeground());
                 renderer.setBackground(table.getSelectionBackground());
@@ -581,6 +591,19 @@ public class MITable extends JTable {
                 }
             }
 
+            if (protein.isProtein()) {
+            	renderer.setIcon(new ImageIcon(getClass().getResource("/uniprot.jpg")));
+            } else if (protein.isLigand()) {
+            	if(DrugBankMapper.getInstance().getDrugBankId(protein.getGeneName()) != null ) {            	
+            		renderer.setIcon(new ImageIcon(getClass().getResource("/drugbank.jpg")));
+            	} else {
+            		renderer.setIcon(new ImageIcon(getClass().getResource("/ligand.png")));
+            	}
+            } else if (protein.isMofication()) {
+            	renderer.setIcon(new ImageIcon(getClass().getResource("/ptm.png")));
+            } else if (protein.isNucleicAcid()) {
+            	renderer.setIcon(new ImageIcon(getClass().getResource("/dna.png")));
+            }
             renderer.setText(display);
 
             return renderer;
