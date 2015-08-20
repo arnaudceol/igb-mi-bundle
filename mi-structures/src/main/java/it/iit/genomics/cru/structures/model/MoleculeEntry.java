@@ -565,6 +565,28 @@ public class MoleculeEntry implements Comparable<MoleculeEntry> {
         }
     }
 
+    public boolean isNucleicAcid() {
+        switch (getTaxid()) {
+            case TAXID_DNA:
+                return true;
+            case TAXID_RNA:
+                return true;
+            default:
+                return false;
+        }
+    }
+    
+
+    public boolean isMofication() {
+        switch (getTaxid()) {
+            case TAXID_MODIFICATION:
+                return true;
+            default:
+                return false;
+        }
+    }
+        
+    
     /**
      *
      * @return
