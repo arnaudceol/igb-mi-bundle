@@ -14,9 +14,9 @@
     
     <properties>
         <uniprot.version>2015.02</uniprot.version>
-        <biojava.version>4.0.0</biojava.version>
+        <biojava.version>4.1.0</biojava.version>
         <jmol.version>12.2.34</jmol.version>        
-        <bridges.version>2.2</bridges.version>
+        <bridges.version>2.3</bridges.version>
         <cru.version>2.2-SNAPSHOT</cru.version>
         <netbeans.hint.license>apache20</netbeans.hint.license>
     </properties>
@@ -107,7 +107,7 @@
         <dependency>
             <groupId>it.iit.genomics.cru.bridges</groupId>
             <artifactId>dsysmap-bridge</artifactId>
-            <version>2.2</version>
+            <version>${bridges.version}</version>
         </dependency>
         <dependency>
             <groupId>psidev.psi.mi</groupId>
