@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import org.biojava.nbio.structure.Chain;
 import org.biojava.nbio.structure.Group;
+import org.biojava.nbio.structure.GroupType;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureImpl;
 import org.biojava.nbio.structure.asa.AsaCalculator;
@@ -429,10 +430,10 @@ public class Accessibility {
 
             for (GroupAsa a : asas2) {
                 Group g = a.getGroup();
-                String key = g.getResidueNumber() + ":" + g.getChainId();
-
-                singleAccessibility.put(key, a.getAsaU());
-
+                if (GroupType.AMINOACID == g.getType()) {                
+                	String key = g.getResidueNumber() + ":" + g.getChainId();
+                	singleAccessibility.put(key, a.getAsaU());
+                }
             }
         }
 
@@ -459,13 +460,15 @@ public class Accessibility {
 
             for (GroupAsa a : asas2) {
                 Group g = a.getGroup();
-
+                if (GroupType.AMINOACID == g.getType()) {                
+                
                 String key = g.getResidueNumber() + ":" + g.getChainId();
 
                 Double single = singleAccessibility.get(key);
 
                 if (single - a.getAsaU() < -1) {
                     contactChains.add(key, chainPair[1]);
+                }
                 }
             }
         }
