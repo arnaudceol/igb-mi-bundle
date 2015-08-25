@@ -98,7 +98,7 @@ public class MIQuery extends AbstractMIQuery {
         return pdbMirrorPath;
     }
 
-    public String getI3dMirrorPath() {
+    public String getI3dMirrorPathw() {
         return i3dMirrorPath;
     }
 

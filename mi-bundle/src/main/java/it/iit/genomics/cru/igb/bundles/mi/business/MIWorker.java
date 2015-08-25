@@ -259,29 +259,39 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 				break;
 			}
 
-			// Add interactors from User structures?
-			if (null != query.getUserStructuresPath() && query.searchUserStructures()) {
-				Interactome3DLocalRepository userStructures = UserStructuresManager.getInstance()
-						.getUserRepository(query.getUserStructuresPath());
-				for (String interactorAc : userStructures.getInteractors(ac)) {
-					interactors.getOrCreateInteraction(ac, interactorAc).addType(INTERACTION_TYPE_I3D);
-					uniprotNeedMapping.add(interactorAc);
-				}
-			}
+//			// Add interactors from User structures?
+//			if (null != query.getUserStructuresPath() && query.searchUserStructures()) {
+//				Interactome3DLocalRepository userStructures = UserStructuresManager.getInstance()
+//						.getUserRepository(query.getUserStructuresPath());
+//				for (String interactorAc : userStructures.getInteractors(ac)) {
+//					interactors.getOrCreateInteraction(ac, interactorAc).addType(INTERACTION_TYPE_I3D);
+//					uniprotNeedMapping.add(interactorAc);
+//				}
+//			}
 
 			// Add interactors from I3D?
 			if (query.searchInteractome3D() || query.searchDSysMap()) {
 				// Check or download I3D interaction file
-				I3DDownload download = new I3DDownload(MIBundleConfiguration.getInstance().getCachePath());
+				
+				// get it from local repository?
+				Interactome3DLocalRepository userStructures;
+//				System.out.println("I3D cache: " +  MIBundleConfiguration.getInstance().getI3DStructuresDirectory());
+				if (null != MIBundleConfiguration.getInstance().getI3DStructuresDirectory() ) {
+					userStructures = UserStructuresManager.getInstance()
+							.getUserRepository(MIBundleConfiguration.getInstance().getI3DStructuresDirectory());
+				} else {				
+					I3DDownload download = new I3DDownload(MIBundleConfiguration.getInstance().getCachePath());
 
-				if (false == download.isDatDownloaded(query.getTaxid())) {
-					logAndPublish("download interactions from Interactome3D");
-					download.downloadDat(query.getTaxid());
-				}
+					if (false == download.isDatDownloaded(query.getTaxid())) {
+						logAndPublish("download interactions from Interactome3D");
+						download.downloadDat(query.getTaxid());
+					}
 
-				// get interactions
-				Interactome3DLocalRepository userStructures = UserStructuresManager.getInstance()
+					// get interactions
+					userStructures = UserStructuresManager.getInstance()
 						.getUserRepository(download.getI3DdatPath(query.getTaxid()));
+				}
+				
 				for (String interactorAc : userStructures.getInteractors(ac)) {
 					interactors.getOrCreateInteraction(ac, interactorAc).addType("direct interaction (Interactome3D)");
 					uniprotNeedMapping.add(interactorAc);

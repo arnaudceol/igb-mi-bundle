@@ -264,33 +264,44 @@ public class MIResult {
     private void initAndGetStructures(MIQuery query) {
         // Get Structure repository
         // User dir
-        if (query.getUserStructuresPath() != null
-                && query.searchUserStructures()) {
-
-            structureSource = StructureManager.getInstance()
-                    .getStructureSource(StructureSourceType.USER,
-                            query.getUserStructuresPath(),
-                            MIBundleConfiguration.getInstance().getCachePath());
-
-            Interactome3DLocalRepository userStructures = UserStructuresManager
-                    .getInstance().getUserRepository(
-                            query.getUserStructuresPath());
-            igbLogger.info("Get I3D structures from user source");
-
-            structuresInteraction.addAll(Interactome3DUtils.getStructures(container1.getEntry(), container2.getEntry(), userStructures, structureSource));
-        } // Interactome3D
-        else if (false == MIBundleConfiguration.getInstance()
+//        if (query.getUserStructuresPath() != null
+//                && query.searchUserStructures()) {
+//
+//            structureSource = StructureManager.getInstance()
+//                    .getStructureSource(StructureSourceType.USER,
+//                            query.getUserStructuresPath(),
+//                            MIBundleConfiguration.getInstance().getCachePath());
+//
+//            Interactome3DLocalRepository userStructures = UserStructuresManager
+//                    .getInstance().getUserRepository(
+//                            query.getUserStructuresPath());
+//            igbLogger.info("Get I3D structures from user source");
+//
+//            structuresInteraction.addAll(Interactome3DUtils.getStructures(container1.getEntry(), container2.getEntry(), userStructures, structureSource));
+//        } 
+        // Interactome3D
+//        else 
+        	if (false == MIBundleConfiguration.getInstance()
                 .isDisabledInteractome3D() && (query.searchInteractome3D() || query.searchDSysMap())) {
-            structureSource = StructureManager.getInstance()
+        		
+        		Interactome3DLocalRepository client;
+//				System.out.println("I3D cache: " +  MIBundleConfiguration.getInstance().getI3DStructuresDirectory());
+				if (null != MIBundleConfiguration.getInstance().getI3DStructuresDirectory() ) {
+					client = UserStructuresManager.getInstance()
+							.getUserRepository(MIBundleConfiguration.getInstance().getI3DStructuresDirectory());
+				} else {				
+					I3DDownload download = new I3DDownload(MIBundleConfiguration.getInstance().getCachePath());
+
+					// get interactions
+					client = UserStructuresManager.getInstance()
+						.getUserRepository(download.getI3DdatPath(query.getTaxid()));
+				}
+				
+        	structureSource = StructureManager.getInstance()
                     .getStructureSource(StructureSourceType.INTERACTOME3D,
                             null,
                             MIBundleConfiguration.getInstance().getCachePath());
-
-              I3DDownload download = new I3DDownload(MIBundleConfiguration.getInstance().getCachePath());
-
-            Interactome3DLocalRepository client = UserStructuresManager
-                    .getInstance().getUserRepository(
-                            download.getI3DdatPath(query.getTaxid()));
+            
             structuresInteraction.addAll(Interactome3DUtils.getStructures(container1.getEntry(), container2.getEntry(), client, structureSource));
         } // Structures from PDB
         else if (query.searchPDBLocal()) {
