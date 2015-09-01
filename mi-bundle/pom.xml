@@ -5,7 +5,7 @@
 	<groupId>it.iit.genomics.cru.mi</groupId>
 	<artifactId>igb-bundle</artifactId>
 	<packaging>bundle</packaging>
-	<version>2.9.3-SNAPSHOT</version>
+	<version>2.9.3</version>
     
 	<parent>
 		<groupId>com.affymetrix</groupId>
