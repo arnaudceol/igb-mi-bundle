@@ -8,4 +8,4 @@ structures (protein-protein, protein-DNA, protein-RNA and
 protein-small molecule interactions) and allows the researcher 
 to make educated guesses about the functional impact of somatic mutations.
 
-The source code will be made available soon.
+See more at http://cru.genomics.iit.it/igbmibundle/
