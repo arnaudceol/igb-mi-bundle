@@ -15,23 +15,18 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
+import aQute.bnd.annotation.component.Component;
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.ServiceManager;
 import it.iit.genomics.cru.igb.bundles.mi.business.PsicquicInitWorker;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
-
 import java.awt.BorderLayout;
 import java.util.ResourceBundle;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import org.lorainelab.igb.services.window.tabs.IgbTabPanel;
+import org.lorainelab.igb.services.window.tabs.IgbTabPanelI;
 
-import org.osgi.framework.BundleContext;
-
-import aQute.bnd.annotation.component.Component;
-
-import com.lorainelab.igb.services.window.tabs.IgbTabPanel;
-import com.lorainelab.igb.services.window.tabs.IgbTabPanelI;
 
 
 /**

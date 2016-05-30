@@ -15,18 +15,16 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi;
 
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.igb.bundles.mi.business.DrugBankMapper;
-
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-
 import com.dmurph.tracking.AnalyticsConfigData;
 import com.dmurph.tracking.JGoogleAnalyticsTracker;
 import com.dmurph.tracking.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
-import com.lorainelab.igb.services.IgbService;
-import com.lorainelab.igb.services.XServiceRegistrar;
+import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.DrugBankMapper;
+import org.lorainelab.igb.services.IgbService;
+import org.lorainelab.igb.services.XServiceRegistrar;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 
 /**
