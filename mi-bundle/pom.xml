@@ -5,12 +5,12 @@
 	<groupId>it.iit.genomics.cru.mi</groupId>
 	<artifactId>igb-bundle</artifactId>
 	<packaging>bundle</packaging>
-	<version>2.9.3</version>
+	<version>3.0.0</version>
     
 	<parent>
-		<groupId>com.affymetrix</groupId>
+		<groupId>org.lorainelab.igb</groupId>
 		<artifactId>igb-project</artifactId>
-		<version>8.4.2</version>
+		<version>9.0.0</version>
 	</parent>
 
 	<!-- <parent> <groupId>it.iit.genomics.cru.mi</groupId> <artifactId>mi-master</artifactId> 
@@ -53,6 +53,8 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+                                <!--Going to 3.0.0+ version of this plugin changes the behavior of embedding transitive dependencies-->
+                                <version>2.5.4</version>
 				<extensions>true</extensions>
 				<executions>
 					<execution>
@@ -79,7 +81,7 @@
 						<Service-Component>*</Service-Component>			
 						<Bundle-Activator>it.iit.genomics.cru.igb.bundles.mi.MIActivator</Bundle-Activator>
 						<Export-Package>org.apache.http.*</Export-Package>
-						<Import-Package>com.lorainelab.igb.services;version="${parent.version}",
+						<Import-Package>
 							*;resolution:=optional</Import-Package>
 						<Embed-Dependency>
 							uniprotkb, psimitab,
@@ -156,37 +158,35 @@
 			<scope>provided</scope>
 			<!-- <version>${slf4j-version}</version> -->
 		</dependency>
-		<!-- <dependency> <groupId>com.affymetrix</groupId> <artifactId>heatmap-editor</artifactId> 
-			<version>${igb-version}</version> <scope>provided</scope> </dependency> -->
 		<dependency>
-			<groupId>com.affymetrix</groupId>
-			<artifactId>affymetrix-common</artifactId>
-			<version>${igb-version}</version>
-			<scope>provided</scope>
+		    <groupId>org.lorainelab.igb</groupId>
+		    <artifactId>affymetrix-common</artifactId>
+		    <version>${igb-version}</version>
+		    <scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.affymetrix</groupId>
-			<artifactId>genometry</artifactId>
-			<version>${igb-version}</version>
-			<scope>provided</scope>
+		    <groupId>org.lorainelab.igb</groupId>
+		    <artifactId>genometry</artifactId>
+		    <version>${igb-version}</version>
+		    <scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.affymetrix</groupId>
-			<artifactId>igb</artifactId>
-			<version>${igb-version}</version>
-			<scope>provided</scope>
+		    <groupId>org.lorainelab.igb</groupId>
+		    <artifactId>igb</artifactId>
+		    <version>${igb-version}</version>
+		    <scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.affymetrix</groupId>
-			<artifactId>igb-services</artifactId>
-			<version>${igb-version}</version>
-			<scope>provided</scope>
+		    <groupId>org.lorainelab.igb</groupId>
+		    <artifactId>igb-services</artifactId>
+		    <version>${igb-version}</version>
+		    <scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.affymetrix</groupId>
-			<artifactId>igbSwingExt</artifactId>
-			<version>${igb-version}</version>
-			<scope>provided</scope>
+		    <groupId>org.lorainelab.igb</groupId>
+		    <artifactId>igbSwingExt</artifactId>
+		    <version>${igb-version}</version>
+		    <scope>provided</scope>
 		</dependency>
 		<!-- <dependency> <groupId>com.affymetrix</groupId> <artifactId>window-service</artifactId> 
 			<version>${igb-version}</version> <scope>provided</scope> </dependency> -->
@@ -244,16 +244,10 @@
 		<!-- <dependency> <groupId>com.affymetrix</groupId> <artifactId>shared-lib-wrapper</artifactId> 
 			<version>${igb-version}</version> <scope>provided</scope> </dependency> -->
 		<dependency>
-			<groupId>com.lorainelab</groupId>
-			<artifactId>logging-config</artifactId>
-			<version>${igb-version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.lorainelab</groupId>
-			<artifactId>igb-genoviz-extensions</artifactId>
-			<version>${igb-version}</version>
-			<scope>provided</scope>
+		    <groupId>org.lorainelab.igb</groupId>
+		    <artifactId>igb-genoviz-extensions</artifactId>
+		    <version>${igb-version}</version>
+		    <scope>provided</scope>
 		</dependency>
 		
 		<dependency>
@@ -316,7 +310,7 @@
 		<dependency>
 			<groupId>it.iit.genomics.cru.igb.bundles</groupId>
 			<artifactId>igb-commons</artifactId>
-			<version>${igb-version}</version>
+			<version>8.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.dmurph</groupId>
@@ -360,6 +354,11 @@
 			<artifactId>collections-generic</artifactId>
 			<version>4.01</version>
 		</dependency>
+	    <dependency>
+	        <groupId>it.iit.genomics.cru.bridges</groupId>
+	        <artifactId>ensembl-bridge</artifactId>
+	        <version>2.3</version>
+	    </dependency>
 	</dependencies>
 
 	<repositories>

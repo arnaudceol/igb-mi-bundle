@@ -4,13 +4,7 @@
 
     <groupId>it.iit.genomics.cru.mi</groupId>
     <artifactId>mi-structures</artifactId>
-    <version>2.9</version>
-    
-    <parent>
-        <groupId>it.iit.genomics.cru</groupId>
-        <artifactId>cru-master</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
+    <version>3.0.0</version>
     
     <properties>
         <uniprot.version>2015.02</uniprot.version>
@@ -19,6 +13,8 @@
         <bridges.version>2.3</bridges.version>
         <cru.version>2.2-SNAPSHOT</cru.version>
         <netbeans.hint.license>apache20</netbeans.hint.license>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     
     
@@ -132,6 +128,13 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+            <type>jar</type>
         </dependency>
     </dependencies>
     

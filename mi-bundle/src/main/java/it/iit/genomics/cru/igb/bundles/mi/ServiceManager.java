@@ -1,6 +1,7 @@
 package it.iit.genomics.cru.igb.bundles.mi;
 
-import com.lorainelab.igb.services.IgbService;
+import org.lorainelab.igb.services.IgbService;
+
 
 
 public class ServiceManager {

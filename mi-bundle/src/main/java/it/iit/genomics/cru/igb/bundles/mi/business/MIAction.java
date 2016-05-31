@@ -21,26 +21,21 @@ import com.affymetrix.genometry.event.GenericAction;
 import com.affymetrix.genometry.event.SymSelectionEvent;
 import com.affymetrix.genometry.event.SymSelectionListener;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-
+import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
 import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
 import it.iit.genomics.cru.igb.bundles.mi.query.MIQueryManager;
 import it.iit.genomics.cru.igb.bundles.mi.view.ProgressPanel;
+import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
 import it.iit.genomics.cru.structures.bridges.uniprot.UniprotkbUtils;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JProgressBar;
-
-import com.lorainelab.igb.services.IgbService;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
-
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import javax.swing.JProgressBar;
+import org.lorainelab.igb.services.IgbService;
 
 /**
  * @author Arnaud Ceol
@@ -59,6 +54,7 @@ public class MIAction extends GenericAction  implements SymSelectionListener {
         super("MI Search", KeyEvent.VK_Z);
         this.igbService = igbService;
         GenometryModel.getInstance().addSymSelectionListener(this);        
+        selected_syms = new ArrayList<>();
     }
     
 

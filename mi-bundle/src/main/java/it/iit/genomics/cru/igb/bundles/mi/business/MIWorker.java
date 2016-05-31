@@ -25,68 +25,54 @@ import com.affymetrix.genometry.style.SimpleTrackStyle;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.symmetry.impl.SimpleSymWithProps;
 import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
-import com.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
-import com.lorainelab.igb.services.IgbService;
-
+import it.iit.genomics.cru.bridges.interactome3d.local.I3DDownload;
 import it.iit.genomics.cru.bridges.interactome3d.local.Interactome3DLocalRepository;
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.genes.EnsemblGeneManager;
 import it.iit.genomics.cru.igb.bundles.mi.business.genes.IGBQuickLoadGeneManager;
-import it.iit.genomics.cru.bridges.interactome3d.local.I3DDownload;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MICommons;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
+import it.iit.genomics.cru.igb.bundles.mi.genometry.MIGeneSymmetry;
 import it.iit.genomics.cru.igb.bundles.mi.model.MISymContainer;
 import it.iit.genomics.cru.igb.bundles.mi.model.MISymManager;
 import it.iit.genomics.cru.igb.bundles.mi.model.ProgressManager;
 import it.iit.genomics.cru.igb.bundles.mi.query.AbstractMIQuery.QueryType;
 import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
 import it.iit.genomics.cru.igb.bundles.mi.view.MIResultPanel;
+import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
 import it.iit.genomics.cru.structures.bridges.pdb.PDBWSClient;
 import it.iit.genomics.cru.structures.bridges.pdb.model.Chain;
 import it.iit.genomics.cru.structures.bridges.pdb.model.Ligand;
 import it.iit.genomics.cru.structures.bridges.pdb.model.MoleculeDescription;
 import it.iit.genomics.cru.structures.bridges.pdb.model.Polymer;
 import it.iit.genomics.cru.structures.bridges.pdb.model.StructureID;
+import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
+import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_PDB;
+import it.iit.genomics.cru.structures.bridges.psicquic.InteractionManager;
 import it.iit.genomics.cru.structures.bridges.psicquic.PsicquicUtils;
-import it.iit.genomics.cru.structures.model.MoleculeEntry;
 import it.iit.genomics.cru.structures.bridges.uniprot.UniprotkbUtils;
 import it.iit.genomics.cru.structures.bridges.userData.UserStructuresManager;
 import it.iit.genomics.cru.structures.model.AAPosition;
 import it.iit.genomics.cru.structures.model.AAPositionManager;
 import it.iit.genomics.cru.structures.model.ChainMapping;
 import it.iit.genomics.cru.structures.model.MIGene;
+import it.iit.genomics.cru.structures.model.ModifiedResidue;
+import it.iit.genomics.cru.structures.model.MoleculeEntry;
+import it.iit.genomics.cru.structures.model.Range;
 import it.iit.genomics.cru.utils.maps.MapOfMap;
-
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.swing.JProgressBar;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingWorker;
-
-import org.apache.commons.lang.StringUtils;
-
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
-import it.iit.genomics.cru.igb.bundles.mi.genometry.MIGeneSymmetry;
-import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
-import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
-import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_I3D;
-import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_PDB;
-import it.iit.genomics.cru.structures.bridges.psicquic.InteractionManager;
-import it.iit.genomics.cru.structures.model.ModifiedResidue;
-import it.iit.genomics.cru.structures.model.Range;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutionException;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -94,7 +80,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingWorker;
 import javax.swing.plaf.basic.BasicButtonUI;
+import org.apache.commons.lang.StringUtils;
+import org.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
+import org.lorainelab.igb.services.IgbService;
 
 /**
  * @author Arnaud Ceol

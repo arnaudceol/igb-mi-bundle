@@ -28,18 +28,15 @@ import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.structures.model.MIExon;
 import it.iit.genomics.cru.structures.model.MIGene;
-
+import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
+import it.iit.genomics.cru.utils.maps.MapOfMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import com.lorainelab.igb.services.IgbService;
-import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
-import java.util.Collections;
 import org.biojava.nbio.core.exceptions.CompoundNotFoundException;
 import org.biojava.nbio.core.exceptions.TranslationException;
 import org.biojava.nbio.core.sequence.DNASequence;
@@ -56,6 +53,7 @@ import org.biojava.nbio.core.sequence.transcription.DNAToRNATranslator;
 import org.biojava.nbio.core.sequence.transcription.Frame;
 import org.biojava.nbio.core.sequence.transcription.RNAToAminoAcidTranslator;
 import org.biojava.nbio.core.sequence.transcription.Table;
+import org.lorainelab.igb.services.IgbService;
 
 /**
  * @author Arnaud Ceol
