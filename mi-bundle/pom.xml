@@ -320,7 +320,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>mi-structures</artifactId>
-			<version>${mi.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>it.iit.genomics.cru.bridges</groupId>
