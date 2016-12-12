@@ -15,18 +15,6 @@
  */
 package it.iit.genomics.cru.structures.business;
 
-import it.iit.genomics.cru.structures.alignment.SmithWaterman;
-import it.iit.genomics.cru.structures.model.MoleculeEntry;
-import it.iit.genomics.cru.structures.model.AAPosition;
-import it.iit.genomics.cru.structures.model.AAPositionManager;
-import it.iit.genomics.cru.structures.model.ChainMapping;
-import it.iit.genomics.cru.structures.model.InteractionStructure;
-import it.iit.genomics.cru.structures.model.StructureException;
-import it.iit.genomics.cru.structures.model.StructureModel;
-import it.iit.genomics.cru.structures.model.position.UniprotPosition;
-import it.iit.genomics.cru.structures.sources.StructureSource;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -38,6 +26,19 @@ import org.biojava.nbio.structure.GroupType;
 import org.biojava.nbio.structure.Structure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.HashMultimap;
+
+import it.iit.genomics.cru.structures.alignment.SmithWaterman;
+import it.iit.genomics.cru.structures.model.AAPosition;
+import it.iit.genomics.cru.structures.model.AAPositionManager;
+import it.iit.genomics.cru.structures.model.ChainMapping;
+import it.iit.genomics.cru.structures.model.InteractionStructure;
+import it.iit.genomics.cru.structures.model.MoleculeEntry;
+import it.iit.genomics.cru.structures.model.StructureException;
+import it.iit.genomics.cru.structures.model.StructureModel;
+import it.iit.genomics.cru.structures.model.position.UniprotPosition;
+import it.iit.genomics.cru.structures.sources.StructureSource;
 
 /**
  *
@@ -74,7 +75,7 @@ public class StructureMapper {
         /**
          * key = structureId + "#" +chainId
          */
-        private final MapOfMap<String, String> chain2residues = new MapOfMap<>();
+        private final HashMultimap<String, String> chain2residues = HashMultimap.create();
 
         /**
          *
@@ -98,7 +99,7 @@ public class StructureMapper {
                 structuresIds.add(structureId);
             }
 
-            chain2residues.add(structureId, pdbResidue);
+            chain2residues.put(structureId, pdbResidue);
 
             hasResidues = true;
         }

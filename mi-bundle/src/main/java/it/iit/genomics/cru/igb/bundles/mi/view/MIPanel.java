@@ -19,14 +19,12 @@ import java.awt.BorderLayout;
 import java.util.ResourceBundle;
 
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 
 import org.lorainelab.igb.services.window.tabs.IgbTabPanel;
 import org.lorainelab.igb.services.window.tabs.IgbTabPanelI;
 
 import aQute.bnd.annotation.component.Component;
 import it.iit.genomics.cru.igb.bundles.mi.ServiceManager;
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.PsicquicInitWorker;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
 
@@ -45,28 +43,18 @@ public class MIPanel extends IgbTabPanel {
     
     private static final long serialVersionUID = 1L;
 
-    private JTextArea textArea;
-
     private final JTabbedPane resultsTabbedPan;
 
     public static final ResourceBundle BUNDLE = ResourceBundle.getBundle("mi");
 
-    private final IGBLogger igbLogger;	
-
     
     public MIPanel() {
-//    	IgbService igbService
-//IgbService igbService, String displayName, String title, boolean main
+    	
         super( "MI", "Molecular Interactions", "MI", false);
         getContentPane().setLayout(new BorderLayout(10, 1));
 
         resultsTabbedPan = new JTabbedPane();
 
-        igbLogger = IGBLogger.getMainInstance();
-
-        // Search
-//        SearchPanel panel = new SearchPanel();
-        	
         resultsTabbedPan.addTab("Search", new SearchPanel(ServiceManager.getInstance().getService()));
 
         this.add(resultsTabbedPan, BorderLayout.CENTER);
@@ -85,9 +73,4 @@ public class MIPanel extends IgbTabPanel {
         
 
     }
-
-//    public JTextArea getTextArea() {
-//        return textArea;
-//    }
-
 }

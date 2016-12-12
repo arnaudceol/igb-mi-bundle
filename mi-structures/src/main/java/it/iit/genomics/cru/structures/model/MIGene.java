@@ -15,11 +15,6 @@
  */
 package it.iit.genomics.cru.structures.model;
 
-import it.iit.genomics.cru.structures.model.position.TranscriptPosition;
-import it.iit.genomics.cru.structures.model.position.UniprotPosition;
-import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
-import it.iit.genomics.cru.structures.model.sequence.UniprotSequence;
-import it.iit.genomics.cru.utils.maps.BiMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,6 +25,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
+import it.iit.genomics.cru.structures.model.position.TranscriptPosition;
+import it.iit.genomics.cru.structures.model.position.UniprotPosition;
+import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
+import it.iit.genomics.cru.structures.model.sequence.UniprotSequence;
+
 /**
  * 0-based inclusive. It was originally exclusive, but it make it difficult to
  * browse in two directions
@@ -37,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @author aceol
  */
 public class MIGene {
-
+	
     static AtomicInteger nextId = new AtomicInteger();
     private final int uniqueID;
 
@@ -52,7 +55,7 @@ public class MIGene {
     /**
      * AA positions are 1-based inclusive
      */
-    protected BiMap<UniprotPosition, TranscriptPosition> uniprot2transcriptAA = new BiMap<>();
+    protected BiMap<UniprotPosition, TranscriptPosition> uniprot2transcriptAA = HashBiMap.create();
 
     /**
      *
@@ -333,7 +336,7 @@ public class MIGene {
 
         TranscriptPosition transcriptAAPosition = getTranscriptAAPosition(genomicPosition);
         if (transcriptAAPosition != null) {
-            return uniprot2transcriptAA.getKey(transcriptAAPosition);
+            return uniprot2transcriptAA.inverse().get(transcriptAAPosition);
         }
 
         return null;

@@ -15,13 +15,6 @@
  */
 package it.iit.genomics.cru.structures.bridges.uniprot;
 
-import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
-import it.iit.genomics.cru.structures.model.MoleculeEntry;
-import it.iit.genomics.cru.structures.model.ChainMapping;
-import it.iit.genomics.cru.structures.model.ModifiedResidue;
-import it.iit.genomics.cru.structures.model.position.UniprotPosition;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +39,8 @@ import org.apache.http.client.params.ClientPNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.biojava.nbio.core.sequence.ProteinSequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,8 +49,13 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.collect.HashMultimap;
+
+import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
+import it.iit.genomics.cru.structures.model.ChainMapping;
+import it.iit.genomics.cru.structures.model.ModifiedResidue;
+import it.iit.genomics.cru.structures.model.MoleculeEntry;
+import it.iit.genomics.cru.structures.model.position.UniprotPosition;
 
 
 /**
@@ -89,7 +89,7 @@ public class UniprotkbUtils {
      */
     private final static int maxQueries = 10;
 
-    private final MapOfMap<String, MoleculeEntry> cache = new MapOfMap<>();
+    private final HashMultimap<String, MoleculeEntry> cache = HashMultimap.create();
 
     private static final HashMap<String, UniprotkbUtils> instances = new HashMap<>();
 
@@ -523,15 +523,15 @@ public class UniprotkbUtils {
         String geneName = protein.getGeneName();
 
         if (geneName != null) {
-            cache.add(geneName.toUpperCase(), protein);
+            cache.put(geneName.toUpperCase(), protein);
         }
 
         for (String xref : protein.getRefseqs()) {
             // remove version
-            cache.add(xref.toUpperCase().split("\\.")[0], protein);
+            cache.put(xref.toUpperCase().split("\\.")[0], protein);
         }
 
-        cache.add(protein.getUniprotAc(), protein);
+        cache.put(protein.getUniprotAc(), protein);
 
     }
 
@@ -541,24 +541,26 @@ public class UniprotkbUtils {
      * @return
      * @throws BridgesRemoteAccessException
      */
-    public MapOfMap<String, MoleculeEntry> getUniprotEntriesFromGenes(
+    public HashMultimap<String, MoleculeEntry> getUniprotEntriesFromGenes(
             Collection<String> genes) throws BridgesRemoteAccessException {
         String tool = UNIPROT_TOOL;
 
-        MapOfMap<String, MoleculeEntry> gene2uniprots = new MapOfMap<>(
-                genes);
+        HashMultimap<String, MoleculeEntry> gene2uniprots = HashMultimap.create();
 
         HashSet<String> genes2get = new HashSet<>();
 
         try {
+        	
+        	int numGenesProcessed = 0;
+        	
             for (String gene : genes) {
+            	numGenesProcessed++;
                 if (cache.containsKey(gene.toUpperCase())) {
-                    gene2uniprots.addAll(gene, cache.get(gene.toUpperCase()));
+                    gene2uniprots.putAll(gene, cache.get(gene.toUpperCase()));
                 } else {
                     genes2get.add(gene);
-
                     // if size == limit, do query
-                    if (genes2get.size() == maxQueries) {
+                    if ( genes2get.size() == maxQueries || numGenesProcessed == genes.size() ) {
                         String location = UNIPROT_SERVER
                                 + tool
                                 + "/?"
@@ -568,17 +570,17 @@ public class UniprotkbUtils {
                                 + "+AND+(gene:"
                                 + URLEncoder.encode(StringUtils.join(genes2get,
                                                 " OR gene:"), "UTF-8") + ")";
-
+                                                
                         Collection<MoleculeEntry> uniprotEntries = getUniprotEntriesXML(location);
-
+                         
                         for (MoleculeEntry entry : uniprotEntries) {
                             String geneName = entry.getGeneName();
 
                             // Only use the first one. Using synomyms may cause
                             // ambiguity.
                             if (geneName != null
-                                    && gene2uniprots.containsKey(geneName)) {
-                                gene2uniprots.add(geneName, entry);
+                                    && genes.contains(geneName)) {
+                                gene2uniprots.put(geneName, entry);
                             }
                         }
 
@@ -609,11 +611,12 @@ public class UniprotkbUtils {
 
                 // Only use the first one. Using synomyms may cause ambiguity.
                 if (geneName != null && gene2uniprots.containsKey(geneName)) {
-                    gene2uniprots.add(geneName, entry);
+                    gene2uniprots.put(geneName, entry);
                 }
             }
 
         } catch (UnsupportedEncodingException e) {
+        	e.printStackTrace();
             logger.error("cannot get proteins for " + StringUtils.join(genes, ", "), e);
         }
 
@@ -626,12 +629,11 @@ public class UniprotkbUtils {
      * @return
      * @throws BridgesRemoteAccessException
      */
-    public MapOfMap<String, MoleculeEntry> getUniprotEntriesFromRefSeqs(
+    public HashMultimap<String, MoleculeEntry> getUniprotEntriesFromRefSeqs(
             Collection<String> refSeqs) throws BridgesRemoteAccessException {
         String tool = UNIPROT_TOOL;
 
-        MapOfMap<String, MoleculeEntry> refseq2uniprots = new MapOfMap<>(
-                refSeqs);
+        HashMultimap<String, MoleculeEntry> refseq2uniprots = HashMultimap.create();
 
         if (refSeqs.isEmpty()) {
             return refseq2uniprots;
@@ -642,7 +644,7 @@ public class UniprotkbUtils {
         try {
             for (String refseq : refSeqs) {
                 if (cache.containsKey(refseq.toUpperCase().split("\\.")[0])) {
-                    refseq2uniprots.addAll(refseq,
+                    refseq2uniprots.putAll(refseq,
                             cache.get(refseq.toUpperCase().split("\\.")[0]));
                 } else {
                     refs2get.add(refseq);
@@ -672,10 +674,10 @@ public class UniprotkbUtils {
                                     xref = xref.substring(0, xref.length() - 1);
                                 }
                                 if (refseq2uniprots.containsKey(xref.trim())) {
-                                    refseq2uniprots.add(xref, entry);
+                                    refseq2uniprots.put(xref, entry);
                                 } else if (refseq2uniprots.containsKey(xref
                                         .split("[.]")[0])) {
-                                    refseq2uniprots.add(xref.split("[.]")[0],
+                                    refseq2uniprots.put(xref.split("[.]")[0],
                                             entry);
                                 }
                             }
@@ -710,10 +712,10 @@ public class UniprotkbUtils {
                         xref = xref.substring(0, xref.length() - 1);
                     }
                     if (refseq2uniprots.containsKey(xref.trim())) {
-                        refseq2uniprots.add(xref, entry);
+                        refseq2uniprots.put(xref, entry);
                     } else if (refseq2uniprots
                             .containsKey(xref.split("[.]")[0])) {
-                        refseq2uniprots.add(xref.split("[.]")[0], entry);
+                        refseq2uniprots.put(xref.split("[.]")[0], entry);
                     }
                 }
             }
@@ -731,12 +733,11 @@ public class UniprotkbUtils {
      * @return
      * @throws BridgesRemoteAccessException
      */
-    public MapOfMap<String, MoleculeEntry> getUniprotEntriesFromEnsembl(
+    public HashMultimap<String, MoleculeEntry> getUniprotEntriesFromEnsembl(
             Collection<String> ensemblGeneIDs) throws BridgesRemoteAccessException {
         String tool = UNIPROT_TOOL;
 
-        MapOfMap<String, MoleculeEntry> ensembl2uniprots = new MapOfMap<>(
-                ensemblGeneIDs);
+        HashMultimap<String, MoleculeEntry> ensembl2uniprots = HashMultimap.create();
 
         if (ensemblGeneIDs.isEmpty()) {
             return ensembl2uniprots;
@@ -749,7 +750,7 @@ public class UniprotkbUtils {
             for (String ensemblGeneID : ensemblGeneIDs) {
                 if (cache
                         .containsKey(ensemblGeneID.toUpperCase().split("\\.")[0])) {
-                    ensembl2uniprots.addAll(ensemblGeneID, cache
+                    ensembl2uniprots.putAll(ensemblGeneID, cache
                             .get(ensemblGeneID.toUpperCase().split("\\.")[0]));
                 } else {
                     refs2get.add(ensemblGeneID);
@@ -778,10 +779,10 @@ public class UniprotkbUtils {
                                     xref = xref.substring(0, xref.length() - 1);
                                 }
                                 if (ensembl2uniprots.containsKey(xref.trim())) {
-                                    ensembl2uniprots.add(xref, entry);
+                                    ensembl2uniprots.put(xref, entry);
                                 } else if (ensembl2uniprots.containsKey(xref
                                         .split("[.]")[0])) {
-                                    ensembl2uniprots.add(xref.split("[.]")[0],
+                                    ensembl2uniprots.put(xref.split("[.]")[0],
                                             entry);
                                 }
                             }
@@ -815,10 +816,10 @@ public class UniprotkbUtils {
                         xref = xref.substring(0, xref.length() - 1);
                     }
                     if (ensembl2uniprots.containsKey(xref.trim())) {
-                        ensembl2uniprots.add(xref, entry);
+                        ensembl2uniprots.put(xref, entry);
                     } else if (ensembl2uniprots
                             .containsKey(xref.split("[.]")[0])) {
-                        ensembl2uniprots.add(xref.split("[.]")[0], entry);
+                        ensembl2uniprots.put(xref.split("[.]")[0], entry);
                     }
                 }
             }

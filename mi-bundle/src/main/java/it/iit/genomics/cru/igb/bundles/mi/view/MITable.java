@@ -55,15 +55,10 @@ import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.lang.StringUtils;
-import org.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
 import org.lorainelab.igb.services.IgbService;
 
 import com.affymetrix.genometry.SeqSpan;
-import com.affymetrix.genometry.color.RGB;
-import com.affymetrix.genometry.parsers.TrackLineParser;
-import com.affymetrix.genometry.style.SimpleTrackStyle;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
 
 import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
 import it.iit.genomics.cru.igb.bundles.mi.business.DrugBankMapper;
@@ -195,34 +190,11 @@ public class MITable extends JTable {
                                 MIResult result = ((MITableModel) table.getModel())
                                         .getResult(modelRow);
 
-                                TypeContainerAnnot interactorTrack = result.createTrack();
 
-                                igbService.addTrack(interactorTrack, interactorTrack.getID());
-
-                                igbService.getSeqMapView().updatePanel();
-
-                                for (TierGlyph t : igbService.getAllTierGlyphs()) {
-
-                                    if (TierGlyph.TierType.ANNOTATION.equals(t.getTierType()) && (t.getAnnotStyle().getTrackName().equals(interactorTrack.getID()))) {
-
-                                        SimpleTrackStyle style = new SimpleTrackStyle(interactorTrack.getID(), false) {
-
-                                            @Override
-                                            public boolean drawCollapseControl() {
-                                                return false;
-                                            }
-                                        };
-
-                                        t.getAnnotStyle().copyPropertiesFrom(style);
-                                        t.getAnnotStyle().setColorProvider(new RGB());
-                                        interactorTrack.setProperty(TrackLineParser.ITEM_RGB, "on");
-                                    }
-                                }
-
-                                igbService.getSeqMapView().updatePanel();
-
-                                ((JButton) value).setText(interactorTrack.getID());
+                                ((JButton) value).setText(result.getTrackId());
                                 ((JButton) value).setEnabled(false);
+                                
+                                result.createBed();
 
                                 updateUI();
                             }

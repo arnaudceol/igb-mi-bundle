@@ -15,7 +15,7 @@
         
     <repositories>               
 
-      <repository>
+<!--       <repository>
             <id>iit-cru-snapshots</id>
             <name>iit-cru-snapshots</name>
             <url>http://cru.genomics.iit.it/nexus/content/repositories/snapshots</url>
@@ -25,12 +25,12 @@
             <name>iit-cru</name>
             <url>http://cru.genomics.iit.it/nexus/content/repositories/releases</url>
         </repository>   
-        <!-- Third party jars. -->
+        Third party jars.
         <repository>
             <id>iit-cru3</id>
             <name>iit-cru3</name>
             <url>http://cru.genomics.iit.it/nexus/content/repositories/thirdparty/</url>
-        </repository>
+        </repository> -->
 
     
         <!-- EBI repositories - Where the IntAct artifacts are stored -->

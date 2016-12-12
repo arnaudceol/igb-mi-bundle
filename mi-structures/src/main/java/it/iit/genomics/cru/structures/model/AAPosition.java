@@ -15,16 +15,18 @@
  */
 package it.iit.genomics.cru.structures.model;
 
-import it.iit.genomics.cru.structures.model.position.UniprotPosition;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.HashMultimap;
+
+import it.iit.genomics.cru.structures.model.position.UniprotPosition;
 
 /**
  *
@@ -79,17 +81,17 @@ public class AAPosition {
     /**
      *
      */
-    protected final MapOfMap<String, String> structurePositions = new MapOfMap<>();
+    protected final HashMultimap<String, String> structurePositions = HashMultimap.create();
 
     /**
      *
      */
-    protected final MapOfMap<String, String> structureInterfaces = new MapOfMap<>();
+    protected final HashMultimap<String, String> structureInterfaces = HashMultimap.create();
 
     /**
      *
      */
-    protected final MapOfMap<MoleculeEntry, String> partnerInterfaces = new MapOfMap<>();
+    protected final HashMultimap<MoleculeEntry, String> partnerInterfaces = HashMultimap.create();
 
     /**
      *
@@ -99,7 +101,7 @@ public class AAPosition {
     /**
      * Key: structureId:pos:chain, values: associated AA positions
      */
-    private final MapOfMap<String, ChainMapping> structurePosition2AAPositions = new MapOfMap<>();
+    private final HashMultimap<String, ChainMapping> structurePosition2AAPositions = HashMultimap.create();
 
     /**
      *
@@ -187,7 +189,7 @@ public class AAPosition {
      * @param position
      */
     public void addStructurePosition(String structureID, String position) {
-        structurePositions.add(structureID, position);
+        structurePositions.put(structureID, position);
     }
 
     /**
@@ -276,8 +278,8 @@ public class AAPosition {
      * @param partner
      */
     public void addInterfaceStructurePosition(String structureID, String position, MoleculeEntry partner) {
-        structureInterfaces.add(structureID, position);
-        partnerInterfaces.add(partner, structureID + ":" + position);
+        structureInterfaces.put(structureID, position);
+        partnerInterfaces.put(partner, structureID + ":" + position);
     }
 
     /**
@@ -409,7 +411,7 @@ public class AAPosition {
      * @param aa
      */
     public void addStructure2ProteinPosition(String structureID, int position, String chain, ChainMapping aa) {
-        structurePosition2AAPositions.add(structureID + ":" + position + ":" + chain, aa);
+        structurePosition2AAPositions.put(structureID + ":" + position + ":" + chain, aa);
     }
 
     // chain mapping:   ----------S-----------E--------

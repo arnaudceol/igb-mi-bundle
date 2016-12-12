@@ -4,15 +4,13 @@
 
     <groupId>it.iit.genomics.cru.mi</groupId>
     <artifactId>mi-structures</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     
     <properties>
         <uniprot.version>2015.02</uniprot.version>
-        <biojava.version>4.1.0</biojava.version>
+        <biojava.version>4.2.0</biojava.version>
         <jmol.version>12.2.34</jmol.version>        
-        <bridges.version>2.3</bridges.version>
-        <cru.version>2.2-SNAPSHOT</cru.version>
-        <netbeans.hint.license>apache20</netbeans.hint.license>
+        <bridges.version>2.4</bridges.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -34,11 +32,11 @@
             <artifactId>ensembl-bridge</artifactId>
             <version>${bridges.version}</version>
         </dependency>
-        <dependency>
+<!--         <dependency>
             <groupId>it.iit.genomics.cru</groupId>
             <artifactId>cru-utils</artifactId>
             <version>${cru.version}</version>
-        </dependency>
+        </dependency> -->
 		<dependency>
 			<groupId>net.sourceforge.jmol</groupId>
 			<artifactId>jmol</artifactId>
@@ -77,6 +75,10 @@
                 <exclusion>
                     <artifactId>jmol</artifactId>
                     <groupId>net.sourceforge.jmol</groupId>
+                </exclusion>
+                <exclusion>
+                	<groupId>javaws</groupId>
+                	<artifactId>javaws</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -136,53 +138,12 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+        <dependency>
+        	<groupId>com.google.guava</groupId>
+        	<artifactId>guava</artifactId>
+        	<version>20.0</version>
+        </dependency>
     </dependencies>
-    
-    <repositories>               
-
-        <repository>
-            <id>iit-cru-snapshots</id>
-            <name>iit-cru-snapshots</name>
-            <url>http://cru.genomics.iit.it/nexus/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>iit-cru</id>
-            <name>iit-cru</name>
-            <url>http://cru.genomics.iit.it/nexus/content/repositories/releases</url>
-        </repository>   
-        <!-- Third party jars. -->
-        <repository>
-            <id>iit-cru3</id>
-            <name>iit-cru3</name>
-            <url>http://cru.genomics.iit.it/nexus/content/repositories/thirdparty/</url>
-        </repository>
-
-    
-        <!-- EBI repositories - Where the IntAct artifacts are stored -->
-        <repository>
-            <id>ebi-repo</id>
-            <name>ebi-repo</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
-        </repository>
-        
-<!--        <repository>
-            <id>intact.nexus</id>
-            <name>IntAct Nexus</name>
-            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/groups/public</url>
-        </repository>
-        -->
-        <repository>
-            <id>biojava-maven-repo</id>
-            <name>BioJava repository</name>
-            <url>http://www.biojava.org/download/maven/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-
-    </repositories>
+  
     
 </project>

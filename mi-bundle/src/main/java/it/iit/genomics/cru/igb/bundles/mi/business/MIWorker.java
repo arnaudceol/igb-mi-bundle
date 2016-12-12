@@ -22,6 +22,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -47,25 +55,25 @@ import org.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
 import org.lorainelab.igb.services.IgbService;
 
 import com.affymetrix.genometry.BioSeq;
+import com.affymetrix.genometry.GenomeVersion;
 import com.affymetrix.genometry.GenometryModel;
 import com.affymetrix.genometry.SeqSpan;
 import com.affymetrix.genometry.color.RGB;
 import com.affymetrix.genometry.parsers.TrackLineParser;
 import com.affymetrix.genometry.span.SimpleSeqSpan;
-import com.affymetrix.genometry.style.SimpleTrackStyle;
+import com.affymetrix.genometry.style.ITrackStyleExtended;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.symmetry.impl.SimpleSymWithProps;
-import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
 import com.google.common.collect.HashMultimap;
 
 import it.iit.genomics.cru.bridges.interactome3d.local.I3DDownload;
 import it.iit.genomics.cru.bridges.interactome3d.local.Interactome3DLocalRepository;
+import it.iit.genomics.cru.igb.bundles.mi.ServiceManager;
 import it.iit.genomics.cru.igb.bundles.mi.business.genes.EnsemblGeneManager;
 import it.iit.genomics.cru.igb.bundles.mi.business.genes.IGBQuickLoadGeneManager;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MICommons;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
-import it.iit.genomics.cru.igb.bundles.mi.genometry.MIGeneSymmetry;
 import it.iit.genomics.cru.igb.bundles.mi.model.MISymContainer;
 import it.iit.genomics.cru.igb.bundles.mi.model.MISymManager;
 import it.iit.genomics.cru.igb.bundles.mi.model.ProgressManager;
@@ -934,7 +942,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 		MIView.getInstance().getMiConfigurationPanel().updateCacheLabel();
 
-		createTrack();
+		createBed();
 		setProgress(100);
 		logAndPublish("done");
 
@@ -1037,98 +1045,240 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 	/**
 	 * Create a single track with each gene found and each contact
 	 */
-	private void createTrack() {
-		TypeContainerAnnot interactorTrack = new TypeContainerAnnot(trackId);
-		interactorTrack.setID(trackId);
-		interactorTrack.setProperty(TrackLineParser.ITEM_RGB, Color.PINK);
+	 public void createBed() {
 
-		BioSeq aseq = GenometryModel.getInstance().getSelectedSeq().get();
+			// new track
+			String datasetId =  trackId.toLowerCase();
+			Logger.getGlobal().info("Track id: " + datasetId);
 
-		RangeMerger merger = new RangeMerger();
+			try {
 
-		for (MIResult result : results) {
-			merger.merge(result.getRangeMerger());
-		}
+				File file = File.createTempFile(datasetId, ".bed");
 
-		for (SeqSymmetry symFound : miSymmetries) {
+				Logger.getGlobal().info("Write local resource: " + file.getPath());
 
-			if (symFound.getSpanCount() == 0) {
-				continue;
-			}
+				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
+				String titleLine = "track name=" + datasetId + " type=bedDetail description=\"" + datasetId + "\" itemRgb=\"On\" ";
+				writer.write(titleLine + System.lineSeparator()); 
+//				ArrayList<MISymContainer> resultSyms = new ArrayList<>();
+		    
+				RangeMerger merger = new RangeMerger();
 
-			BioSeq sequence = symFound.getSpan(0).getBioSeq();
+				for (MIResult result : results) {
+					merger.merge(result.getRangeMerger());
+				}
+				
+		        for (SeqSymmetry symFound : miSymmetries) {
 
-			if (null == sequence.getAnnotation(trackId) && false == sequence.equals(aseq)) {
-				sequence.addAnnotation(interactorTrack);
-			}
+		            if (symFound.getSpanCount() == 0) {
+		                continue;
+		            }
 
-			if (null == symFound.getSpan(sequence)) {
-				continue;
-			}
+		            BioSeq sequence = symFound.getSpan(0).getBioSeq();
 
-			if (symFound.getSpanCount() == 0 || symFound.getSpan(0) == null) {
-				continue;
-			}
-			SeqSpan span = symFound.getSpan(sequence);
+//		            if (null == sequence.getAnnotation(trackId) && false == sequence.equals(aseq)) {
+//		                sequence.addAnnotation(interactorTrack);
+//		            }
+	//
+//		            if (null == symFound.getSpan(sequence)) {
+//		                continue;
+//		            }
 
-			ArrayList<Integer> emins = new ArrayList<>();
-			ArrayList<Integer> emaxs = new ArrayList<>();
+		            if (symFound.getSpanCount() == 0
+		                    || symFound.getSpan(0) == null) {
+		                continue;
+		            }
+		            SeqSpan span = symFound.getSpan(sequence);
 
-			if (merger.getRanges(sequence.getId()) != null) {
-				for (Range range : merger.getRanges(sequence.getId())) {
-					if (range.getMin() >= span.getMin() && range.getMax() <= span.getMax()) {
-						emins.add(range.getMin());
-						emaxs.add(range.getMax() + 1);
+//		    		int min = Integer.MAX_VALUE;
+//					int max = 0;
+					 
+		            ArrayList<Integer> emins = new ArrayList<>();
+		            ArrayList<Integer> emaxs = new ArrayList<>();
+
+		            if (merger.getRanges(sequence.getId()) != null) {
+		                for (Range range : merger.getRanges(sequence.getId())) {
+		                    if (range.getMin() >= span.getMin() && range.getMax() < span.getMax()) {
+		                        emins.add(range.getMin());
+		                        // from 0-based inclusive to 0-based exclusive
+		                        emaxs.add(range.getMax() + 1);
+		                    }
+		                }
+		            }
+
+		            int[] eminsA = new int[emaxs.size()];
+		            int[] emaxsA = new int[emaxs.size()];
+
+		            for (int i = 0; i < emaxs.size(); i++) {
+		                eminsA[i] = emins.get(i);
+		                emaxsA[i] = emaxs.get(i);
+		            }
+
+//		            MIGeneSymmetry geneSym
+//		                    = new MIGeneSymmetry(symFound.getID(), symFound.getID(), symFound.getID(),
+//		                            sequence, span.isForward(), span.getMin(), span.getMax(),
+//		                            span.getMin(), span.getMax(), eminsA, emaxsA,symManager.getByResultSym(symFound).getMiGenes());
+
+		            Color color;
+		            if (eminsA.length > 0) {
+		                color = Color.RED;
+		            } else {
+		                color = Color.BLACK;
+		            }
+		            
+		        	ArrayList<String> blockMins = new ArrayList<>();
+					ArrayList<String> blockSizes = new ArrayList<>();
+
+					for (int i=0; i< eminsA.length ; i++) {
+						int blockMin = eminsA[i] - span.getMin();
+						int blockSize = emaxsA[i] - eminsA[i];
+						blockMins.add(""+blockMin);					
+						blockSizes.add(""+blockSize);
+					}
+		            
+		            writer.append(sequence.getId() + "\t" + span.getMin() + "\t" + span.getMax() + "\t" + symFound.getID() + "\t"
+							+ 1000 + "\t" + "." + "\t" + span.getMin() + "\t"
+							+  span.getMax() // result.getSimilarityScore()
+							+ "\t" + color.getRed() + "," + color.getGreen() + ","
+							+ color.getBlue() + "\t" + blockMins.size() + "\t"
+							+ String.join(",", blockSizes) + "\t" + String.join(",", blockMins) + "\t" + datasetId + "\t"
+							+ System.lineSeparator());
+		        }
+				
+				
+				
+				writer.close();
+				Logger.getGlobal().info("File writen, uri: " + file.toURI());
+
+				GenomeVersion loadGroup = GenometryModel.getInstance().getSelectedGenomeVersion();
+
+				Logger.getGlobal().info("GenomeVersion: " + loadGroup.getName());
+
+				String speciesName = loadGroup.getSpeciesName();
+
+				Logger.getGlobal().info("Species: " + speciesName);
+
+				URI uri = file.toURI();
+
+				Logger.getGlobal().info("Open uri: " + uri);
+				ServiceManager.getInstance().getService().openURI(uri, datasetId, loadGroup, speciesName, false);
+
+				Logger.getGlobal().info("Content loaded");
+
+
+				for (TierGlyph tg : ServiceManager.getInstance().getService().getVisibleTierGlyphs()) {				
+					if (tg.getAnnotStyle().getTrackName().equals(datasetId)) {						
+						ITrackStyleExtended style = tg.getAnnotStyle();
+						style.setColorProvider(new RGB());
 					}
 				}
+				
+				
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			int[] eminsA = new int[emaxs.size()];
-			int[] emaxsA = new int[emaxs.size()];
-
-			for (int i = 0; i < emaxs.size(); i++) {
-				eminsA[i] = emins.get(i);
-				emaxsA[i] = emaxs.get(i);
-			}
-
-			MIGeneSymmetry geneSym = new MIGeneSymmetry(symFound.getID(), symFound.getID(), symFound.getID(), sequence,
-					span.isForward(), span.getMin(), span.getMax(), span.getMin(), span.getMax(), eminsA, emaxsA,
-					symManager.getByResultSym(symFound).getMiGenes());
-
-			if (eminsA.length > 0) {
-				geneSym.setProperty(TrackLineParser.ITEM_RGB, Color.RED);
-			} else {
-				geneSym.setProperty(TrackLineParser.ITEM_RGB, Color.BLACK);
-			}
-
-			interactorTrack.addChild(geneSym);
-		}
-
-		service.addTrack(interactorTrack, trackId);
-
-		service.getSeqMapView().updatePanel();
-
-		for (TierGlyph t : service.getAllTierGlyphs()) {
-
-			if (TierGlyph.TierType.ANNOTATION.equals(t.getTierType())
-					&& (t.getAnnotStyle().getTrackName().equals(trackId))) {
-
-				SimpleTrackStyle style = new SimpleTrackStyle(trackId, false) {
-
-					@Override
-					public boolean drawCollapseControl() {
-						return false;
-					}
-				};
-
-				t.getAnnotStyle().copyPropertiesFrom(style);
-				t.getAnnotStyle().setColorProvider(new RGB());
-				interactorTrack.setProperty(TrackLineParser.ITEM_RGB, "on");
-			}
-		}
-
-		service.getSeqMapView().updatePanel();
-
-	}
+	    	
+	    	
+	    }
+	    
+	
+//	
+//	private void createTrack() {
+//		TypeContainerAnnot interactorTrack = new TypeContainerAnnot(trackId);
+//		interactorTrack.setID(trackId);
+//		interactorTrack.setProperty(TrackLineParser.ITEM_RGB, Color.PINK);
+//
+//		BioSeq aseq = GenometryModel.getInstance().getSelectedSeq().get();
+//
+//		RangeMerger merger = new RangeMerger();
+//
+//		for (MIResult result : results) {
+//			merger.merge(result.getRangeMerger());
+//		}
+//
+//		for (SeqSymmetry symFound : miSymmetries) {
+//
+//			if (symFound.getSpanCount() == 0) {
+//				continue;
+//			}
+//
+//			BioSeq sequence = symFound.getSpan(0).getBioSeq();
+//
+//			if (null == sequence.getAnnotation(trackId) && false == sequence.equals(aseq)) {
+//				sequence.addAnnotation(interactorTrack);
+//			}
+//
+//			if (null == symFound.getSpan(sequence)) {
+//				continue;
+//			}
+//
+//			if (symFound.getSpanCount() == 0 || symFound.getSpan(0) == null) {
+//				continue;
+//			}
+//			SeqSpan span = symFound.getSpan(sequence);
+//
+//			ArrayList<Integer> emins = new ArrayList<>();
+//			ArrayList<Integer> emaxs = new ArrayList<>();
+//
+//			if (merger.getRanges(sequence.getId()) != null) {
+//				for (Range range : merger.getRanges(sequence.getId())) {
+//					if (range.getMin() >= span.getMin() && range.getMax() <= span.getMax()) {
+//						emins.add(range.getMin());
+//						emaxs.add(range.getMax() + 1);
+//					}
+//				}
+//			}
+//			int[] eminsA = new int[emaxs.size()];
+//			int[] emaxsA = new int[emaxs.size()];
+//
+//			for (int i = 0; i < emaxs.size(); i++) {
+//				eminsA[i] = emins.get(i);
+//				emaxsA[i] = emaxs.get(i);
+//			}
+//
+//			MIGeneSymmetry geneSym = new MIGeneSymmetry(symFound.getID(), symFound.getID(), symFound.getID(), sequence,
+//					span.isForward(), span.getMin(), span.getMax(), span.getMin(), span.getMax(), eminsA, emaxsA,
+//					symManager.getByResultSym(symFound).getMiGenes());
+//
+//			if (eminsA.length > 0) {
+//				geneSym.setProperty(TrackLineParser.ITEM_RGB, Color.RED);
+//			} else {
+//				geneSym.setProperty(TrackLineParser.ITEM_RGB, Color.BLACK);
+//			}
+//
+//			interactorTrack.addChild(geneSym);
+//		}
+//
+//		service.addTrack(interactorTrack, trackId);
+//
+//		service.getSeqMapView().updatePanel();
+//
+//		for (TierGlyph t : service.getAllTierGlyphs()) {
+//
+//			if (TierGlyph.TierType.ANNOTATION.equals(t.getTierType())
+//					&& (t.getAnnotStyle().getTrackName().equals(trackId))) {
+//
+//				SimpleTrackStyle style = new SimpleTrackStyle(trackId, false) {
+//
+//					@Override
+//					public boolean drawCollapseControl() {
+//						return false;
+//					}
+//				};
+//
+//				t.getAnnotStyle().copyPropertiesFrom(style);
+//				t.getAnnotStyle().setColorProvider(new RGB());
+//				interactorTrack.setProperty(TrackLineParser.ITEM_RGB, "on");
+//			}
+//		}
+//
+//		service.getSeqMapView().updatePanel();
+//
+//	}
 
 	private void logAndPublish(String message) {
 		igbLogger.info(message);
