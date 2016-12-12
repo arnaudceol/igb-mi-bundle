@@ -15,14 +15,14 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.query;
 
-import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MICommons;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import java.util.ArrayList;
+import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MICommons;
 
 /**
  *

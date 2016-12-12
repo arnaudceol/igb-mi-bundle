@@ -15,6 +15,11 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.genometry;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.MutableSeqSpan;
 import com.affymetrix.genometry.SeqSpan;
@@ -24,13 +29,9 @@ import com.affymetrix.genometry.symmetry.SupportsGeneName;
 import com.affymetrix.genometry.symmetry.SymSpanWithCds;
 import com.affymetrix.genometry.symmetry.SymWithProps;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+
 import it.iit.genomics.cru.structures.model.MIGene;
 import it.iit.genomics.cru.structures.model.position.UniprotPosition;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Hashtable;
-
-import java.util.Map;
 
 /**
  *

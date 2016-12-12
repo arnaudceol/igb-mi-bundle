@@ -15,21 +15,20 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
-import it.iit.genomics.cru.igb.bundles.mi.business.MIResult.StructureSummary;
-import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
-
-import it.iit.genomics.cru.structures.model.MoleculeEntry;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.AbstractTableModel;
+
+import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
+import it.iit.genomics.cru.igb.bundles.mi.business.MIResult.StructureSummary;
+import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
+import it.iit.genomics.cru.structures.model.MoleculeEntry;
 
 /**
  *

@@ -15,9 +15,10 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business;
 
+import java.util.HashMap;
+
 import it.iit.genomics.cru.bridges.dsysmap.local.DSysMapDownload;
 import it.iit.genomics.cru.bridges.dsysmap.local.DSysMapLocalRepository;
-import java.util.HashMap;
 
 /**
  *

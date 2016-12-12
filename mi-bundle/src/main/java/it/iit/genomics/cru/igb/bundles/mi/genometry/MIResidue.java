@@ -15,9 +15,10 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.genometry;
 
+import java.util.BitSet;
+
 import com.affymetrix.genometry.symmetry.SymWithResidues;
 import com.affymetrix.genometry.symmetry.impl.SimpleSymWithProps;
-import java.util.BitSet;
 
 /**
  *

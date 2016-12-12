@@ -15,16 +15,8 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import com.affymetrix.common.CommonUtils;
-import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
-import it.iit.genomics.cru.bridges.interactome3d.ws.Utils;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
-import it.iit.genomics.cru.igb.bundles.mi.view.ColourIterator.ColourScheme;
-import it.iit.genomics.cru.structures.model.ChainMapping;
-import it.iit.genomics.cru.structures.model.InteractionStructure;
-import it.iit.genomics.cru.structures.model.StructureException;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -38,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -46,15 +39,27 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+
 import org.apache.commons.lang.StringUtils;
 import org.biojava.nbio.structure.Structure;
 import org.jmol.api.JmolViewer;
 import org.lorainelab.igb.services.IgbService;
 import org.lorainelab.igb.services.window.tabs.IgbTabPanel;
+
+import com.affymetrix.common.CommonUtils;
+
+import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
+import it.iit.genomics.cru.bridges.interactome3d.ws.Utils;
+import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
+import it.iit.genomics.cru.igb.bundles.mi.view.ColourIterator.ColourScheme;
+import it.iit.genomics.cru.structures.model.ChainMapping;
+import it.iit.genomics.cru.structures.model.InteractionStructure;
+import it.iit.genomics.cru.structures.model.StructureException;
 
 /**
  *

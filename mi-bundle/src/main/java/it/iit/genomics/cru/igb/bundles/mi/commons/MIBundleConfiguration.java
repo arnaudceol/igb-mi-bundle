@@ -15,9 +15,6 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.commons;
 
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,6 +24,9 @@ import java.util.HashSet;
 import java.util.Properties;
 
 import com.affymetrix.common.CommonUtils;
+
+import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
 
 /**
  *

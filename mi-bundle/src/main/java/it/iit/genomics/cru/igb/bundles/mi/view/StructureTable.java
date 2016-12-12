@@ -15,15 +15,18 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import it.iit.genomics.cru.igb.bundles.mi.view.StructuresPanel.ResiduesType;
 import java.awt.Color;
 import java.awt.Component;
+
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
+
 import org.lorainelab.igb.services.IgbService;
+
+import it.iit.genomics.cru.igb.bundles.mi.view.StructuresPanel.ResiduesType;
 
 
 /**

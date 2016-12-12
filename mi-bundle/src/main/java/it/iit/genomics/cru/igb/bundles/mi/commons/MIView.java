@@ -15,11 +15,11 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.commons;
 
+import javax.swing.JTabbedPane;
+
 import it.iit.genomics.cru.igb.bundles.mi.view.ConfigurationPanel;
 import it.iit.genomics.cru.igb.bundles.mi.view.MIPanel;
 import it.iit.genomics.cru.igb.bundles.mi.view.SearchPanel;
-
-import javax.swing.JTabbedPane;
 
 /**
  *

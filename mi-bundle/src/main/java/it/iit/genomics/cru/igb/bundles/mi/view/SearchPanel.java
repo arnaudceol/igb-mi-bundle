@@ -15,32 +15,6 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import com.affymetrix.common.CommonUtils;
-import com.affymetrix.genometry.BioSeq;
-import com.affymetrix.genometry.GenomeVersion;
-import com.affymetrix.genometry.GenometryModel;
-import com.affymetrix.genometry.SeqSpan;
-import com.affymetrix.genometry.event.GenericAction;
-import com.affymetrix.genometry.event.GenomeVersionSelectionEvent;
-import com.affymetrix.genometry.event.GroupSelectionListener;
-import com.affymetrix.genometry.event.SymSelectionEvent;
-import com.affymetrix.genometry.event.SymSelectionListener;
-import com.affymetrix.genometry.search.SearchUtils;
-import com.affymetrix.genometry.symmetry.RootSeqSymmetry;
-import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-import com.affymetrix.genometry.util.SeqUtils;
-import com.affymetrix.igb.shared.TrackUtils;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.igb.bundles.commons.view.InfoPanel;
-import it.iit.genomics.cru.igb.bundles.commons.view.LogPanel;
-import it.iit.genomics.cru.igb.bundles.mi.business.MIAction;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
-import it.iit.genomics.cru.igb.bundles.mi.query.AbstractMIQuery.QueryType;
-import it.iit.genomics.cru.igb.bundles.mi.query.MIQueryManager;
-import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
-import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
-import it.iit.genomics.cru.structures.bridges.uniprot.UniprotkbUtils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -55,6 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
@@ -74,8 +49,35 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
+
 import org.lorainelab.igb.genoviz.extensions.glyph.StyledGlyph;
 import org.lorainelab.igb.services.IgbService;
+
+import com.affymetrix.common.CommonUtils;
+import com.affymetrix.genometry.BioSeq;
+import com.affymetrix.genometry.GenomeVersion;
+import com.affymetrix.genometry.GenometryModel;
+import com.affymetrix.genometry.SeqSpan;
+import com.affymetrix.genometry.event.GenericAction;
+import com.affymetrix.genometry.event.GenomeVersionSelectionEvent;
+import com.affymetrix.genometry.event.GroupSelectionListener;
+import com.affymetrix.genometry.event.SymSelectionEvent;
+import com.affymetrix.genometry.event.SymSelectionListener;
+import com.affymetrix.genometry.search.SearchUtils;
+import com.affymetrix.genometry.symmetry.RootSeqSymmetry;
+import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+import com.affymetrix.genometry.util.SeqUtils;
+import com.affymetrix.igb.shared.TrackUtils;
+
+import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.MIAction;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
+import it.iit.genomics.cru.igb.bundles.mi.query.AbstractMIQuery.QueryType;
+import it.iit.genomics.cru.igb.bundles.mi.query.MIQueryManager;
+import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
+import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
+import it.iit.genomics.cru.structures.bridges.uniprot.UniprotkbUtils;
 
 /**
  *

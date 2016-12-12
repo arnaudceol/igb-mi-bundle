@@ -15,21 +15,6 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business.genes;
 
-import com.affymetrix.genometry.BioSeq;
-import com.affymetrix.genometry.GenometryModel;
-import com.affymetrix.genometry.SeqSpan;
-import com.affymetrix.genometry.SupportsCdsSpan;
-import com.affymetrix.genometry.parsers.CytobandParser;
-import com.affymetrix.genometry.span.SeqSpanComparator;
-import com.affymetrix.genometry.span.SimpleSeqSpan;
-import com.affymetrix.genometry.symmetry.SymWithProps;
-import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.structures.model.MIExon;
-import it.iit.genomics.cru.structures.model.MIGene;
-import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import org.biojava.nbio.core.exceptions.CompoundNotFoundException;
 import org.biojava.nbio.core.exceptions.TranslationException;
 import org.biojava.nbio.core.sequence.DNASequence;
@@ -54,6 +40,23 @@ import org.biojava.nbio.core.sequence.transcription.Frame;
 import org.biojava.nbio.core.sequence.transcription.RNAToAminoAcidTranslator;
 import org.biojava.nbio.core.sequence.transcription.Table;
 import org.lorainelab.igb.services.IgbService;
+
+import com.affymetrix.genometry.BioSeq;
+import com.affymetrix.genometry.GenometryModel;
+import com.affymetrix.genometry.SeqSpan;
+import com.affymetrix.genometry.SupportsCdsSpan;
+import com.affymetrix.genometry.parsers.CytobandParser;
+import com.affymetrix.genometry.span.SeqSpanComparator;
+import com.affymetrix.genometry.span.SimpleSeqSpan;
+import com.affymetrix.genometry.symmetry.SymWithProps;
+import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
+import com.google.common.collect.HashMultimap;
+
+import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import it.iit.genomics.cru.structures.model.MIExon;
+import it.iit.genomics.cru.structures.model.MIGene;
+import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
 
 /**
  * @author Arnaud Ceol
@@ -103,8 +106,8 @@ public class IGBQuickLoadGeneManager extends GeneManager {
         return instances.get(species);
     }
 
-    MapOfMap<String, MIGene> genesByGeneId = new MapOfMap<>();
-    MapOfMap<String, MIGene> genesBySymId = new MapOfMap<>();
+    HashMultimap<String, MIGene> genesByGeneId = HashMultimap.create();
+    HashMultimap<String, MIGene> genesBySymId = HashMultimap.create();
 
     @Override
     public Collection<MIGene> getByID(String geneId) {
@@ -137,13 +140,13 @@ public class IGBQuickLoadGeneManager extends GeneManager {
 
                 MIGene gene = spanToMIGene(symmetry.getID(), symmetry.getID(), symmetry.getSpan(seq));
                 genes.add(gene);
-                genesBySymId.add(symmetry.getID(), gene);
+                genesBySymId.put(symmetry.getID(), gene);
 
                 getExons(seq, symmetry, gene);
 
             }
         }
-        genesByGeneId.addAll(geneId, genes);
+        genesByGeneId.putAll(geneId, genes);
 
         return genes;
     }
@@ -310,9 +313,9 @@ public class IGBQuickLoadGeneManager extends GeneManager {
         return new MIGene(id, name, span.getBioSeq().getId(), start, end);
     }
 
-    public MapOfMap<SeqSymmetry, MIGene> getBySymList(BioSeq chromosomeSeq, ArrayList<SeqSymmetry> syms) {
+    public HashMultimap<SeqSymmetry, MIGene> getBySymList(BioSeq chromosomeSeq, ArrayList<SeqSymmetry> syms) {
 
-        MapOfMap<SeqSymmetry, MIGene> genes = new MapOfMap<>();
+        HashMultimap<SeqSymmetry, MIGene> genes = HashMultimap.create();
 
         Pattern CYTOBAND_TIER_REGEX = Pattern.compile(".*"
                 + CytobandParser.CYTOBAND_TIER_NAME);
@@ -368,9 +371,9 @@ public class IGBQuickLoadGeneManager extends GeneManager {
 
                     MIGene gene = spanToMIGene(geneSym.getID(), geneSym.getID(), geneSym.getSpan(chromosomeSeq));
 
-                    genes.add(syms.get(idxSym), gene);
+                    genes.put(syms.get(idxSym), gene);
 
-                    genesBySymId.add(geneSym.getID(), gene);
+                    genesBySymId.put(geneSym.getID(), gene);
 
                     getExons(chromosomeSeq, geneSym, gene);
                 }

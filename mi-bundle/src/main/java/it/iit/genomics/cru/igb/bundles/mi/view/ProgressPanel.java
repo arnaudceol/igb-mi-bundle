@@ -15,12 +15,12 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-
 import javax.swing.JProgressBar;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+
+import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 
 /**
  *

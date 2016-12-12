@@ -15,17 +15,19 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business;
 
-import it.iit.genomics.cru.structures.model.Range;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.common.collect.HashMultimap;
+
+import it.iit.genomics.cru.structures.model.Range;
+
 
 public class RangeMerger {
-    private final MapOfMap<String, Range> ranges;
+    private final HashMultimap<String, Range> ranges;
     
     public RangeMerger() {
-        ranges = new MapOfMap<>();
+        ranges = HashMultimap.create();
     }
     public Collection<String> getSequences() {
         return ranges.keySet();
@@ -37,7 +39,7 @@ public class RangeMerger {
 
     public void addRange(String seq, Range newRange) {
         if (false == ranges.containsKey(seq)) {
-            ranges.add(seq, newRange);
+            ranges.put(seq, newRange);
             return;
         }
         ArrayList<Range> updatedRanges = new ArrayList<>();
@@ -51,7 +53,7 @@ public class RangeMerger {
         }
         updatedRanges.add(newRange);
         ranges.get(seq).clear();
-        ranges.addAll(seq, updatedRanges);
+        ranges.putAll(seq, updatedRanges);
     }
     
     /**

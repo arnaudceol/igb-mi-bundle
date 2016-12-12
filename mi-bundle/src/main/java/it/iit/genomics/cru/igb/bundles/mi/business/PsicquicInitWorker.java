@@ -15,19 +15,18 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business;
 
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
-import it.iit.genomics.cru.igb.bundles.mi.view.ProgressPanel;
-import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
-import it.iit.genomics.cru.structures.bridges.psicquic.PsicquicService;
-import it.iit.genomics.cru.structures.bridges.psicquic.PsicquicUtils;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
+
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
+import it.iit.genomics.cru.igb.bundles.mi.view.ProgressPanel;
+import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
+import it.iit.genomics.cru.structures.bridges.psicquic.PsicquicService;
+import it.iit.genomics.cru.structures.bridges.psicquic.PsicquicUtils;
 
 /**
  * @author Arnaud Ceol

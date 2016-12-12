@@ -15,11 +15,12 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.commons;
 
-import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-import it.iit.genomics.cru.structures.model.MIGene;
-
 import java.util.Collection;
 import java.util.HashSet;
+
+import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+
+import it.iit.genomics.cru.structures.model.MIGene;
 
 
 /**

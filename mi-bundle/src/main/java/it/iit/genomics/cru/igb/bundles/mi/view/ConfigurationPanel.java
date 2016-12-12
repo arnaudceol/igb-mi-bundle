@@ -15,10 +15,6 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
-import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -42,6 +38,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import com.affymetrix.genometry.event.GenericAction;
+
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
+import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
 
 /**
  *

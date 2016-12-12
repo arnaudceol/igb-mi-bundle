@@ -15,20 +15,23 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business.genes;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
+import org.lorainelab.igb.services.IgbService;
+
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.span.SimpleSeqSpan;
+
 import it.iit.genomics.cru.bridges.ensembl.EnsemblClient;
 import it.iit.genomics.cru.bridges.ensembl.EnsemblClientManager;
 import it.iit.genomics.cru.bridges.ensembl.model.EnsemblException;
 import it.iit.genomics.cru.bridges.ensembl.model.Exon;
 import it.iit.genomics.cru.bridges.ensembl.model.Gene;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.structures.model.MIExon;
 import it.iit.genomics.cru.structures.model.MIGene;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import org.lorainelab.igb.services.IgbService;
 
 
 /**

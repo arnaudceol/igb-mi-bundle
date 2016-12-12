@@ -15,9 +15,10 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.model;
 
-import it.iit.genomics.cru.structures.model.MoleculeEntry;
 import java.awt.Color;
 import java.util.HashMap;
+
+import it.iit.genomics.cru.structures.model.MoleculeEntry;
 
 /**
  * Use to assign the same color to nodes according to their species 

@@ -15,32 +15,8 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business;
 
-import com.affymetrix.genometry.BioSeq;
-import com.affymetrix.genometry.GenometryModel;
-import com.affymetrix.genometry.SeqSpan;
-import com.affymetrix.genometry.parsers.TrackLineParser;
-import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
-import it.iit.genomics.cru.bridges.interactome3d.local.Interactome3DLocalRepository;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.bridges.interactome3d.local.I3DDownload;
-import it.iit.genomics.cru.igb.bundles.mi.commons.IDManager;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
-import it.iit.genomics.cru.igb.bundles.mi.model.MISymContainer;
-import it.iit.genomics.cru.igb.bundles.mi.model.MISymManager;
-import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
-import it.iit.genomics.cru.structures.model.MoleculeEntry;
-import it.iit.genomics.cru.structures.bridges.userData.UserStructuresManager;
-import it.iit.genomics.cru.structures.business.StructureMapper;
-import it.iit.genomics.cru.structures.business.StructureMapper.MappingType;
-import it.iit.genomics.cru.structures.model.AAPosition;
-import it.iit.genomics.cru.structures.model.AAPositionManager;
-import it.iit.genomics.cru.structures.model.InteractionStructure;
-import it.iit.genomics.cru.structures.model.ProteinStructure;
-import it.iit.genomics.cru.structures.sources.StructureManager;
-import it.iit.genomics.cru.structures.sources.StructureManager.StructureSourceType;
-import it.iit.genomics.cru.structures.sources.StructureSource;
-
+import java.awt.Color;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -48,21 +24,43 @@ import java.util.HashSet;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.affymetrix.genometry.BioSeq;
+import com.affymetrix.genometry.GenometryModel;
+import com.affymetrix.genometry.SeqSpan;
+import com.affymetrix.genometry.parsers.TrackLineParser;
+import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
+
 import it.iit.genomics.cru.bridges.dsysmap.local.DSysMapDownload;
 import it.iit.genomics.cru.bridges.dsysmap.local.DSysMapLocalRepository;
+import it.iit.genomics.cru.bridges.interactome3d.local.I3DDownload;
+import it.iit.genomics.cru.bridges.interactome3d.local.Interactome3DLocalRepository;
+import it.iit.genomics.cru.igb.bundles.mi.commons.IDManager;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
 import it.iit.genomics.cru.igb.bundles.mi.genometry.MIGeneSymmetry;
+import it.iit.genomics.cru.igb.bundles.mi.model.MISymContainer;
+import it.iit.genomics.cru.igb.bundles.mi.model.MISymManager;
+import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
 import it.iit.genomics.cru.structures.bridges.dsysmap.DSysMapStructureMapper;
 import it.iit.genomics.cru.structures.bridges.eppic.EPPICStructureMapper;
 import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
-
+import it.iit.genomics.cru.structures.bridges.userData.UserStructuresManager;
 import it.iit.genomics.cru.structures.business.Interactome3DUtils;
 import it.iit.genomics.cru.structures.business.PDBUtils;
+import it.iit.genomics.cru.structures.business.StructureMapper;
+import it.iit.genomics.cru.structures.business.StructureMapper.MappingType;
+import it.iit.genomics.cru.structures.model.AAPosition;
+import it.iit.genomics.cru.structures.model.AAPositionManager;
+import it.iit.genomics.cru.structures.model.InteractionStructure;
 import it.iit.genomics.cru.structures.model.MIGene;
 import it.iit.genomics.cru.structures.model.ModifiedResidue;
+import it.iit.genomics.cru.structures.model.MoleculeEntry;
+import it.iit.genomics.cru.structures.model.ProteinStructure;
 import it.iit.genomics.cru.structures.model.Range;
 import it.iit.genomics.cru.structures.model.position.UniprotPosition;
-import java.awt.Color;
-import java.io.File;
+import it.iit.genomics.cru.structures.sources.StructureManager;
+import it.iit.genomics.cru.structures.sources.StructureManager.StructureSourceType;
+import it.iit.genomics.cru.structures.sources.StructureSource;
 
 /**
  * @author Arnaud Ceol

@@ -5,11 +5,10 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import it.iit.genomics.cru.igb.bundles.commons.view.InfoPanel;
 import java.awt.Color;
 import java.awt.Dimension;
-import javax.swing.JButton;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 /**

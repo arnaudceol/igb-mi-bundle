@@ -15,6 +15,37 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business;
 
+import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_PDB;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingWorker;
+import javax.swing.plaf.basic.BasicButtonUI;
+
+import org.apache.commons.lang.StringUtils;
+import org.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
+import org.lorainelab.igb.services.IgbService;
+
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.GenometryModel;
 import com.affymetrix.genometry.SeqSpan;
@@ -25,9 +56,10 @@ import com.affymetrix.genometry.style.SimpleTrackStyle;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.symmetry.impl.SimpleSymWithProps;
 import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
+import com.google.common.collect.HashMultimap;
+
 import it.iit.genomics.cru.bridges.interactome3d.local.I3DDownload;
 import it.iit.genomics.cru.bridges.interactome3d.local.Interactome3DLocalRepository;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.genes.EnsemblGeneManager;
 import it.iit.genomics.cru.igb.bundles.mi.business.genes.IGBQuickLoadGeneManager;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
@@ -48,7 +80,6 @@ import it.iit.genomics.cru.structures.bridges.pdb.model.MoleculeDescription;
 import it.iit.genomics.cru.structures.bridges.pdb.model.Polymer;
 import it.iit.genomics.cru.structures.bridges.pdb.model.StructureID;
 import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
-import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_PDB;
 import it.iit.genomics.cru.structures.bridges.psicquic.InteractionManager;
 import it.iit.genomics.cru.structures.bridges.psicquic.PsicquicUtils;
 import it.iit.genomics.cru.structures.bridges.uniprot.UniprotkbUtils;
@@ -60,33 +91,6 @@ import it.iit.genomics.cru.structures.model.MIGene;
 import it.iit.genomics.cru.structures.model.ModifiedResidue;
 import it.iit.genomics.cru.structures.model.MoleculeEntry;
 import it.iit.genomics.cru.structures.model.Range;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingWorker;
-import javax.swing.plaf.basic.BasicButtonUI;
-import org.apache.commons.lang.StringUtils;
-import org.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
-import org.lorainelab.igb.services.IgbService;
 
 /**
  * @author Arnaud Ceol
@@ -116,14 +120,14 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 	String trackId;
 
-	MapOfMap<MIGene, AAPosition> gene2pos = new MapOfMap<>();
+	HashMultimap<MIGene, AAPosition> gene2pos = HashMultimap.create();
 
 	// We need the transcript sequences only for those entries
 	HashSet<String> uniprotNeedMapping = new HashSet<>();
 
 	// Associate Gene symmetries (from the genome loaded) to the selected
 	// symmetries (e.g. mutations)
-	MapOfMap<MIGene, SeqSymmetry> miGene2selectedSyms = new MapOfMap<>();
+	HashMultimap<MIGene, SeqSymmetry> miGene2selectedSyms = HashMultimap.create();
 
 	public MIWorker(List<MIResult> results, IgbService service, MIQuery query, JProgressBar progressBar) {
 
@@ -164,7 +168,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		Set<String> targetUniprotAcs = new HashSet<>();
 
 		// interactions
-		MapOfMap<String, String> uniprotAc2uniprotAcs;
+		HashMultimap<String, String> uniprotAc2uniprotAcs;
 
 		// Interaction found
 		ArrayList<MIResult> resultsInBackground = new ArrayList<>();
@@ -222,7 +226,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		progressManager.nextMajorStep(queryUniprotAcs.size());
 
 		// Get interactors
-		uniprotAc2uniprotAcs = new MapOfMap<>(queryUniprotAcs);
+		uniprotAc2uniprotAcs = HashMultimap.create();
 
 		logAndPublish("get interactions");
 
@@ -501,7 +505,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 				// interactions between selected genes)
 				// and one of the protein was not selected
 				if (QueryType.EXTRA.equals(query.getQueryType()) || queryUniprotAcs.contains(interactorUniprotAc)) {
-					uniprotAc2uniprotAcs.add(ac, interactorUniprotAc);
+					uniprotAc2uniprotAcs.put(ac, interactorUniprotAc);
 					targetUniprotAcs.add(interactorUniprotAc);
 
 					// String key = ac + "#" + interactorUniprotAc;
@@ -678,7 +682,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 					aaPositions.addAll(positions);
 
 					for (AAPosition aa : aaPositions) {
-						gene2pos.add(gene, aa);
+						gene2pos.put(gene, aa);
 					}
 					symManager.addSelectedResidues(gene.getProtein(), aaPositions);
 				}
@@ -781,13 +785,13 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		// Don't map residues if they cover a full gene
 		boolean skipSearchResidues = false;
 
-		MapOfMap<String, MoleculeEntry> proteins = new MapOfMap<>();
+		HashMultimap<String, MoleculeEntry> proteins = HashMultimap.create();
 
 		HashSet<String> searchGeneNames = new HashSet<>();
 		HashSet<String> searchRefSeq = new HashSet<>();
 		HashSet<String> searchEnsembl = new HashSet<>();
 
-		MapOfMap<SeqSymmetry, MIGene> candidates = geneManager.getBySymList(seq, selectedSymmetries);
+		HashMultimap<SeqSymmetry, MIGene> candidates = geneManager.getBySymList(seq, selectedSymmetries);
 
 		/**
 		 * TODO : may be more than one!!!
@@ -808,18 +812,18 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 			try {
 				if (false == searchRefSeq.isEmpty()) {
-					proteins.merge(
+					proteins.putAll(
 							UniprotkbUtils.getInstance(query.getTaxid()).getUniprotEntriesFromRefSeqs(searchRefSeq));
 
 				}
 
 				if (false == searchEnsembl.isEmpty()) {
-					proteins.merge(
+					proteins.putAll(
 							UniprotkbUtils.getInstance(query.getTaxid()).getUniprotEntriesFromEnsembl(searchEnsembl));
 				}
 
 				if (false == searchGeneNames.isEmpty()) {
-					proteins.merge(
+					proteins.putAll(
 							UniprotkbUtils.getInstance(query.getTaxid()).getUniprotEntriesFromGenes(searchGeneNames));
 				}
 			} catch (BridgesRemoteAccessException be) {
@@ -844,7 +848,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 				if (protein == null) {
 					igbLogger.warning("No protein for gene " + gene.getID());
 				} else {
-					miGene2selectedSyms.add(gene, sym);
+					miGene2selectedSyms.put(gene, sym);
 
 					gene.getUniprotAcs().add(protein.getUniprotAc());
 					gene.setProtein(protein);

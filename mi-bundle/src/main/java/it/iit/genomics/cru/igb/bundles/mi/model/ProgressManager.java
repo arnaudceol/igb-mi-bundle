@@ -15,7 +15,7 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.model;
 
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 
 public class ProgressManager {
 

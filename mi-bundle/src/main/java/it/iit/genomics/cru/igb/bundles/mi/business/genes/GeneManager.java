@@ -15,12 +15,13 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.business.genes;
 
-import com.affymetrix.genometry.BioSeq;
-import com.affymetrix.genometry.GenometryModel;
-import it.iit.genomics.cru.structures.model.MIGene;
-
 import java.util.Collection;
 import java.util.List;
+
+import com.affymetrix.genometry.BioSeq;
+import com.affymetrix.genometry.GenometryModel;
+
+import it.iit.genomics.cru.structures.model.MIGene;
 
 
 /**
