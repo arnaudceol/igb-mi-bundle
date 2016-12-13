@@ -108,20 +108,21 @@ public class MIAction extends GenericAction  implements SymSelectionListener {
 
         if (query.getSelectedSymmetries().isEmpty() && MIView.getInstance().getMiSearch().isBoxSearchEnabled()) {
             JOptionPane.showMessageDialog(MIView.getInstance().getMiSearch(),
-                    "Please add one or more genomic region (e.g. a gene, an exon or a variant).", "Select a region", ERROR_MESSAGE);
+                    "Please add one or more genomic region to the selection box (e.g. a gene, an exon or a variant).", "Select a region", ERROR_MESSAGE);
             return;
         }
 
         if (false == MIView.getInstance().getMiSearch().isBoxSearchEnabled()) {
+
+            if (selected_syms.isEmpty()) {
+                JOptionPane.showMessageDialog(MIView.getInstance().getMiSearch(),
+                        "Please select one genomic region (e.g. a gene, an exon or a variant).", "Select a region", ERROR_MESSAGE);
+                return;
+            }
+
             query.getSelectedSymmetries().clear();
             query.getSelectedSymmetries().addAll(
             		selected_syms);
-        }
-
-        if (selected_syms.isEmpty()) {
-            JOptionPane.showMessageDialog(MIView.getInstance().getMiSearch(),
-                    "Please select one genomic region (e.g. a gene, an exon or a variant).", "Select a region", ERROR_MESSAGE);
-            return;
         }
 
         JProgressBar progressBar = new JProgressBar();
