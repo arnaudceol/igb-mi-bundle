@@ -98,6 +98,7 @@
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
+			<version>${luceneVersion}</version>			
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>

@@ -71,14 +71,12 @@ public class EPPICStructureMapper extends StructureMapper {
         }
 
         try {
-            if (!theDir.exists()) {  // Checks that Directory/Folder Doesn't Exists!  
+            if (false == theDir.exists()) {  // Checks that Directory/Folder Doesn't Exists!  
                 boolean result = theDir.mkdir();
                 if (result) {
                     logger.info("New Folder created: " + eppicLocalPath);
                 }
-            } else {
-                logger.info("EPPIC Folder: " + eppicLocalPath);
-            }
+            } 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }

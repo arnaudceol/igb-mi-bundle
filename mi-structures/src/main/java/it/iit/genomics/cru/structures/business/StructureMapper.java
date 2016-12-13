@@ -200,7 +200,6 @@ public class StructureMapper {
      */
     public void searchStructureResidues(MappingType type, MoleculeEntry protein,
             StructureModel miStructure, Collection<AAPosition> residues) throws StructureException {
-        //logger.log(Level.INFO, "Get structure residues: {0} {1} {2}", new Object[]{protein.getGeneName(), miStructure.getStructureID(), residues.size()});
         String structureID = miStructure.getStructureID();
 
         // StructureResidueContainer src = null;
@@ -219,10 +218,7 @@ public class StructureMapper {
         }
 
         for (AAPosition search : residues) {
-
-//                logger.log(Level.INFO, "Search: {0} {1}", new Object[]{structureID, search.toString()});
             if (search.notOnStructure(structureID)) {
-//                logger.log(Level.WARNING, "Not on structure: {0} {1}", new Object[]{structureID, search.toString()});
                 continue;
             }
 
@@ -232,7 +228,6 @@ public class StructureMapper {
             for (ChainMapping structureMapping : miStructure.getChains(protein
                     .getUniprotAc())) {
 
-//                logger.log(Level.INFO, "Search: {0} ", new Object[]{structureMapping.getChain() + ":" + structureMapping.getStart()});
                 /**
                  * TODO: this is not the right place to do that
                  */
@@ -437,7 +432,7 @@ public class StructureMapper {
                 Integer pos = group.getResidueNumber().getSeqNum();
 
                 if ('-' == uniprotAA) {
-                    logger.warn("Position not aligned to uniprot: {0} {1} {2}", new Object[]{structureId, chain.getChainID(), pos});
+                    logger.warn("Position not aligned to uniprot: " + structureId + " " +  chain.getChainID() + " " + pos);
                 } else if (uniprotCursor >= search.getStart() - 1 && uniprotCursor <= search.getEnd() - 1) {
 
                     // Add residue
