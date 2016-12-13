@@ -32,7 +32,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -43,6 +44,8 @@ import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
  */
 public class InfoPanel extends JPanel {
 
+	private static final Logger logger = LoggerFactory.getLogger(InfoPanel.class);
+	
     private static final long serialVersionUID = 1L;
     private static final Dimension d = new Dimension(800, 600);
 
@@ -67,7 +70,7 @@ public class InfoPanel extends JPanel {
                         try {
                             Desktop.getDesktop().browse(event.getURL().toURI());
                         } catch (IOException | URISyntaxException e) {
-                            IGBLogger.getMainInstance().getLogger().error("Cannot manage hyperlinks ", e);
+                           logger.error("Cannot manage hyperlinks ", e);
                         }
                     }
                 }

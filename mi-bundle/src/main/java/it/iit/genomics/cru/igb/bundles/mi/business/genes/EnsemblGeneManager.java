@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.lorainelab.igb.services.IgbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.span.SimpleSeqSpan;
@@ -29,7 +31,7 @@ import it.iit.genomics.cru.bridges.ensembl.EnsemblClientManager;
 import it.iit.genomics.cru.bridges.ensembl.model.EnsemblException;
 import it.iit.genomics.cru.bridges.ensembl.model.Exon;
 import it.iit.genomics.cru.bridges.ensembl.model.Gene;
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.MIAction;
 import it.iit.genomics.cru.structures.model.MIExon;
 import it.iit.genomics.cru.structures.model.MIGene;
 
@@ -42,8 +44,8 @@ import it.iit.genomics.cru.structures.model.MIGene;
  */
 public class EnsemblGeneManager extends GeneManager {
 
-    private final IGBLogger igbLogger;
-    
+	private static final Logger logger = LoggerFactory.getLogger(EnsemblGeneManager.class);
+	
     private static final HashMap<String, EnsemblGeneManager> instances = new HashMap<>();
 
     private EnsemblClient client;
@@ -51,12 +53,12 @@ public class EnsemblGeneManager extends GeneManager {
     protected IgbService igbService;
 
     protected EnsemblGeneManager(IgbService igbService, String species) {
-        igbLogger = IGBLogger.getMainInstance();
+    
         try {
             client = EnsemblClientManager.getInstance().getClient(species);
             this.igbService = igbService;
         } catch (EnsemblException e) {
-            igbLogger.severe("Cannot access Ensembl MART");
+            logger.error("Cannot access Ensembl MART");
         }
     }
 
@@ -92,12 +94,11 @@ public class EnsemblGeneManager extends GeneManager {
                 results.add(cachedGenes.get(gene.getEnsemblGeneID()));
             }
         } catch (EnsemblException e) {
-            igbLogger.severe(e.getMessage());
-            igbLogger.getLogger().error( null, e);
+            logger.error(e.getMessage());
         }
 
         long estimatedTime = System.currentTimeMillis() - startTime;
-        igbLogger.info("getByEnsemblID " + estimatedTime + " ms");
+        logger.info("getByEnsemblID " + estimatedTime + " ms");
         return results;
     }
 
@@ -117,13 +118,13 @@ public class EnsemblGeneManager extends GeneManager {
             Collection<Gene> ensemblGenes = client.getGenesEnsemblGeneId(geneId);
 
             if (ensemblGenes.size() > 1) {
-                igbLogger.severe(
+                logger.error(
                         "Strange: more than one entry for ensembl gene id "
                         + geneId);
             }
 
             if (ensemblGenes.isEmpty()) {
-                igbLogger.severe(
+                logger.error(
                         "Strange: no gene found for ensembl gene id " + geneId);
                 return null;
             }
@@ -143,11 +144,10 @@ public class EnsemblGeneManager extends GeneManager {
                 return genes;
             }
         } catch (EnsemblException e) {
-            igbLogger.severe(e.getMessage());
-            igbLogger.getLogger().error( null, e);
+            logger.error(e.getMessage());
         }
         long estimatedTime = System.currentTimeMillis() - startTime;
-        igbLogger.info("getByEnsemblID " + estimatedTime + " ms");
+        logger.info("getByEnsemblID " + estimatedTime + " ms");
         return null;
     }
 
@@ -161,7 +161,7 @@ public class EnsemblGeneManager extends GeneManager {
             BioSeq chromosome = getSequence(gene.getChromosomeName());
 
             if (chromosome == null) {
-                igbLogger.warning("Unavailable sequence: " + gene.getChromosomeName());
+                logger.warn("Unavailable sequence: " + gene.getChromosomeName());
                 return;
             }
 
@@ -179,10 +179,9 @@ public class EnsemblGeneManager extends GeneManager {
             }
 
             long estimatedTime = System.currentTimeMillis() - startTime;
-            igbLogger.info("getByEnsemblID " + estimatedTime + " ms");
+            logger.info("getByEnsemblID " + estimatedTime + " ms");
         } catch (EnsemblException e) {
-            igbLogger.severe(e.getMessage());
-            igbLogger.getLogger().error( null, e);
+            logger.error( null, e);
         }
     }
 

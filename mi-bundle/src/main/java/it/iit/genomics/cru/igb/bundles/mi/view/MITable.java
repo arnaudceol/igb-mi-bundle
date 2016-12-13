@@ -56,13 +56,14 @@ import javax.swing.table.TableRowSorter;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.lang.StringUtils;
 import org.lorainelab.igb.services.IgbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.genometry.SeqSpan;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 
 import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
 import it.iit.genomics.cru.igb.bundles.mi.business.DrugBankMapper;
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult.StructureSummary;
 import it.iit.genomics.cru.igb.bundles.mi.commons.Utils;
@@ -82,7 +83,7 @@ public class MITable extends JTable {
 
     private static final long serialVersionUID = 1L;
 
-    private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(MITable.class);
 
     private final IgbService igbService;
 
@@ -144,7 +145,7 @@ public class MITable extends JTable {
 
     public void setShowInteractionsWoStructure(
             boolean showInteractionsWoStructure) {
-        igbLogger.info(
+        logger.info(
                 "Set show wo structs.: " + showInteractionsWoStructure);
         this.showInteractionsWoStructure = showInteractionsWoStructure;
         ((MITableModel) this.getModel()).fireTableDataChanged();
@@ -156,7 +157,6 @@ public class MITable extends JTable {
         super(model);
 
         this.query = query;
-        igbLogger = IGBLogger.getInstance(query.getLabel());
         this.igbService = service;
 
         this.SymSelectionListener = new MouseListener() {
@@ -868,7 +868,7 @@ public class MITable extends JTable {
                 }
             }
         } catch (RuntimeException e1) {
-            igbLogger.getLogger().error("exception, row " + rowIndex, e1);
+            logger.error("exception, row " + rowIndex, e1);
             // catch null pointer exception if mouse is over an empty line
         }
 
@@ -898,8 +898,8 @@ public class MITable extends JTable {
 //
 //            @Override
 //            public int compare(Interaction a1, Interaction a2) {
-//                igbLogger.info("O1: " + a1.getClass() + ", " + a1);
-//                igbLogger.info("O2: " + a2.getClass() + ", " + a2);
+//                logger.info("O1: " + a1.getClass() + ", " + a1);
+//                logger.info("O2: " + a2.getClass() + ", " + a2);
 //                
 //                Interaction o2 = (Interaction) a2;
 //                Interaction o1 = (Interaction) a1;

@@ -48,12 +48,13 @@ import org.biojava.nbio.structure.Structure;
 import org.jmol.api.JmolViewer;
 import org.lorainelab.igb.services.IgbService;
 import org.lorainelab.igb.services.window.tabs.IgbTabPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.common.CommonUtils;
 
 import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
 import it.iit.genomics.cru.bridges.interactome3d.ws.Utils;
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
 import it.iit.genomics.cru.igb.bundles.mi.view.ColourIterator.ColourScheme;
@@ -72,7 +73,7 @@ import it.iit.genomics.cru.structures.model.StructureException;
  */
 public class StructuresPanel extends IgbTabPanel {
 
-    private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(MITable.class);
 
     private final static String ACTION_LINK = "View structure source";
 
@@ -129,8 +130,6 @@ public class StructuresPanel extends IgbTabPanel {
 
         super("MI Structures", "MI Structures", "Display structure",
                 true);
-
-        igbLogger = IGBLogger.getInstance(label);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -292,7 +291,7 @@ public class StructuresPanel extends IgbTabPanel {
                         .getStructure(structureID);
 
                 if (struc == null) {
-                    igbLogger.severe(
+                    logger.error(
                             "No PDB file available for " + structureID
                             + ", skip");
                     return;
@@ -394,7 +393,7 @@ public class StructuresPanel extends IgbTabPanel {
                 jmolFrame.setVisible(true);
 
             } catch (HeadlessException | StructureException ex) {
-                igbLogger.getLogger().error(null, ex);
+                logger.error(null, ex);
             }
         }
 
@@ -465,7 +464,7 @@ public class StructuresPanel extends IgbTabPanel {
                 }
 
             } catch (HeadlessException | Interactome3DException | URISyntaxException | IOException ex) {
-                igbLogger.getLogger().error(null, ex);
+                logger.error(null, ex);
             }
         }
 

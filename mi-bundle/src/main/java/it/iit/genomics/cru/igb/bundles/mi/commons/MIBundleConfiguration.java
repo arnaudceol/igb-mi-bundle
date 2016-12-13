@@ -23,9 +23,12 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.affymetrix.common.CommonUtils;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.genes.IGBQuickLoadGeneManager;
 import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
 
 /**
@@ -39,7 +42,7 @@ import it.iit.genomics.cru.structures.bridges.pdb.PDBUtils;
  */
 public final class MIBundleConfiguration {
 
-    private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(IGBQuickLoadGeneManager.class);
     
     private static MIBundleConfiguration instance = null;
 
@@ -51,7 +54,6 @@ public final class MIBundleConfiguration {
     private boolean disableSave = false;
 
     private MIBundleConfiguration() {
-        igbLogger = IGBLogger.getMainInstance();
         
         // set the path to cache files
         String lineSplit = System.getProperty("file.separator");
@@ -132,7 +134,7 @@ public final class MIBundleConfiguration {
 
         // if the directory does not exist, create it
         if (!tempDir.exists()) {
-            igbLogger.info(
+            logger.info(
                     "creating directory for PDB files: " + cachePath);
             tempDir.mkdir();
         }
@@ -141,7 +143,7 @@ public final class MIBundleConfiguration {
 
         // if the directory does not exist, create it
         if (!tempDir.exists()) {
-            igbLogger.info(
+            logger.info(
                     "creating directory for PDB files: " + cachePath);
             tempDir.mkdir();
         }
@@ -180,7 +182,7 @@ public final class MIBundleConfiguration {
 
             FileInputStream in = new FileInputStream(f);
 
-            igbLogger.info(
+            logger.info(
                     "load properties");
 
             properties.load(in);

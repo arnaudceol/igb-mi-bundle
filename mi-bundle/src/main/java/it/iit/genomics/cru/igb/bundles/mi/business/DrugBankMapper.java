@@ -5,12 +5,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Map HET from PDB to drugbank
  * @author aceol 
  */
 public class DrugBankMapper {
 
+	private static final Logger logger = LoggerFactory.getLogger(DrugBankMapper.class);
+	
 	private static DrugBankMapper mapper;
 	
 	private DrugBankMapper() {
@@ -82,7 +87,7 @@ public class DrugBankMapper {
             	 drugIds.put(het, id);
              }
          } catch (IOException ex) {
-             IGBLogger.getMainInstance().severe("Cannot read file " + localPath);
+        	 logger.error("Cannot read file " + localPath);
          }
 	}
 	

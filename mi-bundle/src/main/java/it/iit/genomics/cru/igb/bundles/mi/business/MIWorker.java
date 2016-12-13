@@ -36,7 +36,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -53,6 +52,8 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import org.apache.commons.lang.StringUtils;
 import org.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
 import org.lorainelab.igb.services.IgbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.GenomeVersion;
@@ -108,12 +109,14 @@ import it.iit.genomics.cru.structures.model.Range;
  */
 public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
-	private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(MIWorker.class);
 
 	private final JProgressBar progressBar;
 
 	private final static String featureName = "mi";
 
+	private ArrayList<String> errorMessages = new ArrayList<>();;
+	
 	IgbService service;
 
 	MIQuery query;
@@ -144,8 +147,6 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		this.results = results;
 		this.progressBar = progressBar;
 		this.trackId = query.getLabel();
-
-		igbLogger = IGBLogger.getInstance(trackId);
 
 		progressBar.setIndeterminate(true);
 
@@ -224,7 +225,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 				symManager.addSelectedSymmetry(container, gene);
 			} else {
-				igbLogger.getLogger().warn("No protein for {0}", gene.getID());
+				logger.warn("No protein for {0}", gene.getID());
 			}
 			progressManager.nextStep();
 			setProgress(progressManager.getProgress());
@@ -259,7 +260,9 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 					}
 				}
 			} catch (BridgesRemoteAccessException be) {
-				igbLogger.severe("Cannot access PSICQUIC server!");
+				String message = "Cannot access PSICQUIC server";
+				logger.error(message);
+				errorMessages.add(message);
 				break;
 			}
 
@@ -321,7 +324,9 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 						try {
 							molDesc = client.getDescription(subset);
 						} catch (BridgesRemoteAccessException be) {
-							igbLogger.severe("Cannot access PDB!");
+							String message = "Cannot access PDB";
+							logger.error(message);
+							errorMessages.add(message);
 							break;
 						}
 
@@ -330,7 +335,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 								for (Polymer polymer : structureId.getPolymers()) {
 									if (polymer.getPolymerDescription() == null) {
-										igbLogger.severe("No description for " + structureId.getId());
+										logger.error("No description for " + structureId.getId());
 									}
 									if (null != polymer.getType()) {
 										switch (polymer.getType()) {
@@ -444,7 +449,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 								}
 
 								if (numAtoms <= 10) {
-									igbLogger.info("Skip ligand: " + ligand.getFormula());
+									logger.info("Skip ligand: " + ligand.getFormula());
 									continue;
 								}
 								uniprotNeedMapping.add(ac);
@@ -471,7 +476,9 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 							}
 						} catch (BridgesRemoteAccessException be) {
-							igbLogger.severe("Cannot access PDB!");
+							String message = "Cannot access PDB";
+							logger.error(message);
+							errorMessages.add(message);
 							break;
 						}
 					}
@@ -538,7 +545,9 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		try {
 			targetUniprotEntries.putAll(uniprotUtil.getUniprotEntriesFromUniprotAccessions(uniprotAcToSearch, false));
 		} catch (BridgesRemoteAccessException be) {
-			igbLogger.severe("Cannot access Uniprot!");
+			String message = "Cannot access Uniprot";
+			logger.error(message);
+			errorMessages.add(message);
 
 			return resultsInBackground;
 		}
@@ -620,8 +629,10 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 						BioSeq chromosome = geneManager.getSequence(gene.getChromosomeName());
 
 						if (chromosome == null) {
-							igbLogger.severe("Unavailable sequence: " + gene.getChromosomeName()
-									+ ", there may be a network problem.");
+							String message = "Unavailable sequence: " + gene.getChromosomeName()
+							+ ", there may be a network problem.";
+							logger.error(message);
+							errorMessages.add(message);
 							continue;
 						}
 
@@ -633,7 +644,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 					BioSeq chromosome = geneManager.getSequence(seq);
 
 					if (chromosome == null) {
-						igbLogger.severe("No sequence for chromosome: " + seq);
+						logger.error("No sequence for chromosome: " + seq);
 					}
 					for (Range range : merger.getRanges(seq)) {
 						SeqSpan span = new SimpleSeqSpan(range.getMin(), range.getMax(), chromosome);
@@ -835,7 +846,9 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 							UniprotkbUtils.getInstance(query.getTaxid()).getUniprotEntriesFromGenes(searchGeneNames));
 				}
 			} catch (BridgesRemoteAccessException be) {
-				igbLogger.severe("Cannot access Uniprot!");
+				String message = "Cannot access Uniprot!";
+				logger.error(message);
+				errorMessages.add(message);
 			}
 
 			for (MIGene gene : candidates.get(sym)) {
@@ -854,7 +867,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 				}
 
 				if (protein == null) {
-					igbLogger.warning("No protein for gene " + gene.getID());
+					logger.warn("No protein for gene " + gene.getID());
 				} else {
 					miGene2selectedSyms.put(gene, sym);
 
@@ -876,7 +889,9 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		try {
 			results.addAll(get());
 		} catch (InterruptedException | ExecutionException ignore) {
-			igbLogger.getLogger().error("Fail to analyze the selected regions", ignore);
+			String message = "Fail to analyze the selected regions";
+			logger.error(message, ignore);
+			errorMessages.add(message);
 			failed = true;
 		}
 
@@ -934,8 +949,11 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 		if (failed) {
 			querySummary += " <b><font color=\"red\">The query failed, please check the log for more informations.</font></b>";
-		} else if (igbLogger.hasError()) {
+		} else if (false == errorMessages.isEmpty()) {
 			querySummary += " <font color=\"red\">Some errors happend, please check the log for more informations.</font>";
+			for (String message: errorMessages) {
+				querySummary += message + "\n";
+			}
 		}
 
 		addResultTab(querySummary, results, query.getLabel(), query);
@@ -946,7 +964,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		setProgress(100);
 		logAndPublish("done");
 
-		igbLogger.info("Query over.");
+		logger.info("Query over.");
 	}
 
 	public void addResultTab(String summary, List<MIResult> results, String label, MIQuery query) {
@@ -1049,13 +1067,13 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 			// new track
 			String datasetId =  trackId.toLowerCase();
-			Logger.getGlobal().info("Track id: " + datasetId);
+			logger.info("Track id: " + datasetId);
 
 			try {
 
 				File file = File.createTempFile(datasetId, ".bed");
 
-				Logger.getGlobal().info("Write local resource: " + file.getPath());
+				logger.info("Write local resource: " + file.getPath());
 
 				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
 				String titleLine = "track name=" + datasetId + " type=bedDetail description=\"" + datasetId + "\" itemRgb=\"On\" ";
@@ -1148,22 +1166,22 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 				
 				
 				writer.close();
-				Logger.getGlobal().info("File writen, uri: " + file.toURI());
+				logger.info("File writen, uri: " + file.toURI());
 
 				GenomeVersion loadGroup = GenometryModel.getInstance().getSelectedGenomeVersion();
 
-				Logger.getGlobal().info("GenomeVersion: " + loadGroup.getName());
+				logger.info("GenomeVersion: " + loadGroup.getName());
 
 				String speciesName = loadGroup.getSpeciesName();
 
-				Logger.getGlobal().info("Species: " + speciesName);
+				logger.info("Species: " + speciesName);
 
 				URI uri = file.toURI();
 
-				Logger.getGlobal().info("Open uri: " + uri);
+				logger.info("Open uri: " + uri);
 				ServiceManager.getInstance().getService().openURI(uri, datasetId, loadGroup, speciesName, false);
 
-				Logger.getGlobal().info("Content loaded");
+				logger.info("Content loaded");
 
 
 				for (TierGlyph tg : ServiceManager.getInstance().getService().getVisibleTierGlyphs()) {				
@@ -1281,7 +1299,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 //	}
 
 	private void logAndPublish(String message) {
-		igbLogger.info(message);
+		logger.info(message);
 		publish(message);
 	}
 

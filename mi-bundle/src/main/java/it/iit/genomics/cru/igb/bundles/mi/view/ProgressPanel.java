@@ -20,7 +20,8 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,12 +37,11 @@ public class ProgressPanel extends JScrollPane {
 
     // Only one panel
     private static ProgressPanel instance;
-
-    private final IGBLogger igbLogger;
     
+	private static final Logger logger = LoggerFactory.getLogger(ProgressPanel.class);
+	
     private ProgressPanel() {
         super(ProgressBarPanel.getInstance());
-        igbLogger = IGBLogger.getMainInstance();
         setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     }
 
@@ -54,7 +54,7 @@ public class ProgressPanel extends JScrollPane {
     }
 
     public void addBar(JProgressBar progressBar) {
-        igbLogger.info("add progress bar");
+        logger.info("add progress bar");
         ProgressBarPanel.getInstance().add(progressBar);
         JScrollBar sb = this.getVerticalScrollBar();
         sb.setValue(sb.getMaximum());

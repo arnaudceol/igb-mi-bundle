@@ -27,10 +27,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.GenomeVersion;
@@ -81,8 +82,8 @@ import it.iit.genomics.cru.structures.sources.StructureSource;
  */
 public class MIResult {
 
-	private final IGBLogger igbLogger;
-
+	private static final Logger logger = LoggerFactory.getLogger(MIResult.class);
+	
 	private final static String featureName = "mi";
 
 	private boolean homodimer = false;
@@ -132,8 +133,6 @@ public class MIResult {
 		super();
 
 		this.ID = IDManager.getInstance().getMiID();
-
-		igbLogger = IGBLogger.getInstance(ID);
 
 		this.trackId = trackGroup + "-" + container1.getEntry().getGeneName() + "-"
 				+ container2.getEntry().getGeneName();
@@ -198,7 +197,7 @@ public class MIResult {
 							container1.getEntry(), interactionStructure, queryResiduesB);
 				}
 			} catch (Exception e) {
-				igbLogger.getLogger().error("Cannot get PDB structures ", e);
+				logger.error("Cannot get PDB structures ", e);
 			}
 		}
 
@@ -404,7 +403,7 @@ public class MIResult {
 														.substring(aa.getPosition() - 1, aa.getPosition())
 												+ aa.getPosition());
 							} catch (Exception e) {
-								igbLogger.getLogger().error("Pb when assigning AA : {0}, {1}, {2}, {3}",
+								logger.error("Pb when assigning AA : {0}, {1}, {2}, {3}",
 										new Object[] { aa, gene.getID(),
 												container1.getEntry().getVarSpliceAC(gene.getID()),
 												container1.getEntry().getSequence(gene.getID()) });
@@ -533,7 +532,7 @@ public class MIResult {
 		for (AAPosition pos : aaPositions) {
 			String seq = pos.getSequence();
 			if (seq == null) {
-				igbLogger.severe("No sequence for residue " + protein.getUniprotAc() + ", " + pos.getDescription());
+				logger.error("No sequence for residue " + protein.getUniprotAc() + ", " + pos.getDescription());
 			}
 
 			if (pos.getStart() < pos.getEnd()) {
@@ -835,13 +834,13 @@ public class MIResult {
 
 		// new track
 		String datasetId = getTrackId().toLowerCase();
-		Logger.getGlobal().info("Track id: " + datasetId);
+		logger.info("Track id: " + datasetId);
 
 		try {
 
 			File file = File.createTempFile(datasetId, ".bed");
 
-			Logger.getGlobal().info("Write local resource: " + file.getPath());
+			logger.info("Write local resource: " + file.getPath());
 
 			Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
 			String titleLine = "track name=" + datasetId + " type=bedDetail description=\"" + datasetId
@@ -925,22 +924,22 @@ public class MIResult {
 			}
 
 			writer.close();
-			Logger.getGlobal().info("File writen, uri: " + file.toURI());
+			logger.info("File writen, uri: " + file.toURI());
 
 			GenomeVersion loadGroup = GenometryModel.getInstance().getSelectedGenomeVersion();
 
-			Logger.getGlobal().info("GenomeVersion: " + loadGroup.getName());
+			logger.info("GenomeVersion: " + loadGroup.getName());
 
 			String speciesName = loadGroup.getSpeciesName();
 
-			Logger.getGlobal().info("Species: " + speciesName);
+			logger.info("Species: " + speciesName);
 
 			URI uri = file.toURI();
 
-			Logger.getGlobal().info("Open uri: " + uri);
+			logger.info("Open uri: " + uri);
 			ServiceManager.getInstance().getService().openURI(uri, datasetId, loadGroup, speciesName, false);
 
-			Logger.getGlobal().info("Content loaded");
+			logger.info("Content loaded");
 
 			for (TierGlyph tg : ServiceManager.getInstance().getService().getVisibleTierGlyphs()) {
 				if (tg.getAnnotStyle().getTrackName().equals(datasetId)) {
@@ -959,87 +958,6 @@ public class MIResult {
 
 	}
 
-	// public TypeContainerAnnot createTrack() {
-	//
-	// // create track
-	// TypeContainerAnnot interactorTrack = new TypeContainerAnnot(
-	// getTrackId());
-	// interactorTrack.setID(getTrackId());
-	// interactorTrack.setProperty(TrackLineParser.ITEM_RGB, Color.PINK);
-	//
-	// BioSeq aseq = GenometryModel.getInstance().getSelectedSeq().get();
-	//
-	// ArrayList<MISymContainer> resultSyms = new ArrayList<>();
-	// resultSyms.add(container1);
-	// if (false == this.isHomodimer()) {
-	// resultSyms.add(container2);
-	// }
-	//
-	// for (MISymContainer container : resultSyms) {
-	// SeqSymmetry symFound = container.getResultSym();
-	//
-	// if (symFound.getSpanCount() == 0) {
-	// continue;
-	// }
-	//
-	// BioSeq sequence = symFound.getSpan(0).getBioSeq();
-	//
-	// if (null == sequence.getAnnotation(trackId) && false ==
-	// sequence.equals(aseq)) {
-	// sequence.addAnnotation(interactorTrack);
-	// }
-	//
-	// if (null == symFound.getSpan(sequence)) {
-	// continue;
-	// }
-	//
-	// if (symFound.getSpanCount() == 0
-	// || symFound.getSpan(0) == null) {
-	// continue;
-	// }
-	// SeqSpan span = symFound.getSpan(sequence);
-	//
-	// ArrayList<Integer> emins = new ArrayList<>();
-	// ArrayList<Integer> emaxs = new ArrayList<>();
-	//
-	// if (merger.getRanges(sequence.getId()) != null) {
-	// for (Range range : merger.getRanges(sequence.getId())) {
-	// if (range.getMin() >= span.getMin() && range.getMax() < span.getMax()) {
-	// emins.add(range.getMin());
-	// // from 0-based inclusive to 0-based exclusive
-	// emaxs.add(range.getMax() + 1);
-	// }
-	// }
-	// }
-	//
-	// int[] eminsA = new int[emaxs.size()];
-	// int[] emaxsA = new int[emaxs.size()];
-	//
-	// for (int i = 0; i < emaxs.size(); i++) {
-	// eminsA[i] = emins.get(i);
-	// emaxsA[i] = emaxs.get(i);
-	// }
-	//
-	// MIGeneSymmetry geneSym
-	// = new MIGeneSymmetry(symFound.getID(), symFound.getID(),
-	// symFound.getID(),
-	// sequence, span.isForward(), span.getMin(), span.getMax(),
-	// span.getMin(), span.getMax(), eminsA, emaxsA, container.getMiGenes());
-	//
-	// if (eminsA.length > 0) {
-	// geneSym.setProperty(TrackLineParser.ITEM_RGB, Color.RED);
-	// } else {
-	// geneSym.setProperty(TrackLineParser.ITEM_RGB, Color.BLACK);
-	// }
-	//
-	// interactorTrack.addChild(geneSym);
-	// }
-	//
-	// this.hasTrack = true;
-	//
-	// return interactorTrack;
-	//
-	// }
 
 	public HashSet<AAPosition> getInterfaceAAPositionsA() {
 		return structureMapper.getInterfaceAAPositionsA();

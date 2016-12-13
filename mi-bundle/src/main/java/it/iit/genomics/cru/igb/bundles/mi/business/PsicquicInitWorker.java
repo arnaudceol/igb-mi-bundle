@@ -22,6 +22,9 @@ import java.util.List;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
 import it.iit.genomics.cru.igb.bundles.mi.view.ProgressPanel;
 import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
@@ -41,11 +44,8 @@ public class PsicquicInitWorker extends SwingWorker<List<Integer>, String> {
 
     public final static String nullServer = "== none ==";
 
-    private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(PsicquicInitWorker.class);
 
-    public PsicquicInitWorker() {
-        this.igbLogger = IGBLogger.getMainInstance();
-    }
     
     @Override
     protected List<Integer> doInBackground() throws Exception {
@@ -70,7 +70,7 @@ public class PsicquicInitWorker extends SwingWorker<List<Integer>, String> {
         activeServices = psiquic
                 .getActiveServerFromRegistry();
         } catch (BridgesRemoteAccessException e) {
-            igbLogger.severe("Cannot reach the PSICQUIC registry, either the registry is down or there is a network problem.");
+        	logger.error("Cannot reach the PSICQUIC registry, either the registry is down or there is a network problem.");
             publish("Cannot reach the PSICQUIC registry!");
             setProgress(100);
 
@@ -95,16 +95,16 @@ public class PsicquicInitWorker extends SwingWorker<List<Integer>, String> {
                             "idA:uniprotkb AND idB:uniprotkb") > 0) {
                         psiquic.addUrl(service.getName(), service.getRestUrl());
                     } else {
-                        igbLogger.warning(service.getName() + " has no Uniprot xrefs, skip.");
+                        logger.warn(service.getName() + " has no Uniprot xrefs, skip.");
                         publish(service.getName() + " has no Uniprot xrefs, skip");
                     }
                 } catch (IOException ioe) {                        
-                    igbLogger.warning("Cannot access psicquic service "
+                	logger.warn("Cannot access psicquic service "
                             + service.getName());
                     publish("Cannot access psicquic service "
                             + service.getName());
                 }
-            } else { igbLogger.warning("PSICQUIC service " + service.getName() + " is not active, skip");
+            } else { logger.warn("PSICQUIC service " + service.getName() + " is not active, skip");
                 publish(service.getName() + " is not active, skip");
             }
 

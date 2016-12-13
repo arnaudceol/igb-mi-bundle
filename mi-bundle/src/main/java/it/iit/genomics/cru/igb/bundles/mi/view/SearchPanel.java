@@ -52,6 +52,8 @@ import javax.swing.border.TitledBorder;
 
 import org.lorainelab.igb.genoviz.extensions.glyph.StyledGlyph;
 import org.lorainelab.igb.services.IgbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.common.CommonUtils;
 import com.affymetrix.genometry.BioSeq;
@@ -69,7 +71,6 @@ import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.util.SeqUtils;
 import com.affymetrix.igb.shared.TrackUtils;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIAction;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIView;
@@ -90,7 +91,7 @@ public class SearchPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(SearchPanel.class);
 
     // Search type
     private ButtonGroup searchTypeGroup;
@@ -151,8 +152,6 @@ public class SearchPanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         this.igbService = igbService;
-
-        igbLogger = IGBLogger.getMainInstance();
 
         this.initListeners();
 
@@ -457,10 +456,8 @@ public class SearchPanel extends JPanel {
 
                 final JFrame helpFrame;
                 final JFrame setupFrame;
-                final JFrame logFrame;
-
+              
                 helpFrame = new JFrame("MI Bundle Help");
-                logFrame = new JFrame("MI Bundle Log");
                 setupFrame = new JFrame("MI Bundle Setup");
 
                 Dimension preferredSize = new Dimension(900, 500);
@@ -468,21 +465,16 @@ public class SearchPanel extends JPanel {
                 helpFrame.setPreferredSize(preferredSize);
                 helpFrame.setMinimumSize(preferredSize);
 
-                logFrame.setPreferredSize(preferredSize);
-                logFrame.setMinimumSize(preferredSize);
-
-                setupFrame.setPreferredSize(preferredSize);
+                              setupFrame.setPreferredSize(preferredSize);
                 setupFrame.setMinimumSize(preferredSize);
 
                 InfoPanel.getInstance().setPreferredSize(preferredSize);
                 InfoPanel.getInstance().setMinimumSize(preferredSize);
 
                 helpFrame.add(InfoPanel.getInstance());
-                logFrame.add(new JScrollPane(new LogPanel(IGBLogger.getMainInstance())));
                 setupFrame.add(new ConfigurationPanel());
 
                 helpFrame.setVisible(false);
-                logFrame.setVisible(false);
                 setupFrame.setVisible(false);
 
                 JButton help = new JButton();
@@ -506,17 +498,7 @@ public class SearchPanel extends JPanel {
                     }
 
                 });
-                JButton log = new JButton();
-                log.setIcon(CommonUtils.getInstance().getIcon("16x16/actions/console.png"));
-                log.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        logFrame.setVisible(true);
-                    }
-
-                });
-
+                
                 Dimension buttonSize = new Dimension(90, 30);
                 help.setMaximumSize(buttonSize);
                 help.setPreferredSize(buttonSize);
@@ -526,13 +508,8 @@ public class SearchPanel extends JPanel {
                 setup.setPreferredSize(buttonSize);
                 setup.setMinimumSize(buttonSize);
 
-                log.setMaximumSize(buttonSize);
-                log.setPreferredSize(buttonSize);
-                log.setMinimumSize(buttonSize);
-
                 buttons.add(help);
                 buttons.add(setup);
-                buttons.add(log);
 
                 add(buttons);
 
@@ -673,7 +650,7 @@ public class SearchPanel extends JPanel {
                             .getSpeciesFromName(igbService
                                     .getSelectedSpecies())) {
 
-                                igbLogger.info(
+                                logger.info(
                                         "Species: " + species[0] + " / "
                                         + species[1]);
                                 MIQueryManager.getInstance().setSpecies(
@@ -694,7 +671,7 @@ public class SearchPanel extends JPanel {
                                 break;
                             }
                         } catch (BridgesRemoteAccessException be) {
-                            igbLogger.severe("Cannot access Uniprot!");
+                            logger.error("Cannot access Uniprot!");
                         }
                     }
                 });
@@ -751,7 +728,7 @@ public class SearchPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            igbLogger.info("Set selection by search: " + searchAndAddArea.getText());
+            logger.info("Set selection by search: " + searchAndAddArea.getText());
 
             if (searchAndAddArea.getText() == null || "".equals(searchAndAddArea.getText().trim())) {
                 return;
@@ -769,7 +746,7 @@ public class SearchPanel extends JPanel {
             List<SeqSymmetry> symmetries = SearchUtils.findLocalSyms(group,
                     null, regex, true);
 
-            igbLogger.info(
+            logger.info(
                     "Number of terms found: " + symmetries.size());
 
             for (SeqSymmetry selected : symmetries) {
@@ -800,7 +777,7 @@ public class SearchPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent event) {
         	if (selected_syms == null) {
-        		igbLogger.info("Number of elements: null");
+        		logger.info("Number of elements: null");
         		return;        				
         	}
             for (SeqSymmetry selected : selected_syms ){
@@ -808,7 +785,7 @@ public class SearchPanel extends JPanel {
                 selectionModel.getListModel().addElement(selected);
             }
 
-            igbLogger.info("Number of elements: " + selectionModel.getListModel().size());
+            logger.info("Number of elements: " + selectionModel.getListModel().size());
             MIQueryManager.getInstance().setSelectedSymmetries(
                     Collections.list(selectionModel.getListModel().elements()));
             selectList.ensureIndexIsVisible(selectList.getComponentCount());

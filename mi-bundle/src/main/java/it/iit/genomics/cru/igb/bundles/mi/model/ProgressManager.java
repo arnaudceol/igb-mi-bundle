@@ -15,12 +15,13 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.model;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProgressManager {
 
-    private final IGBLogger igbLogger;
-    
+	private static final Logger logger = LoggerFactory.getLogger(ProgressManager.class);
+	
     private final int numberOfSteps;
 
     private int numMinorSteps;
@@ -35,7 +36,6 @@ public class ProgressManager {
     public ProgressManager(int numberOfSteps) {
         super();
         this.numberOfSteps = numberOfSteps;
-        igbLogger = IGBLogger.getMainInstance();
     }
 
     public void nextMajorStep(int numMinorSteps) {
@@ -56,12 +56,12 @@ public class ProgressManager {
 
     public int getProgress() {
         if (progress > nextMax) {
-            igbLogger.severe("progress  > " + nextMax + ": " + progress);
+            logger.error("progress  > " + nextMax + ": " + progress);
             return nextMax;
         }
 
         if (progress > 100) {
-            igbLogger.severe("progress  > 100 (strange): " + progress);
+            logger.error("progress  > 100 (strange): " + progress);
             return 100;
         }
         return progress;

@@ -26,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
 import org.lorainelab.igb.services.IgbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.GenometryModel;
@@ -49,6 +51,8 @@ import it.iit.genomics.cru.structures.bridges.uniprot.UniprotkbUtils;
  */
 public class MIAction extends GenericAction  implements SymSelectionListener {
 
+	private static final Logger logger = LoggerFactory.getLogger(MIAction.class);
+	
     private static final long serialVersionUID = 1L;
     private final IgbService igbService;
 
@@ -98,8 +102,7 @@ public class MIAction extends GenericAction  implements SymSelectionListener {
                 }
             }
         } catch (BridgesRemoteAccessException be) {
-            IGBLogger.getMainInstance().severe("Cannot access Uniprot!");
-
+            logger.error("Cannot access Uniprot!");
         }
         MIQuery query = MIQueryManager.getInstance().getMIQuery();
 

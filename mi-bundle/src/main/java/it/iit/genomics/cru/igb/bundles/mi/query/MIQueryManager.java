@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.structures.bridges.psicquic.PsicquicUtils;
 
 /**
@@ -38,11 +40,10 @@ public class MIQueryManager extends AbstractMIQuery {
 
     private static MIQueryManager instance;
 
-    private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(MIQueryManager.class);
     
     private MIQueryManager() {
         this.selectedSymmetries = new ArrayList<>();
-        igbLogger = IGBLogger.getMainInstance();
     }
 
     public static MIQueryManager getInstance() {
@@ -71,7 +72,7 @@ public class MIQueryManager extends AbstractMIQuery {
     }
 
     public void setQueryType(QueryType queryType) {
-        igbLogger.info("Set query type: " + queryType);
+        logger.info("Set query type: " + queryType);
         this.queryType = queryType;
     }
 
@@ -88,37 +89,37 @@ public class MIQueryManager extends AbstractMIQuery {
     }
 
     public void setSearchInteractome3D(boolean searchInteractome3D) {
-        igbLogger.info("Search strutures in Interactome3D: " + searchInteractome3D);
+        logger.info("Search strutures in Interactome3D: " + searchInteractome3D);
         this.searchInteractome3D = searchInteractome3D;
     }
 
     public void setSearchDSysMap(boolean searchDSysMap) {
-        igbLogger.info("Search strutures and contacts in DSysMap: " + searchDSysMap);
+        logger.info("Search strutures and contacts in DSysMap: " + searchDSysMap);
         this.searchDsysmap = searchDSysMap;
     }
     
     public void setSearchEPPIC(boolean searchEPPIC) {
-        igbLogger.info("Search strutures and contacts in EPPIC: " + searchEPPIC);
+        logger.info("Search strutures and contacts in EPPIC: " + searchEPPIC);
         this.searchEPPIC = searchEPPIC;
     }
     
     public void setSearchPDB(boolean searchPDB) {
-        igbLogger.info("Search strutures in PDB: " + searchPDB);
+        logger.info("Search strutures in PDB: " + searchPDB);
         this.searchPDB = searchPDB;
     }
 
     public void setSearchPDBLocal(boolean searchPDBLocal) {
-        igbLogger.info("Search strutures in PDB local mirror: " + searchPDBLocal);
+        logger.info("Search strutures in PDB local mirror: " + searchPDBLocal);
         this.searchPDBLocal = searchPDBLocal;
     }
 
     public void setSearchUserStructures(boolean searchUserStructures) {
-        igbLogger.info("Search local strutures: " + searchUserStructures);
+        logger.info("Search local strutures: " + searchUserStructures);
         this.searchUserStructures = searchUserStructures;
     }
 
     public void setSearchProteinStructures(boolean searchProteinStructures) {
-        igbLogger.info("Search protein structures: " + searchProteinStructures);
+        logger.info("Search protein structures: " + searchProteinStructures);
         this.searchProteinStructures = searchProteinStructures;
     }
 
@@ -128,22 +129,22 @@ public class MIQueryManager extends AbstractMIQuery {
     }
     
     public void setSearchPPI(boolean selected) {
-        igbLogger.info("Search PPI: " + selected);
+        logger.info("Search PPI: " + selected);
         this.searchPPI = selected;
     }
     
     public void setSearchNucleicAcid(boolean selected) {
-        igbLogger.info("Search RNA/DNA: " + selected);
+        logger.info("Search RNA/DNA: " + selected);
         this.searchNucleicAcid = selected;
     }
 
     public void setSearchLigands(boolean selected) {
-        igbLogger.info("Search ligands: " + selected);
+        logger.info("Search ligands: " + selected);
         this.searchLigands = selected;
     }
 
     public void setSearchModifications(boolean searchModifications) {
-        igbLogger.info("Search modifications: " + searchModifications);
+        logger.info("Search modifications: " + searchModifications);
         this.searchModifications = searchModifications;
     }
     

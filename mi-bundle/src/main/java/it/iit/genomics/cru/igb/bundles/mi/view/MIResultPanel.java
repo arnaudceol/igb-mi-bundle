@@ -68,6 +68,8 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.httpclient.util.URIUtil;
 import org.lorainelab.igb.services.IgbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.common.CommonUtils;
 
@@ -80,7 +82,6 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
 import it.iit.genomics.cru.igb.bundles.mi.commons.MICommons;
@@ -98,7 +99,7 @@ public class MIResultPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(MIResultPanel.class);
 
     private MITable miTable;
 
@@ -123,7 +124,6 @@ public class MIResultPanel extends JPanel {
 
         this.label = label;
 
-        igbLogger = IGBLogger.getInstance(label);
 
         colorer = TaxonColorer.getColorer(query.getTaxid());
 
@@ -152,27 +152,6 @@ public class MIResultPanel extends JPanel {
 
         logFrame.setPreferredSize(preferredSize);
         logFrame.setMinimumSize(preferredSize);
-
-        logFrame.add(new LogPanel(igbLogger));
-
-        JButton log = new JButton();
-
-        if (igbLogger.hasError()) {
-            log.setBackground(Color.red);
-        }
-
-        log.setIcon(CommonUtils.getInstance().getIcon("16x16/actions/console.png"));
-
-        log.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                logFrame.setVisible(true);
-            }
-
-        });
-
-        buttonBox1.add(log);
 
         JButton networkButton = new JButton("");
         networkButton.setIcon(new ImageIcon(getClass().getResource("/network.jpg")));
@@ -344,7 +323,7 @@ public class MIResultPanel extends JPanel {
                 }
 
             } catch (HeadlessException | URISyntaxException | IOException ex) {
-                igbLogger.getLogger().error(null, ex);
+                logger.error(null, ex);
             }
         }
     }
@@ -357,7 +336,7 @@ public class MIResultPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            igbLogger.info(
+            logger.info(
                     "Generate tab delimited code for query " + label);
 
             String header = "uniprot A\tgene A\tGenome Positions A\tResidues A"
@@ -564,7 +543,7 @@ public class MIResultPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            igbLogger.info(
+            logger.info(
                     "Generate xgmml code for query " + label);
 
             // default file name

@@ -40,6 +40,8 @@ import org.biojava.nbio.core.sequence.transcription.Frame;
 import org.biojava.nbio.core.sequence.transcription.RNAToAminoAcidTranslator;
 import org.biojava.nbio.core.sequence.transcription.Table;
 import org.lorainelab.igb.services.IgbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.affymetrix.genometry.BioSeq;
 import com.affymetrix.genometry.GenometryModel;
@@ -53,7 +55,6 @@ import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
 import com.google.common.collect.HashMultimap;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.structures.model.MIExon;
 import it.iit.genomics.cru.structures.model.MIGene;
 import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
@@ -66,7 +67,7 @@ import it.iit.genomics.cru.structures.model.sequence.TranscriptSequence;
  */
 public class IGBQuickLoadGeneManager extends GeneManager {
 
-    private final IGBLogger igbLogger;
+	private static final Logger logger = LoggerFactory.getLogger(IGBQuickLoadGeneManager.class);
 
     private static final HashMap<String, IGBQuickLoadGeneManager> instances = new HashMap<>();
 
@@ -90,7 +91,6 @@ public class IGBQuickLoadGeneManager extends GeneManager {
 
     protected IGBQuickLoadGeneManager(IgbService igbService, String species) {
         this.igbService = igbService;
-        igbLogger = IGBLogger.getMainInstance();
     }
 
     public static IGBQuickLoadGeneManager getFirstInstance() {
@@ -154,7 +154,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
     @Override
     public Collection<MIGene> getByPosition(String chromosome, int start,
             int end) {
-        igbLogger.severe("not supported: getByPosition");
+        logger.error("not supported: getByPosition");
         return null;
     }
 
@@ -271,7 +271,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
             RNASequence rnaSequence = (RNASequence) dnaTranslator.createSequence(
                     dnaSeq, Frame.ONE);
             if (rnaSequence == null) {
-                igbLogger.getLogger().error("RNA Sequence null, transcription error: {0}", gene.getID());
+                logger.error("RNA Sequence null, transcription error: {0}", gene.getID());
                 return;
             }
 
@@ -281,7 +281,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
 
             gene.setTranscriptSequence(new TranscriptSequence(exonProteinSequenceAsString));
         } catch (NullPointerException | CompoundNotFoundException | TranslationException te) {
-            igbLogger.getLogger().warn("Translation error: {0}", transcriptSeq);
+            logger.warn("Translation error: {0}", transcriptSeq);
         }
 
     }
@@ -335,7 +335,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
         }
 
         if (chromosomeSym == null) {
-            igbLogger.warning(
+            logger.warn(
                     "No chromosome found for " + chromosomeSeq.getId());
             return genes;
         }

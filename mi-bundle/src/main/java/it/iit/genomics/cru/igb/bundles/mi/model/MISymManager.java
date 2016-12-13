@@ -22,17 +22,14 @@ import java.util.HashSet;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.google.common.collect.HashMultimap;
 
-import it.iit.genomics.cru.igb.bundles.mi.business.IGBLogger;
 import it.iit.genomics.cru.structures.model.AAPosition;
 import it.iit.genomics.cru.structures.model.MIGene;
 import it.iit.genomics.cru.structures.model.MoleculeEntry;
 
 public class MISymManager {
 
-    private final IGBLogger igbLogger;
-
     public MISymManager(String label) {
-        igbLogger = IGBLogger.getInstance(label);
+    	
     }
 
     HashMap<MIGene, MISymContainer> geneSyms = new HashMap<>();
