@@ -35,6 +35,7 @@ import java.util.Set;
 
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.io.PDBFileReader;
+import org.biojava.nbio.structure.io.LocalPDBDirectory.FetchBehavior;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,7 +140,7 @@ public abstract class StructureSource {
     protected StructureSource(StructureSourceType sourceType) {
         this.sourceType = sourceType;
         pdbFileReader = new PDBFileReader();
-        pdbFileReader.setAutoFetch(true);
+        pdbFileReader.setFetchBehavior(FetchBehavior.FETCH_FILES);;
     }
 
     /**

@@ -80,10 +80,11 @@ public class IGBQuickLoadGeneManager extends GeneManager {
     private final static Table table = IUPACParser.getInstance().getTable(new Integer(1));
 
     private final static CompoundSet<Table.Codon> codons = table.getCodonCompoundSet(rna, aa);
+   
 
     private final static RNAToAminoAcidTranslator rnaTranslator = new RNAToAminoAcidTranslator(
             new ProteinSequenceCreator(aa), rna, codons, aa, table, false,
-            false, false);
+            false, false,false,false);
 
     protected IGBQuickLoadGeneManager(IgbService igbService, String species) {
         this.igbService = igbService;
@@ -268,7 +269,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
             RNASequence rnaSequence = (RNASequence) dnaTranslator.createSequence(
                     dnaSeq, Frame.ONE);
             if (rnaSequence == null) {
-                igbLogger.getLogger().error("RNA Sequence null, transcription error: {0}", gene.getID());
+                igbLogger.getLogger().severe("RNA Sequence null, transcription error: " +  gene.getID());
                 return;
             }
 
@@ -278,7 +279,7 @@ public class IGBQuickLoadGeneManager extends GeneManager {
 
             gene.setTranscriptSequence(new TranscriptSequence(exonProteinSequenceAsString));
         } catch (NullPointerException | CompoundNotFoundException | TranslationException te) {
-            igbLogger.getLogger().warn("Translation error: {0}", transcriptSeq);
+            igbLogger.getLogger().warning("Translation error: "+ transcriptSeq);
         }
 
     }

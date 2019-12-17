@@ -15,28 +15,13 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import com.affymetrix.genometry.SeqSpan;
-import com.affymetrix.genometry.color.RGB;
-import com.affymetrix.genometry.parsers.TrackLineParser;
-import com.affymetrix.genometry.style.SimpleTrackStyle;
-import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
-import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
-import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.igb.bundles.mi.business.DrugBankMapper;
-import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_0;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_1;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_2;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_3;
-import it.iit.genomics.cru.igb.bundles.mi.business.MIResult.StructureSummary;
-import it.iit.genomics.cru.igb.bundles.mi.commons.Utils;
-import it.iit.genomics.cru.igb.bundles.mi.model.TaxonColorer;
-import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
-import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
 import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_I3D;
 import static it.iit.genomics.cru.structures.bridges.psicquic.Interaction.INTERACTION_TYPE_PDB;
-import it.iit.genomics.cru.structures.model.MoleculeEntry;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -48,6 +33,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Comparator;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -66,10 +52,29 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
-import org.apache.commons.httpclient.util.URIUtil;
+
+import com.affymetrix.genometry.SeqSpan;
+import com.affymetrix.genometry.color.RGB;
+import com.affymetrix.genometry.parsers.TrackLineParser;
+import com.affymetrix.genometry.style.SimpleTrackStyle;
+import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.lorainelab.igb.genoviz.extensions.glyph.TierGlyph;
 import org.lorainelab.igb.services.IgbService;
+
+import it.iit.genomics.cru.bridges.interactome3d.ws.Interactome3DException;
+import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.mi.business.DrugBankMapper;
+import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
+import it.iit.genomics.cru.igb.bundles.mi.business.MIResult.StructureSummary;
+import it.iit.genomics.cru.igb.bundles.mi.commons.Utils;
+import it.iit.genomics.cru.igb.bundles.mi.model.TaxonColorer;
+import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
+import it.iit.genomics.cru.structures.bridges.psicquic.Interaction;
+import it.iit.genomics.cru.structures.model.MoleculeEntry;
 
 /**
  *
@@ -289,7 +294,7 @@ public class MITable extends JTable {
                                     break;
                             }
                             try {
-                                URI uri = new URI(URIUtil.encodeQuery(query) + anchor);
+                                URI uri = new URI(new URIBuilder().setPath(query).toString() + anchor);
 
                                 Desktop desktop = Desktop.isDesktopSupported() ? Desktop
                                         .getDesktop() : null;
@@ -351,7 +356,7 @@ public class MITable extends JTable {
                                 }
                             }
                             try {
-                                URI uri = new URI(URIUtil.encodeQuery(queryURL));
+                                URI uri = new URI(new URIBuilder().setPath(queryURL).toString());
 
                                 Desktop desktop = Desktop.isDesktopSupported() ? Desktop
                                         .getDesktop() : null;
@@ -891,7 +896,7 @@ public class MITable extends JTable {
                 }
             }
         } catch (RuntimeException e1) {
-            igbLogger.getLogger().error("exception, row " + rowIndex, e1);
+            igbLogger.getLogger().severe("exception, row " + rowIndex);
             // catch null pointer exception if mouse is over an empty line
         }
 

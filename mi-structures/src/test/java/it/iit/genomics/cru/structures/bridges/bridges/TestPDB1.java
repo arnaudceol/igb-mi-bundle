@@ -8,13 +8,13 @@ package it.iit.genomics.cru.structures.bridges.bridges;
 import org.biojava.nbio.alignment.Alignments;
 import org.biojava.nbio.alignment.Alignments.PairwiseSequenceAlignerType;
 import org.biojava.nbio.alignment.SimpleGapPenalty;
-import org.biojava.nbio.alignment.SimpleSubstitutionMatrix;
 import org.biojava.nbio.alignment.template.PairwiseSequenceAligner;
-import org.biojava.nbio.alignment.template.Profile;
+import org.biojava.nbio.core.alignment.matrices.SimpleSubstitutionMatrix;
+import org.biojava.nbio.core.alignment.template.Profile;
+// import org.biojava.nbio.alignment.template.Profile;
 import org.biojava.nbio.core.exceptions.CompoundNotFoundException;
 import org.biojava.nbio.core.sequence.ProteinSequence;
 import org.biojava.nbio.core.sequence.compound.AminoAcidCompound;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

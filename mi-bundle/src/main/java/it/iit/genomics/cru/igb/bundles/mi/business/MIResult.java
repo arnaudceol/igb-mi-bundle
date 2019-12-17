@@ -196,7 +196,7 @@ public class MIResult {
                             queryResiduesB);
                 }
             } catch (Exception e) {
-                igbLogger.getLogger().error("Cannot get PDB structures ", e);
+                igbLogger.getLogger().severe("Cannot get PDB structures ");
             }
         }
 
@@ -398,7 +398,7 @@ public class MIResult {
                             try {
                                 selectedProteinResiduesAtInterfaceA.add(gene.getID() + "," + container1.getEntry().getVarSpliceAC(gene.getID()) + ":" + container1.getEntry().getSequence(gene.getID()).getSequence().substring(aa.getPosition() - 1, aa.getPosition()) + aa.getPosition());
                             } catch (Exception e) {
-                                igbLogger.getLogger().error("Pb when assigning AA : {0}, {1}, {2}, {3}", new Object[]{aa, gene.getID(), container1.getEntry().getVarSpliceAC(gene.getID()), container1.getEntry().getSequence(gene.getID())});
+                                igbLogger.getLogger().severe("Pb when assigning AA"); // : {0}, {1}, {2}, {3}", new Object[]{aa, gene.getID(), container1.getEntry().getVarSpliceAC(gene.getID()), container1.getEntry().getSequence(gene.getID())});
                             }
                         }
                     }

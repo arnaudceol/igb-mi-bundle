@@ -212,7 +212,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 				symManager.addSelectedSymmetry(container, gene);
 			} else {
-				igbLogger.getLogger().warn("No protein for {0}", gene.getID());
+				igbLogger.getLogger().warning("No protein for " +  gene.getID());
 			}
 			progressManager.nextStep();
 			setProgress(progressManager.getProgress());
@@ -221,6 +221,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		// Step 3
 		progressManager.nextMajorStep(queryUniprotAcs.size());
 
+		logAndPublish("Uniprot: " +queryUniprotAcs.size() );
 		// Get interactors
 		uniprotAc2uniprotAcs = new MapOfMap<>(queryUniprotAcs);
 
@@ -796,7 +797,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 			logAndPublish("map " + sym.getID());
 			for (MIGene gene : candidates.get(sym)) {
 
-				String refseqPattern = "[A-Z]{2}\\_[0-9]+";
+				String refseqPattern = "[A-Z]{2}\\_[0-9\\.]+";
 				if (gene.getID().matches(refseqPattern)) {
 					searchRefSeq.add(gene.getID());
 				} else if (gene.getID().startsWith("ENS")) {
@@ -864,7 +865,8 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		try {
 			results.addAll(get());
 		} catch (InterruptedException | ExecutionException ignore) {
-			igbLogger.getLogger().error("Fail to analyze the selected regions", ignore);
+			igbLogger.getLogger().severe("Fail to analyze the selected regions");
+			ignore.printStackTrace();
 			failed = true;
 		}
 

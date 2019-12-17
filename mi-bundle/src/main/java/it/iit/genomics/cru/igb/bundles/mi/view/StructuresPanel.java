@@ -389,7 +389,7 @@ public class StructuresPanel extends IgbTabPanel {
                 jmolFrame.setVisible(true);
 
             } catch (HeadlessException | StructureException ex) {
-                igbLogger.getLogger().error(null, ex);
+                igbLogger.getLogger().severe(ex.getMessage());
             }
         }
 
@@ -460,7 +460,7 @@ public class StructuresPanel extends IgbTabPanel {
                 }
 
             } catch (HeadlessException | Interactome3DException | URISyntaxException | IOException ex) {
-                igbLogger.getLogger().error(null, ex);
+                igbLogger.getLogger().severe(ex.getMessage());
             }
         }
 

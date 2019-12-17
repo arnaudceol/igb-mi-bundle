@@ -90,7 +90,7 @@ public class EnsemblGeneManager extends GeneManager {
             }
         } catch (EnsemblException e) {
             igbLogger.severe(e.getMessage());
-            igbLogger.getLogger().error( null, e);
+            igbLogger.getLogger().severe( e.getMessage());
         }
 
         long estimatedTime = System.currentTimeMillis() - startTime;
@@ -141,7 +141,7 @@ public class EnsemblGeneManager extends GeneManager {
             }
         } catch (EnsemblException e) {
             igbLogger.severe(e.getMessage());
-            igbLogger.getLogger().error( null, e);
+            igbLogger.getLogger().severe( e.getMessage());
         }
         long estimatedTime = System.currentTimeMillis() - startTime;
         igbLogger.info("getByEnsemblID " + estimatedTime + " ms");
@@ -179,7 +179,7 @@ public class EnsemblGeneManager extends GeneManager {
             igbLogger.info("getByEnsemblID " + estimatedTime + " ms");
         } catch (EnsemblException e) {
             igbLogger.severe(e.getMessage());
-            igbLogger.getLogger().error( null, e);
+            igbLogger.getLogger().severe( e.getMessage());
         }
     }
 

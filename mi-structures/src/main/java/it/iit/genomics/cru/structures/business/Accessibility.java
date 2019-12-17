@@ -440,13 +440,13 @@ public class Accessibility {
         for (String[] chainPair : chainNamePairs) {
             Chain c1 = name2chain.get(chainPair[0]);
 
-            List<Group> hets = structure.getHetGroups();
+            // List<Group> hets = structure.getHetGroups();
 
-            for (Group het : hets) {
-                if (chainPair[1].equals(het.getChemComp().getId())) {
-                    c1.getAtomGroups().remove(het);
-                }
-            }
+            // for (Group het : hets) {
+            //     if (chainPair[1].equals(het.getChemComp().getId())) {
+            //         c1.getAtomGroups().remove(het);
+            //     }
+            // }
 
             Structure s2 = new StructureImpl();
 

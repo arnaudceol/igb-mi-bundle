@@ -15,28 +15,11 @@
  */
 package it.iit.genomics.cru.igb.bundles.mi.view;
 
-import com.affymetrix.common.CommonUtils;
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.renderers.Renderer;
-import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
-import it.iit.genomics.cru.igb.bundles.commons.view.LogPanel;
-import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_0;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_1;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_2;
 import static it.iit.genomics.cru.igb.bundles.mi.business.MIResult.HTML_SCORE_3;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
-import it.iit.genomics.cru.igb.bundles.mi.commons.MICommons;
-import it.iit.genomics.cru.igb.bundles.mi.model.TaxonColorer;
-import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
-import it.iit.genomics.cru.structures.model.MoleculeEntry;
+
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -62,6 +45,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -80,9 +64,31 @@ import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 import javax.swing.filechooser.FileFilter;
+
+import com.affymetrix.common.CommonUtils;
+
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.httpclient.util.URIUtil;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.client.utils.URIUtils;
 import org.lorainelab.igb.services.IgbService;
+
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
+import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
+import it.iit.genomics.cru.igb.bundles.commons.view.LogPanel;
+import it.iit.genomics.cru.igb.bundles.mi.business.MIResult;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MIBundleConfiguration;
+import it.iit.genomics.cru.igb.bundles.mi.commons.MICommons;
+import it.iit.genomics.cru.igb.bundles.mi.model.TaxonColorer;
+import it.iit.genomics.cru.igb.bundles.mi.query.MIQuery;
+import it.iit.genomics.cru.structures.model.MoleculeEntry;
 
 /**
  *
@@ -330,7 +336,7 @@ public class MIResultPanel extends JPanel {
                             + miResult.getInteractor2().getUniprotAc() + "*";
                 }
 
-                URI uri = new URI(URIUtil.encodeQuery(query));
+                URI uri = new URI(new URIBuilder().setPath(query).toString());
 
                 Desktop desktop = Desktop.isDesktopSupported() ? Desktop
                         .getDesktop() : null;
@@ -340,7 +346,7 @@ public class MIResultPanel extends JPanel {
                 }
 
             } catch (HeadlessException | URISyntaxException | IOException ex) {
-                igbLogger.getLogger().error(null, ex);
+                igbLogger.getLogger().severe(ex.getMessage());
             }
         }
     }
