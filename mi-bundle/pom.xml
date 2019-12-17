@@ -23,7 +23,7 @@
 		<netbeans.hint.license>apache20</netbeans.hint.license>
 		<igb-version>${project.parent.version}</igb-version>
 
-		<luceneVersion>7.1.0</luceneVersion>
+		<luceneVersion>8.3.1</luceneVersion>
 
 		<!-- Explicitly declaring the source encoding eliminates the following 
 			message: -->
