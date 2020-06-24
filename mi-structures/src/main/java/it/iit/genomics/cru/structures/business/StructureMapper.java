@@ -25,11 +25,13 @@ import it.iit.genomics.cru.structures.model.StructureException;
 import it.iit.genomics.cru.structures.model.StructureModel;
 import it.iit.genomics.cru.structures.model.position.UniprotPosition;
 import it.iit.genomics.cru.structures.sources.StructureSource;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+
+import com.google.common.collect.ArrayListMultimap;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.biojava.nbio.structure.Chain;
@@ -74,7 +76,7 @@ public class StructureMapper {
         /**
          * key = structureId + "#" +chainId
          */
-        private final MapOfMap<String, String> chain2residues = new MapOfMap<>();
+        private final ArrayListMultimap<String, String> chain2residues = ArrayListMultimap.create();
 
         /**
          *
@@ -98,7 +100,7 @@ public class StructureMapper {
                 structuresIds.add(structureId);
             }
 
-            chain2residues.add(structureId, pdbResidue);
+            chain2residues.put(structureId, pdbResidue);
 
             hasResidues = true;
         }

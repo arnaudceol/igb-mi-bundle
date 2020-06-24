@@ -21,12 +21,15 @@ import it.iit.genomics.cru.structures.model.ChainMapping;
 import it.iit.genomics.cru.structures.model.InteractionStructure;
 import it.iit.genomics.cru.structures.sources.PDBStructureSource;
 import it.iit.genomics.cru.structures.sources.StructureSource;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
+import com.google.common.collect.HashMultimap;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -73,7 +76,7 @@ public class TestPDB {
         StructureSource source = new PDBStructureSource("/usr/local/data/pdb/");
 
         HashMap<String, MoleculeEntry> targetUniprotEntries = new HashMap<>();
-        MapOfMap<String, String> interactors = new MapOfMap<>();
+        HashMultimap<String, String> interactors = HashMultimap.create();
 
         PDBWSClient client = new PDBWSClient();
 
@@ -103,14 +106,14 @@ public class TestPDB {
                             switch (polymer.getType()) {
                                 case "protein":
                                     if (null != polymer.getMacromolecule()) {
-                                        interactors.add(polymer.getMacromolecule().getAccession().get(0),
+                                        interactors.put(polymer.getMacromolecule().getAccession().get(0),
                                                 "association (from PDB structure)");
                                     }
 //                         source.addInteractionStructure(structureId.getId(), protA.getUniprotAc(), rnaEntry.getUniprotAc(), 
 //                        protA.getChains(structureId.getId()), rnaEntry.getChains(structureId.getId()));
                                     break;
                                 case "dna":
-                                    interactors.add(polymer.getPolymerDescription()
+                                    interactors.put(polymer.getPolymerDescription()
                                             .getDescription(),
                                             "DNA association (from PDB structure)");
                                     MoleculeEntry dnaEntry = new MoleculeEntry(
@@ -135,7 +138,7 @@ public class TestPDB {
                                             .getDescription() + " " + dnaEntry.getUniprotAc());
                                     break;
                                 case "rna":
-                                    interactors.add(polymer.getPolymerDescription()
+                                    interactors.put(polymer.getPolymerDescription()
                                             .getDescription(),
                                             "RNA association (from PDB structure)");
                                     MoleculeEntry rnaEntry = new MoleculeEntry(
@@ -170,7 +173,7 @@ public class TestPDB {
                     continue;
                 }
                 System.out.println(ligand.getChemicalName());
-                interactors.add(ligand.getChemicalName(),
+                interactors.put(ligand.getChemicalName(),
                         "ligand association (from PDB structure)");
                 MoleculeEntry rnaEntry = new MoleculeEntry(
                         ligand.getChemicalName());
