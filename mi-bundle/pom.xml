@@ -344,7 +344,7 @@
 	</pluginRepositories>
 	<repositories>
 		<repository>
-            <id>github</id>
+            <id>jbiobridges</id>
             <name>GitHub arnaudceol Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/arnaudceol/jbiobridges/</url>
         </repository>
