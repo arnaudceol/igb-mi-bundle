@@ -25,6 +25,8 @@ import com.affymetrix.genometry.style.SimpleTrackStyle;
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
 import com.affymetrix.genometry.symmetry.impl.SimpleSymWithProps;
 import com.affymetrix.genometry.symmetry.impl.TypeContainerAnnot;
+import com.google.common.collect.HashMultimap;
+
 import it.iit.genomics.cru.bridges.interactome3d.local.I3DDownload;
 import it.iit.genomics.cru.bridges.interactome3d.local.Interactome3DLocalRepository;
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
@@ -60,7 +62,6 @@ import it.iit.genomics.cru.structures.model.MIGene;
 import it.iit.genomics.cru.structures.model.ModifiedResidue;
 import it.iit.genomics.cru.structures.model.MoleculeEntry;
 import it.iit.genomics.cru.structures.model.Range;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -116,14 +117,14 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 	String trackId;
 
-	MapOfMap<MIGene, AAPosition> gene2pos = new MapOfMap<>();
+	HashMultimap<MIGene, AAPosition> gene2pos = HashMultimap.create();
 
 	// We need the transcript sequences only for those entries
 	HashSet<String> uniprotNeedMapping = new HashSet<>();
 
 	// Associate Gene symmetries (from the genome loaded) to the selected
 	// symmetries (e.g. mutations)
-	MapOfMap<MIGene, SeqSymmetry> miGene2selectedSyms = new MapOfMap<>();
+	HashMultimap<MIGene, SeqSymmetry> miGene2selectedSyms = HashMultimap.create();
 
 	public MIWorker(List<MIResult> results, IgbService service, MIQuery query, JProgressBar progressBar) {
 
@@ -164,7 +165,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		Set<String> targetUniprotAcs = new HashSet<>();
 
 		// interactions
-		MapOfMap<String, String> uniprotAc2uniprotAcs;
+		HashMultimap<String, String> uniprotAc2uniprotAcs;
 
 		// Interaction found
 		ArrayList<MIResult> resultsInBackground = new ArrayList<>();
@@ -223,7 +224,8 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 		logAndPublish("Uniprot: " +queryUniprotAcs.size() );
 		// Get interactors
-		uniprotAc2uniprotAcs = new MapOfMap<>(queryUniprotAcs);
+		/** TODO: verify that non initialized map is fine */
+		uniprotAc2uniprotAcs = HashMultimap.create(); //new HashMultimap<>(queryUniprotAcs);
 
 		logAndPublish("get interactions");
 
@@ -502,7 +504,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 				// interactions between selected genes)
 				// and one of the protein was not selected
 				if (QueryType.EXTRA.equals(query.getQueryType()) || queryUniprotAcs.contains(interactorUniprotAc)) {
-					uniprotAc2uniprotAcs.add(ac, interactorUniprotAc);
+					uniprotAc2uniprotAcs.put(ac, interactorUniprotAc);
 					targetUniprotAcs.add(interactorUniprotAc);
 
 					// String key = ac + "#" + interactorUniprotAc;
@@ -679,7 +681,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 					aaPositions.addAll(positions);
 
 					for (AAPosition aa : aaPositions) {
-						gene2pos.add(gene, aa);
+						gene2pos.put(gene, aa);
 					}
 					symManager.addSelectedResidues(gene.getProtein(), aaPositions);
 				}
@@ -782,13 +784,13 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 		// Don't map residues if they cover a full gene
 		boolean skipSearchResidues = false;
 
-		MapOfMap<String, MoleculeEntry> proteins = new MapOfMap<>();
+		HashMultimap<String, MoleculeEntry> proteins = HashMultimap.create();
 
 		HashSet<String> searchGeneNames = new HashSet<>();
 		HashSet<String> searchRefSeq = new HashSet<>();
 		HashSet<String> searchEnsembl = new HashSet<>();
 
-		MapOfMap<SeqSymmetry, MIGene> candidates = geneManager.getBySymList(seq, selectedSymmetries);
+		HashMultimap<SeqSymmetry, MIGene> candidates = geneManager.getBySymList(seq, selectedSymmetries);
 
 		/**
 		 * TODO : may be more than one!!!
@@ -809,18 +811,18 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 
 			try {
 				if (false == searchRefSeq.isEmpty()) {
-					proteins.merge(
+					proteins.putAll(
 							UniprotkbUtils.getInstance(query.getTaxid()).getUniprotEntriesFromRefSeqs(searchRefSeq));
 
 				}
 
 				if (false == searchEnsembl.isEmpty()) {
-					proteins.merge(
+					proteins.putAll(
 							UniprotkbUtils.getInstance(query.getTaxid()).getUniprotEntriesFromEnsembl(searchEnsembl));
 				}
 
 				if (false == searchGeneNames.isEmpty()) {
-					proteins.merge(
+					proteins.putAll(
 							UniprotkbUtils.getInstance(query.getTaxid()).getUniprotEntriesFromGenes(searchGeneNames));
 				}
 			} catch (BridgesRemoteAccessException be) {
@@ -845,7 +847,7 @@ public class MIWorker extends SwingWorker<ArrayList<MIResult>, String> {
 				if (protein == null) {
 					igbLogger.warning("No protein for gene " + gene.getID());
 				} else {
-					miGene2selectedSyms.add(gene, sym);
+					miGene2selectedSyms.put(gene, sym);
 
 					gene.getUniprotAcs().add(protein.getUniprotAc());
 					gene.setProtein(protein);

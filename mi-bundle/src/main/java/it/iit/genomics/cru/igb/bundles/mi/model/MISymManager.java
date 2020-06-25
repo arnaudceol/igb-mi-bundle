@@ -16,11 +16,12 @@
 package it.iit.genomics.cru.igb.bundles.mi.model;
 
 import com.affymetrix.genometry.symmetry.impl.SeqSymmetry;
+import com.google.common.collect.HashMultimap;
+
 import it.iit.genomics.cru.igb.bundles.commons.business.IGBLogger;
 import it.iit.genomics.cru.structures.model.MoleculeEntry;
 import it.iit.genomics.cru.structures.model.AAPosition;
 import it.iit.genomics.cru.structures.model.MIGene;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class MISymManager {
     HashMap<MIGene, MISymContainer> geneSyms = new HashMap<>();
 
     // a selected symmetry can cover to more than one gene
-    MapOfMap<MIGene, MISymContainer> querySyms = new MapOfMap<>();
+    HashMultimap<MIGene, MISymContainer> querySyms = HashMultimap.create();
 
     HashMap<MoleculeEntry, MISymContainer> proteins = new HashMap<>();
 
@@ -47,11 +48,11 @@ public class MISymManager {
 
     HashSet<MISymContainer> queryContainers = new HashSet<>();
 
-    private final MapOfMap<MoleculeEntry, AAPosition> protein2QueryResidues = new MapOfMap<>();
+    private final HashMultimap<MoleculeEntry, AAPosition> protein2QueryResidues = HashMultimap.create();
 
     public void addSelectedResidues(MoleculeEntry protein,
             Collection<AAPosition> sequences) {
-        protein2QueryResidues.addAll(protein, sequences);
+        protein2QueryResidues.putAll(protein, sequences);
     }
 
     public Collection<AAPosition> getQueryResidues(
@@ -137,7 +138,7 @@ public class MISymManager {
 
     public void addSelectedSymmetry(MISymContainer container, MIGene selectedSymmetry) {
         container.addMIGene(selectedSymmetry);
-        querySyms.add(selectedSymmetry, container);
+        querySyms.put(selectedSymmetry, container);
         queryContainers.add(container);
     }
 
