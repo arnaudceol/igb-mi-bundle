@@ -10,7 +10,7 @@
 	<groupId>it.iit.genomics.cru.mi</groupId>
 	<artifactId>igb-bundle</artifactId>
 	<packaging>bundle</packaging>
-	<version>3.1.0</version>
+	<version>3.2.0</version>
 
 	<properties>
 		<bundle.symbolicName>it.iit.genomics.cru.igb.bundle.mi.MIBundle</bundle.symbolicName>
