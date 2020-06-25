@@ -1,23 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.iit.genomics.cru.mi</groupId>
     <artifactId>mi-structures</artifactId>
     <version>3.1.0</version>
-    
+
     <properties>
         <uniprot.version>2019.09</uniprot.version>
         <biojava.version>5.3.0</biojava.version>
-        <jmol.version>12.2.34</jmol.version>        
-        <bridges.version>2019_12</bridges.version>
-        <cru.version>2.2-SNAPSHOT</cru.version>
+        <jmol.version>12.2.34</jmol.version>
+        <bridges.version>2020_07</bridges.version>
         <netbeans.hint.license>apache20</netbeans.hint.license>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    
-    
+
+
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -27,23 +25,23 @@
         <dependency>
             <groupId>it.iit.genomics.cru.bridges</groupId>
             <artifactId>interactome3d-bridge</artifactId>
-            <version>2019_12</version>
+            <version>${bridges.version}</version>
         </dependency>
         <dependency>
             <groupId>it.iit.genomics.cru.bridges</groupId>
             <artifactId>ensembl-bridge</artifactId>
             <version>${bridges.version}</version>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>it.iit.genomics.cru</groupId>
             <artifactId>cru-utils</artifactId>
             <version>${cru.version}</version>
+        </dependency> -->
+        <dependency>
+            <groupId>net.sourceforge.jmol</groupId>
+            <artifactId>jmol</artifactId>
+            <version>${jmol.version}</version>
         </dependency>
-		<dependency>
-			<groupId>net.sourceforge.jmol</groupId>
-			<artifactId>jmol</artifactId>
-			<version>${jmol.version}</version>
-		</dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -137,8 +135,13 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-    
-    <repositories>               
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub arnaudceol Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/arnaudceol/jbiobridges/</url>
+        </repository>
         <!-- EBI repositories - Where the IntAct artifacts are stored -->
         <repository>
             <id>ebi-repo</id>
@@ -156,7 +159,7 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
-
     </repositories>
-    
+
+  
 </project>
