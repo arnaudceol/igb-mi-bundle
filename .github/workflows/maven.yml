@@ -13,7 +13,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          server-id: jbiobridges # Value of the distributionManagement/repository/id field of the pom.xml
+          server-username: ${{ github.actor }} # env variable for username in deploy
+          server-password: ${{ github.token }}# env variable for token in deploy
           settings-path: ${{ github.workspace }} # location for the settings.xml file
       - name: Build with Maven
         run: mvn -B package --file pom.xml -s $GITHUB_WORKSPACE/settings.xml
