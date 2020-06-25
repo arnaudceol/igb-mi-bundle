@@ -138,7 +138,7 @@
 
     <repositories>
         <repository>
-            <id>jbiobridges</id>
+            <id>github</id>
             <name>GitHub arnaudceol Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/arnaudceol/jbiobridges/</url>
         </repository>
