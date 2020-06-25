@@ -3,7 +3,7 @@
 
     <groupId>it.iit.genomics.cru.mi</groupId>
     <artifactId>mi-structures</artifactId>
-    <version>3.1.0</version>
+    <version>3.2.0</version>
 
     <properties>
         <uniprot.version>2019.09</uniprot.version>
