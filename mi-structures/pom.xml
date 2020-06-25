@@ -3,10 +3,10 @@
 
 
 
-       <parent>
-        <groupId>it.iit.genomics.cru.bridges</groupId>
-        <artifactId>bridges-project</artifactId>
-        <version>2020_07</version>
+    <parent>
+        <groupId>it.iit.genomics.cru.mi</groupId>
+        <artifactId>mi-bundle-project</artifactId>
+        <version>1.0</version>
     </parent>
 
     <groupId>it.iit.genomics.cru.mi</groupId>
