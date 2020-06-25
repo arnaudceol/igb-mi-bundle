@@ -161,5 +161,12 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+		<repository>
+		  <id>github</id>
+		  <name>GitHub Arnaud Ceol Apache Maven Packages</name>
+		  <url>https://maven.pkg.github.com/arnaudceol/igb-mi-bundle</url>
+		</repository>
+	 </distributionManagement>
   
 </project>
