@@ -15,7 +15,10 @@ jobs:
           java-version: 1.8
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
-  
+      - name: maven-settings
+        uses: s4u/maven-settings-action@v2
+        with:
+         servers: '[{"id": "github", "username": "arnaudceol", "password": "${GITHUB_TOKEN}"}]'  
       - name: Build with Maven
         run: mvn -B package --file pom.xml
   
