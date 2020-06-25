@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>it.iit.genomics.cru.mi</groupId>
+	<artifactId>mi-bundle-project</artifactId>
+	<version>1.0</version>
+
+	<packaging>pom</packaging>
+
+	<name>MI Bundle project</name>
+
+ 	<modules>
+ 		<module>mi-structures</module> 
+ 		<module>mi-bundle</module>
+ 	</modules> 
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<bridges.version>2020_07</bridges.version>
+ 	</properties>
+
+	 <distributionManagement>
+		<repository>
+		  <id>github</id>
+		  <name>GitHub Arnaud Ceol Apache Maven Packages</name>
+		  <url>https://maven.pkg.github.com/arnaudceol/igb-mi-bundle</url>
+		</repository>
+	 </distributionManagement>
+
+	<repositories>
+		<repository>
+            <id>github</id>
+            <name>GitHub arnaudceol Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/arnaudceol/jbiobridges/</url>
+        </repository>
+		<!-- EBI repositories - Where the IntAct artifacts are stored -->
+		<repository>
+			<id>ebi-repo</id>
+			<name>ebi-repo</name>
+			<url>http://www.ebi.ac.uk/~maven/m2repo</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>            
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+</project>

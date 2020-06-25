@@ -21,7 +21,6 @@ import it.iit.genomics.cru.structures.model.InteractionStructure;
 import it.iit.genomics.cru.structures.model.ProteinStructure;
 import it.iit.genomics.cru.structures.model.StructureException;
 import it.iit.genomics.cru.structures.sources.StructureManager.StructureSourceType;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +31,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.HashMultimap;
 
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.io.PDBFileReader;
@@ -57,12 +58,12 @@ public abstract class StructureSource {
     /**
      *
      */
-    protected MapOfMap<String, ProteinStructure> proteinStructures = new MapOfMap<>();
+    protected HashMultimap<String, ProteinStructure> proteinStructures = HashMultimap.create();
 
     /**
      *
      */
-    protected MapOfMap<String, InteractionStructure> interactionStructures = new MapOfMap<>();
+    protected HashMultimap<String, InteractionStructure> interactionStructures = HashMultimap.create();
 
     /**
      *
@@ -114,7 +115,7 @@ public abstract class StructureSource {
      * Key: structureID, value: list of residues (format pos:Chain, e.g. 125:A)
      * and the chains they are in contact with
      */
-    protected HashMap<String, MapOfMap<String, String>> interfaces = new HashMap<>();
+    protected HashMap<String, HashMultimap<String, String>> interfaces = new HashMap<>();
 
     /**
      * Key: structureID, value: list of pairs of chains and the residues (format
@@ -126,7 +127,7 @@ public abstract class StructureSource {
      * List of interfaces that have already been computed: key: structureID,
      * value: chainA#chainB
      */
-    protected MapOfMap<String, String> interfacesComputed = new MapOfMap<>();
+    protected HashMultimap<String, String> interfacesComputed = HashMultimap.create();
 
     /**
      * List of structure for which no file was found, to be ignored.
@@ -180,7 +181,7 @@ public abstract class StructureSource {
                 || false == interfacesComputed.get(structureId).contains(key)) {
 
             // Residues between any chain
-            MapOfMap<String, String> allResidues = interfaces.get(structureId);
+            HashMultimap<String, String> allResidues = interfaces.get(structureId);
 
             if (allResidues != null && false == allResidues.keySet().isEmpty()) {
                 for (String residue : allResidues.keySet()) {
@@ -245,7 +246,7 @@ public abstract class StructureSource {
         HashSet<String> residues = new HashSet<>();
 
         // Residues between any chain
-        MapOfMap<String, String> allResidues = interfaces.get(structureId);
+        HashMultimap<String, String> allResidues = interfaces.get(structureId);
 
         if (allResidues != null && false == allResidues.keySet().isEmpty()) {
             for (String residue : allResidues.keySet()) {
@@ -298,7 +299,7 @@ public abstract class StructureSource {
         HashSet<String> residues = new HashSet<>();
 
         // Residues between any chain
-        MapOfMap<String, String> allResidues = interfaces.get(structureId);
+        HashMultimap<String, String> allResidues = interfaces.get(structureId);
 
         if (allResidues != null && false == allResidues.keySet().isEmpty()) {
             for (String residue : allResidues.keySet()) {
@@ -324,7 +325,7 @@ public abstract class StructureSource {
     public void addProteinStructure(String structureID, String proteinAc,
             ChainMapping chain) throws IOException {
 
-        proteinStructures.add(proteinAc, new ProteinStructure(sourceType,
+        proteinStructures.put(proteinAc, new ProteinStructure(sourceType,
                 structureID, proteinAc, chain));
     }
 
@@ -338,7 +339,7 @@ public abstract class StructureSource {
     public void addProteinStructure(String structureID, String proteinAc,
             Collection<ChainMapping> chains) throws IOException {
 
-        proteinStructures.add(proteinAc, new ProteinStructure(sourceType,
+        proteinStructures.put(proteinAc, new ProteinStructure(sourceType,
                 structureID, proteinAc, chains));
     }
 
@@ -354,7 +355,7 @@ public abstract class StructureSource {
     public void addInteractionStructure(String structureID, String proteinAc1,
             String proteinAc2, ChainMapping chainA, ChainMapping chainB)
             throws IOException {
-        interactionStructures.add(getInteractionKey(proteinAc1, proteinAc2),
+        interactionStructures.put(getInteractionKey(proteinAc1, proteinAc2),
                 new InteractionStructure(sourceType, structureID, proteinAc1,
                         proteinAc2, chainA, chainB));
     }
@@ -376,7 +377,7 @@ public abstract class StructureSource {
                 sourceType, structureID, proteinAc1, proteinAc2, chainsA,
                 chainsB);
 
-        interactionStructures.add(getInteractionKey(proteinAc1, proteinAc2),
+        interactionStructures.put(getInteractionKey(proteinAc1, proteinAc2),
                 interactionStructure);
     }
 
@@ -448,14 +449,14 @@ public abstract class StructureSource {
                 logger.error( "No structure for {0}", structureId);
             }
             
-            MapOfMap<String, String> accessibilities = Accessibility
+            HashMultimap<String, String> accessibilities = Accessibility
                     .getFasterContactChains(structure,
                             chainPairs);
 
             addInterfaces(structureId, accessibilities);
 
             for (String[] pair : chainPairs) {
-                interfacesComputed.add(structureId,
+                interfacesComputed.put(structureId,
                         getChainPairKey(pair[0], pair[1]));
 //				
 //				interfacesComputed.add(structureId,
@@ -471,13 +472,13 @@ public abstract class StructureSource {
 
         try {
 
-            MapOfMap<String, String> accessibilities = Accessibility
+            HashMultimap<String, String> accessibilities = Accessibility
                     .getFasterContactHETATMS(getStructure(structureId),
                             chainPairs);
             addInterfaces(structureId, accessibilities);
 
             for (String[] pair : chainPairs) {
-                interfacesComputed.add(structureId,
+                interfacesComputed.put(structureId,
                         getChainPairKey(pair[0], pair[1]));
             }
 
@@ -487,12 +488,13 @@ public abstract class StructureSource {
     }
 
     private void addInterfaces(String structureId,
-            MapOfMap<String, String> accessibilities) {
+            HashMultimap<String, String> accessibilities) {
 
         if (false == interfaces.containsKey(structureId)) {
             interfaces.put(structureId, accessibilities);
         } else {
-            interfaces.get(structureId).merge(accessibilities);
+            // interfaces.get(structureId).merge(accessibilities);
+            interfaces.get(structureId).putAll(accessibilities);
         }
 
         for (String position : accessibilities.keySet()) {

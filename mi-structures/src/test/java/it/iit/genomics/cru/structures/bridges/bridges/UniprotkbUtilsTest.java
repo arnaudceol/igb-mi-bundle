@@ -20,12 +20,14 @@ package it.iit.genomics.cru.structures.bridges.bridges;
 import it.iit.genomics.cru.structures.bridges.commons.BridgesRemoteAccessException;
 import it.iit.genomics.cru.structures.model.MoleculeEntry;
 import it.iit.genomics.cru.structures.bridges.uniprot.UniprotkbUtils;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import com.google.common.collect.HashMultimap;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.junit.Assert;
@@ -46,7 +48,7 @@ public class UniprotkbUtilsTest {
         ArrayList<String> geneCollection = new ArrayList<>();
         geneCollection.addAll(Arrays.asList(genes));
 
-        MapOfMap<String, MoleculeEntry> entries = UniprotkbUtils.getInstance("83333").getUniprotEntriesFromGenes(geneCollection);
+        HashMultimap<String, MoleculeEntry> entries = UniprotkbUtils.getInstance("83333").getUniprotEntriesFromGenes(geneCollection);
 
         Assert.assertEquals(genes.length, entries.keySet().size());
 
@@ -74,7 +76,7 @@ public class UniprotkbUtilsTest {
 
         ArrayList<String> genes = new ArrayList<>();
         genes.add("leuS");
-        MapOfMap<String, MoleculeEntry> entries = UniprotkbUtils.getInstance("83333").getUniprotEntriesFromGenes(genes);
+        HashMultimap<String, MoleculeEntry> entries = UniprotkbUtils.getInstance("83333").getUniprotEntriesFromGenes(genes);
 
         Assert.assertEquals(1, entries.keySet().size());
     }

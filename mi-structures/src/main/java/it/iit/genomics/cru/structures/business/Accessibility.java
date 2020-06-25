@@ -17,7 +17,6 @@ package it.iit.genomics.cru.structures.business;
 
 import it.iit.genomics.cru.structures.sources.PDBStructureSource;
 import it.iit.genomics.cru.structures.sources.StructureSource;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -25,6 +24,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
+
 import org.biojava.nbio.structure.Chain;
 import org.biojava.nbio.structure.Group;
 import org.biojava.nbio.structure.GroupType;
@@ -50,10 +53,10 @@ public class Accessibility {
      * @throws NumberFormatException
      * @throws IOException
      */
-    public static MapOfMap<String, String> getContactChains(Structure structure)
+    public static ArrayListMultimap<String, String> getContactChains(Structure structure)
             throws NumberFormatException, IOException {
 
-        MapOfMap<String, String> contactChains = new MapOfMap<>();
+        ArrayListMultimap<String, String> contactChains = ArrayListMultimap.create();
 
         // 1. get all residues
         AsaCalculator asa = new AsaCalculator(structure,
@@ -109,7 +112,7 @@ public class Accessibility {
                     System.out.println(key + ": " + a.getAsaU() + " - "
                             + complex);
                     if (a.getAsaU() - complex > 1) {
-                        contactChains.add(key, c2.getChainID());
+                        contactChains.put(key, c2.getChainID());
                         System.out.println(key + ">" + c.getChainID());
                     } else {
                         System.out.println(key + "<" + c.getChainID());
@@ -129,10 +132,10 @@ public class Accessibility {
      * @throws NumberFormatException
      * @throws IOException
      */
-    public static MapOfMap<String, String> getContactHetams(Structure structure)
+    public static ArrayListMultimap<String, String> getContactHetams(Structure structure)
             throws NumberFormatException, IOException {
 
-        MapOfMap<String, String> contactChains = new MapOfMap<>();
+        ArrayListMultimap<String, String> contactChains = ArrayListMultimap.create();
 
         // 1. get all residues
         AsaCalculator asa = new AsaCalculator(structure,
@@ -187,7 +190,7 @@ public class Accessibility {
                     System.out.println(key + ": " + a.getAsaU() + " - "
                             + complex);
                     if (a.getAsaU() - complex > 1) {
-                        contactChains.add(key, c2.getChainID());
+                        contactChains.put(key, c2.getChainID());
                         System.out.println(key + ">" + c.getChainID());
                     } else {
                         System.out.println(key + "<" + c.getChainID());
@@ -208,11 +211,11 @@ public class Accessibility {
      * @throws NumberFormatException
      * @throws IOException
      */
-    public static MapOfMap<String, String> getContactChains(
+    public static ArrayListMultimap<String, String> getContactChains(
             Structure structure, List<String[]> chainNamePairs)
             throws NumberFormatException, IOException {
 
-        MapOfMap<String, String> contactChains = new MapOfMap<>();
+        ArrayListMultimap<String, String> contactChains = ArrayListMultimap.create();
 
         HashMap<String, Chain> name2chain = new HashMap<>();
 
@@ -275,7 +278,7 @@ public class Accessibility {
 
                 Double complex = complexAccessibility.get(key);
                 if (a.getAsaU() - complex >= 1) {
-                    contactChains.add(key, c2.getChainID());
+                    contactChains.put(key, c2.getChainID());
                 }
 
             }
@@ -291,11 +294,11 @@ public class Accessibility {
      * @throws NumberFormatException
      * @throws IOException
      */
-    public static MapOfMap<String, String> getFasterContactChains(
+    public static HashMultimap<String, String> getFasterContactChains(
             Structure structure, List<String[]> chainNamePairs)
             throws NumberFormatException, IOException {
 
-        MapOfMap<String, String> contactChains = new MapOfMap<>();
+        HashMultimap<String, String> contactChains = HashMultimap.create();
 
         HashSet<Chain> chains = new HashSet<>();
 
@@ -371,9 +374,9 @@ public class Accessibility {
 
                 if (single - a.getAsaU() >= 1) {
                     if (false == g.getChainId().equals(c2.getChainID())) {
-                        contactChains.add(key, c2.getChainID());
+                        contactChains.put(key, c2.getChainID());
                     } else if (false == g.getChainId().equals(c1.getChainID())) {
-                        contactChains.add(key, c1.getChainID());
+                        contactChains.put(key, c1.getChainID());
 
                     }
                 }
@@ -390,11 +393,11 @@ public class Accessibility {
      * @throws NumberFormatException
      * @throws IOException
      */
-    public static MapOfMap<String, String> getFasterContactHETATMS(
+    public static HashMultimap<String, String> getFasterContactHETATMS(
             Structure structure, List<String[]> chainNamePairs)
             throws NumberFormatException, IOException {
 
-        MapOfMap<String, String> contactChains = new MapOfMap<>();
+        HashMultimap<String, String> contactChains = HashMultimap.create();
 
         HashSet<Chain> chains = new HashSet<>();
 
@@ -467,7 +470,7 @@ public class Accessibility {
                 Double single = singleAccessibility.get(key);
 
                 if (single - a.getAsaU() < -1) {
-                    contactChains.add(key, chainPair[1]);
+                    contactChains.put(key, chainPair[1]);
                 }
                 }
             }
@@ -498,7 +501,7 @@ public class Accessibility {
         System.out.println(new Timestamp(date.getTime()));
         System.out.println("get asa");
         // System.out.println("name: " +s);
-        MapOfMap<String, String> acc2 = Accessibility.getFasterContactHETATMS(
+        HashMultimap<String, String> acc2 = Accessibility.getFasterContactHETATMS(
                 s, pairs);
         System.out.println("contacts: " + acc2.keySet().size());
         date = new java.util.Date();

@@ -16,7 +16,6 @@
 package it.iit.genomics.cru.structures.model;
 
 import it.iit.genomics.cru.structures.model.sequence.UniprotSequence;
-import it.iit.genomics.cru.utils.maps.MapOfMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
+import com.google.common.collect.ArrayListMultimap;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -120,7 +120,7 @@ public class MoleculeEntry implements Comparable<MoleculeEntry> {
     /**
      *
      */
-    protected MapOfMap<String, ChainMapping> chains;
+    protected ArrayListMultimap<String, ChainMapping> chains;
 
     /**
      *
@@ -428,7 +428,7 @@ public class MoleculeEntry implements Comparable<MoleculeEntry> {
      * @param method
      */
     public void addChain(String structureId, ChainMapping chain, String method) {
-        chains.add(structureId, chain);
+        chains.put(structureId, chain);
         addPDB(structureId, method);
     }
 
@@ -442,7 +442,7 @@ public class MoleculeEntry implements Comparable<MoleculeEntry> {
      */
     public MoleculeEntry(String uniprotAc, String taxid,
             Collection<String> geneNames, Collection<String> refseqs,
-            MapOfMap<String, ChainMapping> pdbChains) {
+            ArrayListMultimap<String, ChainMapping> pdbChains) {
         super();
         this.uniprotAc = uniprotAc;
         this.taxid = taxid;
@@ -465,7 +465,7 @@ public class MoleculeEntry implements Comparable<MoleculeEntry> {
         this.ensemblGenes = new ArrayList<>();
         this.modifications = new ArrayList<>();
         this.diseases = new ArrayList<>();
-        this.chains = new MapOfMap<>();
+        this.chains = ArrayListMultimap.create();
     }
 
     /**
