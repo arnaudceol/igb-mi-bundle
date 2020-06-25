@@ -13,5 +13,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+    - name: Build mi-structure
+      run: mvn -B package --file mi-structures/pom.xml
+      - name: Build mi-bundle
+        run: mvn -B package --file mi-bundle/pom.xml
